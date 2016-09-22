@@ -11,11 +11,11 @@ import "time"
 type NullStore struct{}
 
 // Get always returns no token
-func (s *NullStore) Get(sub, kind, ID string) (string, error) {
+func (s *NullStore) Get(server, sub string, scope string) (string, error) {
 	return "", nil
 }
 
 // Set accepts a token but does nothing with it
-func (s *NullStore) Set(sub, kind, ID, token string, TTL time.Duration) error {
+func (s *NullStore) Set(server, sub string, scope []string, token string, TTL time.Duration) error {
 	return nil
 }

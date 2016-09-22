@@ -15,13 +15,13 @@ type memoryStore struct {
 }
 
 // key builds the key that will be used in the tokens map
-func (s *memoryStore) key(sub, kind, ID string) string {
-	return sub + ":" + kind + ":" + ID
+func (s *memoryStore) key(server, sub, scope string) string {
+	return server + ":" + sub + ":" + scope
 }
 
 // Get gets the token and checks it's TTL
-func (s *memoryStore) Get(sub, kind, ID string) (string, error) {
-	key := s.key(sub, kind, ID)
+func (s *memoryStore) Get(server, sub, scope string) (string, error) {
+	key := s.key(server, sub, scope)
 	tok, ok := s.tokens[key]
 
 	// token not set
@@ -39,13 +39,17 @@ func (s *memoryStore) Get(sub, kind, ID string) (string, error) {
 }
 
 // Set saves the token and sets its deadline
-func (s *memoryStore) Set(sub, kind, ID, token string, TTL time.Duration) error {
-	key := s.key(sub, kind, ID)
+func (s *memoryStore) Set(server, sub string, scopes []string, token string, TTL time.Duration) error {
 	deadline := time.Now().Add(TTL)
-
-	s.tokens[key] = tokenWithDeadline{
+	tok := tokenWithDeadline{
 		Token:    token,
 		Deadline: deadline,
+	}
+
+	// store the token for every scope it has
+	for _, scope := range scopes {
+		key := s.key(server, sub, scope)
+		s.tokens[key] = tok
 	}
 
 	return nil

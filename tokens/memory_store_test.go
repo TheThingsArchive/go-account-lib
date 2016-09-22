@@ -16,24 +16,24 @@ func TestMemoryStore(t *testing.T) {
 	store := MemoryStore()
 
 	// getting from an empty store should work
-	res, err := store.Get("sub", "kind", "ID")
+	res, err := store.Get(server, user, scope)
 	a.So(err, ShouldBeNil)
 	a.So(res, ShouldEqual, "")
 
 	// setting to a new store should work
-	err = store.Set("sub", "kind", "ID", "token", time.Second)
+	err = store.Set(server, user, scopes, token, time.Second)
 	a.So(err, ShouldBeNil)
 
 	// getting from a not-so-new store should still work
-	res, err = store.Get("sub", "kind", "ID")
+	res, err = store.Get(server, user, scope)
 	a.So(err, ShouldBeNil)
-	a.So(res, ShouldEqual, "token")
+	a.So(res, ShouldEqual, token)
 
 	// trying to get an expired token should not work
-	err = store.Set("sub", "kind", "ID2", "token", time.Duration(0))
+	err = store.Set(server, user, []string{"scope2"}, token, time.Duration(0))
 	a.So(err, ShouldBeNil)
 
-	res, err = store.Get("sub", "kind", "ID2")
+	res, err = store.Get(server, user, "scope2")
 	a.So(err, ShouldBeNil)
 	a.So(res, ShouldEqual, "")
 }

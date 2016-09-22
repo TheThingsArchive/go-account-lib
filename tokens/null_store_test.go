@@ -10,21 +10,30 @@ import (
 	. "github.com/smartystreets/assertions"
 )
 
+const (
+	server = "https://account.thethingsnetwork.org"
+	user   = "test"
+	scope  = "apps:foo"
+	token  = "token"
+)
+
+var scopes = []string{scope}
+
 func TestNullStore(t *testing.T) {
 	a := New(t)
 	store := NullStore{}
 
 	// getting from a ne  sotre should work
-	res, err := store.Get("sub", "kind", "ID")
+	res, err := store.Get(server, user, scope)
 	a.So(err, ShouldBeNil)
 	a.So(res, ShouldEqual, "")
 
 	// setting to a new store should work
-	err = store.Set("sub", "kind", "ID", "token", time.Second)
+	err = store.Set(server, user, scopes, token, time.Second)
 	a.So(err, ShouldBeNil)
 
 	// getting from a not-so-new store should still work
-	res, err = store.Get("sub", "kind", "ID")
+	res, err = store.Get(server, user, scope)
 	a.So(err, ShouldBeNil)
 	a.So(res, ShouldEqual, "")
 }

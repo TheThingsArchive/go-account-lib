@@ -10,8 +10,8 @@ type TokenStore interface {
 
 	// Get gets a token from the TokenStore, returning
 	// the empty string if the token does not exist
-	Get(sub string, kind string, ID string) (string, error)
+	Get(server string, sub string, scope string) (string, error)
 
 	// Set saves a token, but only stores it for a given time
-	Set(sub string, kind string, ID string, token string, TTL time.Duration) error
+	Set(server string, sub string, scope []string, token string, TTL time.Duration) error
 }
