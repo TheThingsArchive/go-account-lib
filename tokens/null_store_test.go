@@ -21,7 +21,7 @@ var scopes = []string{scope}
 
 func TestNullStore(t *testing.T) {
 	a := New(t)
-	store := NullStore{}
+	store := NullStore
 
 	// getting from a ne  sotre should work
 	res, err := store.Get(parent, scope)
