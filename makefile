@@ -36,5 +36,5 @@ lint:
 	$(pkgs) | xargs golint
 
 watch:
-	@ginkgo watch -cover $$($(pkgs) | sed "s/.*$$(basename $$PWD)\//.\//")
+	@ginkgo watch -coverprofile=/dev/null $$($(pkgs) | sed "s/.*$$(basename $$PWD)\//.\//")
 
