@@ -6,13 +6,14 @@ pkgs = $(go) list ./... | grep -vE go-account-lib/vendor
 cover_file=coverage.out
 tmp_cover_dir ?= .cover
 
-.PHONY: test tools cover
+.PHONY: test tools cover watch
 
 tools:
 	@echo fething dev deps...
 	$(go) get -u golang.org/x/tools/cmd/cover
 	$(go) get -u github.com/mattn/goveralls
 	$(go) get -u github.com/golang/lint/golint
+	$(go) get -u github.com/onsi/ginkgo/ginkgo
 
 test:
 	@for pkg in $$($(pkgs)); do   \
@@ -33,3 +34,7 @@ vet:
 
 lint:
 	$(pkgs) | xargs golint
+
+watch:
+	@ginkgo watch -cover $$($(pkgs) | sed "s/.*$$(basename $$PWD)\//.\//")
+
