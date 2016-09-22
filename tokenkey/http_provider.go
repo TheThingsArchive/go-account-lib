@@ -9,62 +9,36 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"path"
 )
 
 type httpProvider struct {
-	servers       map[string]string
-	cache         map[string][]byte
-	cacheLocation string
+	servers map[string]string
+	cache   Cache
 }
 
 // NewHTTPProvider returns a new Provider that fetches the key from a HTTP resource
-func NewHTTPProvider(servers map[string]string, cacheLocation string) Provider {
+func HTTPProvider(servers map[string]string, cache Cache) Provider {
 	return &httpProvider{
-		servers:       servers,
-		cache:         map[string][]byte{},
-		cacheLocation: cacheLocation,
+		servers: servers,
+		cache:   cache,
 	}
 }
 
 func (p *httpProvider) Get(server string, renew bool) (*TokenKey, error) {
-	var data []byte
-
-	url, ok := p.servers[server]
-	if !ok {
-		return nil, fmt.Errorf("Auth server %s not registered", server)
-	}
-
-	cacheFile := path.Join(p.cacheLocation, fmt.Sprintf("auth-%s.pub", server))
-
-	// Try to read from memory
-	cached, ok := p.cache[server]
-	if ok {
-		data = cached
-	}
-
-	if data == nil {
-		// Try to read from cache file
-		cached, err := ioutil.ReadFile(cacheFile)
-		if err == nil {
-			p.cache[server] = cached
-			data = cached
-		}
-	}
+	data, _ := p.cache.Get(server)
 
 	// Fetch token if there's a renew or if there's no key cached
 	if renew || data == nil {
-		fetched, err := p.fetch(fmt.Sprintf("%s/key", url))
-		if err == nil {
-			data = fetched
-			// Don't care about errors here. It's better to retrieve keys all the time
-			// because they can't be cached than not to be able to verify a token
-			ioutil.WriteFile(cacheFile, data, 0644)
-			p.cache[server] = data
-		} else if data == nil {
+		fetched, err := p.fetch(server)
+		if err != nil {
 			// We don't have a key here
 			return nil, err
 		}
+
+		data = fetched
+
+		// We do not care about errors here
+		_ = p.cache.Set(server, data)
 	}
 
 	var key TokenKey
@@ -77,16 +51,23 @@ func (p *httpProvider) Get(server string, renew bool) (*TokenKey, error) {
 
 func (p *httpProvider) Update() error {
 	for server := range p.servers {
-		_, err := p.Get(server, true)
+		data, err := p.fetch(server)
 		if err != nil {
 			return err
 		}
+
+		p.cache.Set(server, data)
 	}
 	return nil
 }
 
-func (p *httpProvider) fetch(url string) ([]byte, error) {
-	resp, err := http.Get(url)
+func (p *httpProvider) fetch(server string) ([]byte, error) {
+	url, ok := p.servers[server]
+	if !ok {
+		return nil, fmt.Errorf("Auth server %s not registered", server)
+	}
+
+	resp, err := http.Get(fmt.Sprintf("%s/key", url))
 	if err != nil {
 		return nil, err
 	}
