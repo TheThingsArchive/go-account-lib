@@ -19,7 +19,7 @@ type httpProvider struct {
 }
 
 // NewHTTPProvider returns a new Provider that fetches the key from a HTTP resource
-func HTTPProvider(servers map[string]string, cache Cache) Provider {
+func HTTPProvider(servers map[string]string, cache cache.Cache) Provider {
 	return &httpProvider{
 		servers: servers,
 		cache:   cache,
