@@ -10,7 +10,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/TheThingsNetwork/go-account-lib/tokenkey/cache"
+	"github.com/TheThingsNetwork/go-account-lib/cache"
 )
 
 type httpProvider struct {

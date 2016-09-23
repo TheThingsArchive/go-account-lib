@@ -6,7 +6,7 @@ package tokenkey
 import (
 	"testing"
 
-	"github.com/TheThingsNetwork/go-account-lib/tokenkey/cache"
+	"github.com/TheThingsNetwork/go-account-lib/cache"
 	. "github.com/smartystreets/assertions"
 )
 
