@@ -9,11 +9,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/TheThingsNetwork/go-account-lib/tokenkey/cache"
 )
 
 type httpProvider struct {
 	servers map[string]string
-	cache   Cache
+	cache   cache.Cache
 }
 
 // NewHTTPProvider returns a new Provider that fetches the key from a HTTP resource
