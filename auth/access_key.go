@@ -16,6 +16,11 @@ func (a *accessKey) DecorateRequest(req *http.Request) {
 	req.Header.Set("Authorization", fmt.Sprintf("key %s", a.accessKey))
 }
 
+// WithScope just returns itself
+func (a *accessKey) WithScope(scope string) Strategy {
+	return a
+}
+
 func AccessKey(s string) *accessKey {
 	return &accessKey{
 		accessKey: s,
