@@ -9,7 +9,7 @@ import (
 	"github.com/TheThingsNetwork/go-account-lib/claims"
 )
 
-type manager struct {
+type Manager struct {
 	server string
 	token  string
 	store  TokenStore
@@ -17,8 +17,8 @@ type manager struct {
 
 // ManagerWithStore creates a new token manager that uses the specified store
 // to store and retrieve tokens
-func ManagerWithStore(server, token string, store TokenStore) *manager {
-	return &manager{
+func ManagerWithStore(server, token string, store TokenStore) *Manager {
+	return &Manager{
 		server: server,
 		token:  token,
 		store:  store,
@@ -27,18 +27,18 @@ func ManagerWithStore(server, token string, store TokenStore) *manager {
 
 // NullManager creates a new token manager that uses the NullStore
 // to store and retrieve tokens
-func NullManager(server, token string) *manager {
+func NullManager(server, token string) *Manager {
 	return ManagerWithStore(server, token, &NullStore)
 }
 
 // MemoryManager creates a new token manager that uses the MemoryStore
 // to store and retrieve tokens
-func MemoryManager(server, token string) *manager {
+func MemoryManager(server, token string) *Manager {
 	return ManagerWithStore(server, token, MemoryStore())
 }
 
 // TokenForScopes returns a token that will work for the specified scopes
-func (m *manager) TokenForScopes(scopes []string) (string, error) {
+func (m *Manager) TokenForScopes(scopes []string) (string, error) {
 	// try to get existing token
 	token, err := m.store.Get(m.token, scope)
 	if err != nil {
@@ -66,21 +66,21 @@ func (m *manager) TokenForScopes(scopes []string) (string, error) {
 }
 
 // TokenForScope returns a token that will work for the specified scope
-func (m *manager) TokenForScope(scope string) (string, error) {
+func (m *Manager) TokenForScope(scope string) (string, error) {
 	return m.TokenForScopes([]string{scope})
 }
 
 // TokenForApp returns a token that works for the specified app
-func (m *manager) TokenForApp(appID string) (string, error) {
+func (m *Manager) TokenForApp(appID string) (string, error) {
 	return m.TokenForScope(claims.AppScope + ":" + appID)
 }
 
 // TokenForGateway returns a token that works for the specified gateway
-func (m *manager) TokenForGateway(gatewayID string) (string, error) {
+func (m *Manager) TokenForGateway(gatewayID string) (string, error) {
 	return m.TokenForScope(claims.GatewayScope + ":" + gatewayID)
 }
 
 // TokenForComponent returns a token that works for the specified gateway
-func (m *manager) TokenForComponent(componentID string) (string, error) {
+func (m *Manager) TokenForComponent(componentID string) (string, error) {
 	return m.TokenForScope(claims.ComponentScope + ":" + componentID)
 }
