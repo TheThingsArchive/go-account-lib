@@ -38,7 +38,7 @@ func MemoryManager(server, token string) *Manager {
 }
 
 // TokenForScopes returns a token that will work for the specified scopes
-func (m *Manager) TokenForScopes(scopes []string) (string, error) {
+func (m *Manager) TokenForScope(scope string) (string, error) {
 	// try to get existing token
 	token, err := m.store.Get(m.token, scope)
 	if err != nil {
@@ -49,6 +49,8 @@ func (m *Manager) TokenForScopes(scopes []string) (string, error) {
 	if token != "" {
 		return token, nil
 	}
+
+	scopes := []string{scope}
 
 	// token did not exist, get one from the server
 	restricted, err := RestrictScope(m.server, m.token, scopes)
@@ -63,11 +65,6 @@ func (m *Manager) TokenForScopes(scopes []string) (string, error) {
 	}
 
 	return restricted, nil
-}
-
-// TokenForScope returns a token that will work for the specified scope
-func (m *Manager) TokenForScope(scope string) (string, error) {
-	return m.TokenForScopes([]string{scope})
 }
 
 // TokenForApp returns a token that works for the specified app
