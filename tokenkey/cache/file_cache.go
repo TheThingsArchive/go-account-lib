@@ -6,6 +6,7 @@ package cache
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path"
 )
 
@@ -21,14 +22,20 @@ func FileCache(dirname string) *fileCache {
 	}
 }
 
+// filename builds the filename from the cache key
+// and dirname
 func (c *fileCache) filename(key string) string {
 	return path.Join(c.dirname, fmt.Sprintf("auth-%s.pub", key))
 }
 
+// Get tries to read the filename
 func (c *fileCache) Get(key string) ([]byte, error) {
 	cached, err := ioutil.ReadFile(c.filename(key))
 	if err != nil {
-		return nil, err
+		// check the error
+		if _, ok := err.(*os.PathError); !ok {
+			return nil, err
+		}
 	}
 
 	return cached, nil
