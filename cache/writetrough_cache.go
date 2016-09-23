@@ -17,6 +17,16 @@ func WriteTroughCache(dirname string) *writeTroughCache {
 	}
 }
 
+// WriteTroughCacheWithNameFn creates a cache that stores keys in memory
+// and uses disk as fallback. It generates filenames based on the passed in
+// function.
+func WriteTroughCacheWithNameFn(dirname string, fn func(string) string) *writeTroughCache {
+	return &writeTroughCache{
+		memory: MemoryCache(),
+		file:   FileCacheWithNameFn(dirname, fn),
+	}
+}
+
 // Get gets the data from memory, and tries to read from disk
 // if not there, caching the result
 func (c *writeTroughCache) Get(key string) ([]byte, error) {

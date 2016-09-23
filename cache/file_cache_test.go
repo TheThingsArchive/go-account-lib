@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"io/ioutil"
 	"os"
+	"path"
 	"testing"
 
 	. "github.com/smartystreets/assertions"
@@ -44,4 +45,23 @@ func TestFileCache(t *testing.T) {
 	got, err = otherCache.Get(key)
 	a.So(err, ShouldBeNil)
 	a.So(bytes.Equal(data, got), ShouldBeTrue)
+}
+
+func customName(key string) string {
+	return "bar"
+}
+
+func TestFileCacheName(t *testing.T) {
+	a := New(t)
+
+	dir := "directory"
+
+	cache := FileCache(dir)
+	name := cache.filename("foo")
+	a.So(name, ShouldEqual, path.Join(dir, "ttn-foo.data"))
+
+	cache = FileCacheWithNameFn(dir, customName)
+	name = cache.filename("foo")
+	a.So(name, ShouldEqual, path.Join(dir, "bar"))
+
 }

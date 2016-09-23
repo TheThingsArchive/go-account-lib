@@ -13,19 +13,34 @@ import (
 // fileCache represents a cache that stores keys in memory
 type fileCache struct {
 	dirname string
+	nameFn  func(string) string
 }
 
-// MemoryCache returns a cache that stores keys in memory
+// defaultFilename is the default filename generator
+func defaultFilename(key string) string {
+	return fmt.Sprintf("ttn-%s.data", key)
+}
+
+// FileCache returns a cache that stores keys on filesystem
 func FileCache(dirname string) *fileCache {
 	return &fileCache{
 		dirname: dirname,
+		nameFn:  defaultFilename,
 	}
 }
 
-// filename builds the filename from the cache key
-// and dirname
+// FileCacheWithNameFn creates a FileCache that has a custom way to generate
+// filenames
+func FileCacheWithNameFn(dirname string, filename func(string) string) *fileCache {
+	return &fileCache{
+		dirname: dirname,
+		nameFn:  filename,
+	}
+}
+
+// filename creates the full filename for key based on configuration
 func (c *fileCache) filename(key string) string {
-	return path.Join(c.dirname, fmt.Sprintf("auth-%s.pub", key))
+	return path.Join(c.dirname, c.nameFn(key))
 }
 
 // Get tries to read the filename
