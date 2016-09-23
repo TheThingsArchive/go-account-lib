@@ -15,7 +15,7 @@ import (
 type accessToken struct {
 	accessToken string
 	scope       string
-	manager     *tokens.Manager
+	manager     tokens.Manager
 }
 
 // DecorateRequest gets the correct access token and uses that to
@@ -47,11 +47,11 @@ func (a *accessToken) WithScope(scope string) Strategy {
 func AccessToken(s string) *accessToken {
 	return &accessToken{
 		accessToken: s,
-		manager:     tokens.NullManager("", s),
+		manager:     tokens.HTTPManager("", s, tokens.NullStore),
 	}
 }
 
-func AccessTokenWithManager(s string, manager *tokens.Manager) *accessToken {
+func AccessTokenWithManager(s string, manager tokens.Manager) *accessToken {
 	return &accessToken{
 		accessToken: s,
 		manager:     manager,

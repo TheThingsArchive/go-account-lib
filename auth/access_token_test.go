@@ -56,7 +56,7 @@ func TestAccessTokenWithManager(t *testing.T) {
 
 	store := &constStore{}
 
-	strategy := AccessTokenWithManager(token, tokens.ManagerWithStore("server", token, store))
+	strategy := AccessTokenWithManager(token, tokens.HTTPManager("server", token, store))
 	withScope := strategy.WithScope(scope)
 
 	req, _ := http.NewRequest("GET", "/foo", nil)

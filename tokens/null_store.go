@@ -20,4 +20,4 @@ func (s *nullStore) Set(parent string, scope []string, token string, TTL time.Du
 	return nil
 }
 
-var NullStore = nullStore{}
+var NullStore = &nullStore{}

@@ -26,7 +26,7 @@ func New(server, accessToken string) *Account {
 // NewWithManager creates a new account client that will use the
 // accessToken to make requests to the specified account server
 // and the manager to request new tokens for different scopes
-func NewWithManager(server, accessToken string, manager *tokens.Manager) *Account {
+func NewWithManager(server, accessToken string, manager tokens.Manager) *Account {
 	return &Account{
 		server: server,
 		auth:   auth.AccessTokenWithManager(accessToken, manager),
