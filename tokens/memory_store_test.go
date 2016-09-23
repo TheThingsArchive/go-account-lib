@@ -16,7 +16,7 @@ func TestMemoryStore(t *testing.T) {
 	store := MemoryStore()
 
 	// getting from an empty store should work
-	res, err := store.Get(parent, scope)
+	res, err := store.Get(parent, testScope)
 	a.So(err, ShouldBeNil)
 	a.So(res, ShouldEqual, "")
 
@@ -25,7 +25,7 @@ func TestMemoryStore(t *testing.T) {
 	a.So(err, ShouldBeNil)
 
 	// getting from a not-so-new store should still work
-	res, err = store.Get(parent, scope)
+	res, err = store.Get(parent, testScope)
 	a.So(err, ShouldBeNil)
 	a.So(res, ShouldEqual, token)
 

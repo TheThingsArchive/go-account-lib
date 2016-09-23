@@ -6,7 +6,7 @@ package tokens
 import (
 	"time"
 
-	"github.com/TheThingsNetwork/go-account-lib/claims"
+	"github.com/TheThingsNetwork/go-account-lib/scope"
 )
 
 type Manager struct {
@@ -69,15 +69,15 @@ func (m *Manager) TokenForScope(scope string) (string, error) {
 
 // TokenForApp returns a token that works for the specified app
 func (m *Manager) TokenForApp(appID string) (string, error) {
-	return m.TokenForScope(claims.AppScope + ":" + appID)
+	return m.TokenForScope(scope.App(appID))
 }
 
 // TokenForGateway returns a token that works for the specified gateway
 func (m *Manager) TokenForGateway(gatewayID string) (string, error) {
-	return m.TokenForScope(claims.GatewayScope + ":" + gatewayID)
+	return m.TokenForScope(scope.Gateway(gatewayID))
 }
 
 // TokenForComponent returns a token that works for the specified gateway
 func (m *Manager) TokenForComponent(componentID string) (string, error) {
-	return m.TokenForScope(claims.ComponentScope + ":" + componentID)
+	return m.TokenForScope(scope.Component(componentID))
 }

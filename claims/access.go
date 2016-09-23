@@ -3,17 +3,19 @@
 
 package claims
 
+import "github.com/TheThingsNetwork/go-account-lib/scope"
+
 // AppAccess checks if the token grants access to the specified app
 func (claims *Claims) AppAccess(appID string) bool {
-	return claims.hasScopedID(AppScope, appID)
+	return claims.HasScope(scope.App(appID))
 }
 
 // GatewayAccess checks if the token grants access to the specified Gateway
 func (claims *Claims) GatewayAccess(gatewayID string) bool {
-	return claims.hasScopedID(GatewayScope, gatewayID)
+	return claims.HasScope(scope.Gateway(gatewayID))
 }
 
 // ComponentAccess checks if the token grants access to the specified Component
 func (claims *Claims) ComponentAccess(componentID string) bool {
-	return claims.hasScopedID(ComponentScope, componentID)
+	return claims.HasScope(scope.Component(componentID))
 }

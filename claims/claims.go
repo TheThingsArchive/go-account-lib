@@ -5,10 +5,6 @@ package claims
 
 import jwt "github.com/dgrijalva/jwt-go"
 
-const AppScope = "apps"
-const GatewayScope = "gateways"
-const ComponentScope = "components"
-
 type Claims struct {
 	jwt.StandardClaims
 	Client     string              `json:"client"`

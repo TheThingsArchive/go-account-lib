@@ -6,21 +6,22 @@ package claims
 import (
 	"testing"
 
+	"github.com/TheThingsNetwork/go-account-lib/scope"
 	"github.com/smartystreets/assertions"
 )
 
 func TestClaimsAppsScope(t *testing.T) {
 	a := assertions.New(t)
 
-	a.So(none.HasScope(AppScope), assertions.ShouldBeFalse)
-	a.So(empty.HasScope(AppScope), assertions.ShouldBeFalse)
+	a.So(none.HasScope(scope.Apps), assertions.ShouldBeFalse)
+	a.So(empty.HasScope(scope.Apps), assertions.ShouldBeFalse)
 
-	a.So(withAppAccess.HasScope(AppScope), assertions.ShouldBeFalse)
-	a.So(withGatewayAccess.HasScope(AppScope), assertions.ShouldBeFalse)
-	a.So(withComponentAccess.HasScope(AppScope), assertions.ShouldBeFalse)
+	a.So(withAppAccess.HasScope(scope.Apps), assertions.ShouldBeFalse)
+	a.So(withGatewayAccess.HasScope(scope.Apps), assertions.ShouldBeFalse)
+	a.So(withComponentAccess.HasScope(scope.Apps), assertions.ShouldBeFalse)
 
-	a.So(withGatewaysScope.HasScope(AppScope), assertions.ShouldBeFalse)
-	a.So(withComponentsScope.HasScope(AppScope), assertions.ShouldBeFalse)
+	a.So(withGatewaysScope.HasScope(scope.Apps), assertions.ShouldBeFalse)
+	a.So(withComponentsScope.HasScope(scope.Apps), assertions.ShouldBeFalse)
 
-	a.So(withAppsScope.HasScope(AppScope), assertions.ShouldBeTrue)
+	a.So(withAppsScope.HasScope(scope.Apps), assertions.ShouldBeTrue)
 }
