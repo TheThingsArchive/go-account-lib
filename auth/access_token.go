@@ -50,3 +50,10 @@ func AccessToken(s string) *accessToken {
 		manager:     tokens.NullManager("", s),
 	}
 }
+
+func AccessTokenWithManager(s string, manager *tokens.Manager) *accessToken {
+	return &accessToken{
+		accessToken: s,
+		manager:     manager,
+	}
+}
