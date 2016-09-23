@@ -8,13 +8,17 @@ type writeTroughCache struct {
 	file   *fileCache
 }
 
-func WriteTroughCache(location string) *writeTroughCache {
+// WriteTroughCache creates a cache that stores keys in memory
+// and uses disk as fallback
+func WriteTroughCache(dirname string) *writeTroughCache {
 	return &writeTroughCache{
 		memory: MemoryCache(),
-		file:   FileCache(location),
+		file:   FileCache(dirname),
 	}
 }
 
+// Get gets the data from memory, and tries to read from disk
+// if not there, caching the result
 func (c *writeTroughCache) Get(key string) ([]byte, error) {
 	// Try to read from memory cache
 	data, err := c.memory.Get(key)
@@ -41,6 +45,7 @@ func (c *writeTroughCache) Get(key string) ([]byte, error) {
 	return data, nil
 }
 
+// Set stores the data in memory and on disk
 func (c *writeTroughCache) Set(key string, data []byte) error {
 	err := c.memory.Set(key, data)
 	if err != nil {

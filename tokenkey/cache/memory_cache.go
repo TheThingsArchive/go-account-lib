@@ -15,6 +15,7 @@ func MemoryCache() *memoryCache {
 	}
 }
 
+// Get gets the data from memory if it exists
 func (c *memoryCache) Get(key string) ([]byte, error) {
 	cached, ok := c.cache[key]
 	if ok {
@@ -24,6 +25,7 @@ func (c *memoryCache) Get(key string) ([]byte, error) {
 	return nil, nil
 }
 
+// Set saves the data to memory
 func (c *memoryCache) Set(key string, data []byte) error {
 	c.cache[key] = data
 	return nil

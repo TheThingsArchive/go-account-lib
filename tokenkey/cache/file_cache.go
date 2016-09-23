@@ -41,6 +41,7 @@ func (c *fileCache) Get(key string) ([]byte, error) {
 	return cached, nil
 }
 
+// Set saves the data to the file determined by key
 func (c *fileCache) Set(key string, data []byte) error {
 	return ioutil.WriteFile(c.filename(key), data, 0644)
 }

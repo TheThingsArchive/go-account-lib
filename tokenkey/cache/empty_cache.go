@@ -9,10 +9,12 @@ type emptyCache struct{}
 // EmptyCache represents a cache that never stores anything
 var EmptyCache = &emptyCache{}
 
+// Get gets no data every time
 func (c *emptyCache) Get(key string) ([]byte, error) {
 	return nil, nil
 }
 
+// Set is a noop
 func (c *emptyCache) Set(key string, data []byte) error {
 	return nil
 }
