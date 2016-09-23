@@ -46,7 +46,7 @@ func (a *Account) CreateComponent(typ, id string) error {
 	body := createComponentReq{
 		ID: id,
 	}
-	return a.post(a.auth.WithScope(scope.Component(id)), fmt.Sprintf("/api/components/%s", typ), body, nil)
+	return a.post(a.auth, fmt.Sprintf("/api/components/%s", typ), body, nil)
 }
 
 // CreateBroker creates a broker with the specified id

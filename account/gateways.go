@@ -50,7 +50,7 @@ func (a *Account) RegisterGateway(gatewayID string, frequencyPlan string, locati
 		Location:      location,
 	}
 
-	err = a.post(a.auth.WithScope(scope.Gateway(gatewayID)), "/gateways", req, &gateway)
+	err = a.post(a.auth, "/gateways", req, &gateway)
 	return gateway, err
 }
 

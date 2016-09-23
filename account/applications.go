@@ -36,7 +36,7 @@ func (a *Account) CreateApplication(appID string, name string, EUIs []types.AppE
 		EUIs:  EUIs,
 	}
 
-	err = a.post(a.auth.WithScope(scope.App(appID)), "/applications", &body, &app)
+	err = a.post(a.auth, "/applications", &body, &app)
 	return app, err
 }
 
