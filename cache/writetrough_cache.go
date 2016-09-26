@@ -4,8 +4,8 @@
 package cache
 
 type writeTroughCache struct {
-	memory *memoryCache
-	file   *fileCache
+	memory Cache
+	file   Cache
 }
 
 // WriteTroughCache creates a cache that stores keys in memory
