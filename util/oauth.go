@@ -6,6 +6,7 @@ package util
 import (
 	"fmt"
 
+	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 )
 
@@ -23,4 +24,21 @@ func MakeConfig(server string, clientID string, clientSecret string, redirectURL
 		Endpoint:     endpoint,
 		RedirectURL:  redirectURL,
 	}
+}
+
+// MakeKeyConfig creates an oauth2.Config that can be used to exchange an app
+// access key for an access token
+func MakeKeyConfig(server string, clientID string, clientSecret string) oauth2.Config {
+	return oauth2.Config{
+		ClientID:     clientID,
+		ClientSecret: clientSecret,
+		Endpoint: oauth2.Endpoint{
+			TokenURL: fmt.Sprintf("%s/applications/token", server),
+		},
+	}
+}
+
+// ExchangeKeyForToken exchanges and app access key for an app access token
+func ExchangeKeyForToken(config oauth2.Config, appID, accessKey string) (*oauth2.Token, error) {
+	return config.PasswordCredentialsToken(context.TODO(), appID, accessKey)
 }
