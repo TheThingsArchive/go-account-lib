@@ -44,14 +44,19 @@ func (a *accessToken) WithScope(scope string) Strategy {
 	}
 }
 
-func AccessToken(s string) *accessToken {
+// AccessToken returns an authorization strategy that uses the specified
+// access token to authorize
+func AccessToken(s string) Strategy {
 	return &accessToken{
 		accessToken: s,
 		manager:     tokens.HTTPManager("", s, tokens.NullStore),
 	}
 }
 
-func AccessTokenWithManager(s string, manager tokens.Manager) *accessToken {
+// AccessTokenWithManager returns an authorization strategy that uses the specified
+// access token to authorize and that uses the specified manager to
+// fetch new tokens if required.
+func AccessTokenWithManager(s string, manager tokens.Manager) Strategy {
 	return &accessToken{
 		accessToken: s,
 		manager:     manager,

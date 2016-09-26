@@ -20,4 +20,5 @@ func (s *nullStore) Set(parent string, scope []string, token string, TTL time.Du
 	return nil
 }
 
+// NullStore is a TokenStore that does not store tokens at all
 var NullStore = &nullStore{}

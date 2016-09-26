@@ -5,6 +5,7 @@ package claims
 
 import jwt "github.com/dgrijalva/jwt-go"
 
+// Claims represents all the claims an access token can have
 type Claims struct {
 	jwt.StandardClaims
 	Client     string              `json:"client"`

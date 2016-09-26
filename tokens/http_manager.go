@@ -11,9 +11,9 @@ type httpManager struct {
 	store  TokenStore
 }
 
-// HTTPManagerWithStore creates a new token manager that uses the specified store
+// HTTPManager creates a new token manager that uses the specified store
 // to store and retrieve tokens
-func HTTPManager(server, token string, store TokenStore) *httpManager {
+func HTTPManager(server, token string, store TokenStore) Manager {
 	return &httpManager{
 		server: server,
 		token:  token,

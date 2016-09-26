@@ -3,8 +3,13 @@
 
 package scope
 
+// Apps is the scope name for apps
 const Apps = "apps"
+
+// Gateways is the scope name for gateways
 const Gateways = "gateways"
+
+// Components is the scope name for components
 const Components = "components"
 
 // App returns the scope for the app with the specific ID

@@ -55,7 +55,8 @@ func (s *memoryStore) Set(parent string, scopes []string, token string, TTL time
 	return nil
 }
 
-func MemoryStore() *memoryStore {
+// MemoryStore returns a new TokenStore that stores the tokens in memory
+func MemoryStore() TokenStore {
 	return &memoryStore{
 		tokens: map[string]tokenWithDeadline{},
 	}

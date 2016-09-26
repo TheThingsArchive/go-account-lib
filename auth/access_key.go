@@ -12,6 +12,7 @@ type accessKey struct {
 	accessKey string
 }
 
+//  DecorateRequest decorates a request with the access key
 func (a *accessKey) DecorateRequest(req *http.Request) {
 	req.Header.Set("Authorization", fmt.Sprintf("key %s", a.accessKey))
 }
@@ -21,7 +22,9 @@ func (a *accessKey) WithScope(scope string) Strategy {
 	return a
 }
 
-func AccessKey(s string) *accessKey {
+// AccessKey creates a authorization strategy that uses
+// the specified access key
+func AccessKey(s string) Strategy {
 	return &accessKey{
 		accessKey: s,
 	}

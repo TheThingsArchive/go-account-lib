@@ -9,7 +9,7 @@ type memoryCache struct {
 }
 
 // MemoryCache returns a cache that stores keys in memory
-func MemoryCache() *memoryCache {
+func MemoryCache() Cache {
 	return &memoryCache{
 		cache: map[string][]byte{},
 	}

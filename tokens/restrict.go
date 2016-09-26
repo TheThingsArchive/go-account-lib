@@ -18,6 +18,7 @@ type restrictResponse struct {
 	AccessToken string `json:"access_token"`
 }
 
+// HTTPError is an error that arises from HTTP
 type HTTPError struct {
 	Code    int    `json:"code"`
 	Message string `json:"error"`

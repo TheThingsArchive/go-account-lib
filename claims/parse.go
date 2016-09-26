@@ -13,6 +13,8 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
+// FromToken uses the tokenkey provider to parse and validate a token into its
+// corresponding claims
 func FromToken(provider tokenkey.Provider, accessToken string) (claims *Claims, err error) {
 	parsed, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
 		if provider == nil {
@@ -47,6 +49,8 @@ func FromToken(provider tokenkey.Provider, accessToken string) (claims *Claims, 
 	return claims, nil
 }
 
+// FromTokenWithoutValidation parses a token into its corresponding claims,
+// without checking the token signature
 func FromTokenWithoutValidation(accessToken string) (*Claims, error) {
 	parts := strings.Split(accessToken, ".")
 	if len(parts) != 3 {

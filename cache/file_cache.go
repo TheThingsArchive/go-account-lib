@@ -22,7 +22,7 @@ func defaultFilename(key string) string {
 }
 
 // FileCache returns a cache that stores keys on filesystem
-func FileCache(dirname string) *fileCache {
+func FileCache(dirname string) Cache {
 	return &fileCache{
 		dirname: dirname,
 		nameFn:  defaultFilename,
@@ -31,7 +31,7 @@ func FileCache(dirname string) *fileCache {
 
 // FileCacheWithNameFn creates a FileCache that has a custom way to generate
 // filenames
-func FileCacheWithNameFn(dirname string, filename func(string) string) *fileCache {
+func FileCacheWithNameFn(dirname string, filename func(string) string) Cache {
 	return &fileCache{
 		dirname: dirname,
 		nameFn:  filename,

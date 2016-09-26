@@ -18,15 +18,15 @@ type fileStore struct {
 
 // FileStore creates a filestore that stores tokens in the
 // specified directory
-func FileStore(dirname string) *fileStore {
+func FileStore(dirname string) TokenStore {
 	return &fileStore{
 		cache: cache.FileCacheWithNameFn(dirname, filename),
 	}
 }
 
-// FileStore creates a filestore that stores tokens in the
+// FileStoreWithNameFn creates a filestore that stores tokens in the
 // specified directory under with a custom filename
-func FileStoreWithNameFn(dirname string, nameFn func(string) string) *fileStore {
+func FileStoreWithNameFn(dirname string, nameFn func(string) string) TokenStore {
 	return &fileStore{
 		cache: cache.FileCacheWithNameFn(dirname, nameFn),
 	}

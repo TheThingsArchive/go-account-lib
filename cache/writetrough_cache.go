@@ -10,7 +10,7 @@ type writeTroughCache struct {
 
 // WriteTroughCache creates a cache that stores keys in memory
 // and uses disk as fallback
-func WriteTroughCache(dirname string) *writeTroughCache {
+func WriteTroughCache(dirname string) Cache {
 	return &writeTroughCache{
 		memory: MemoryCache(),
 		file:   FileCache(dirname),
@@ -20,7 +20,7 @@ func WriteTroughCache(dirname string) *writeTroughCache {
 // WriteTroughCacheWithNameFn creates a cache that stores keys in memory
 // and uses disk as fallback. It generates filenames based on the passed in
 // function.
-func WriteTroughCacheWithNameFn(dirname string, fn func(string) string) *writeTroughCache {
+func WriteTroughCacheWithNameFn(dirname string, fn func(string) string) Cache {
 	return &writeTroughCache{
 		memory: MemoryCache(),
 		file:   FileCacheWithNameFn(dirname, fn),
