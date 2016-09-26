@@ -7,10 +7,3 @@ package claims
 func (claims *Claims) HasScope(scope string) bool {
 	return claims != nil && contains(claims.Scope, scope)
 }
-
-// hasScopedID checks if the token has the specified composite scope
-// For example `claims.hasScopedID("apps", "foo")` checks if the scope `"apps:foo"` is
-// present on `claims`.
-func (claims *Claims) hasScopedID(scope, ID string) bool {
-	return claims.HasScope(scope + ":" + ID)
-}
