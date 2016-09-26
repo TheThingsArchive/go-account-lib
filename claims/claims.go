@@ -9,6 +9,7 @@ type Claims struct {
 	jwt.StandardClaims
 	Client     string              `json:"client"`
 	Scope      []string            `json:"scope"`
+	Type       string              `json:"type,omitempty"`
 	Apps       map[string][]string `json:"apps,omitempty"`
 	Gateways   map[string][]string `json:"gateways,omitempty"`
 	Components map[string][]string `json:"components,omitempty"`
