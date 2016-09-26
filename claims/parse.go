@@ -39,7 +39,7 @@ func FromToken(provider tokenkey.Provider, accessToken string) (claims *Claims, 
 	}
 
 	if !parsed.Valid {
-		return nil, fmt.Errorf("token onot valid or expired")
+		return nil, fmt.Errorf("token not valid or expired")
 	}
 
 	return claims, nil
