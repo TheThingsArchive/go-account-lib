@@ -13,4 +13,10 @@ type Claims struct {
 	Apps       map[string][]string `json:"apps,omitempty"`
 	Gateways   map[string][]string `json:"gateways,omitempty"`
 	Components map[string][]string `json:"components,omitempty"`
+	Username   string              `json:"username"`
+	Email      string              `json:"email"`
+	Name       struct {
+		First string `json:"first"`
+		Last  string `json:"last"`
+	} `json:"name"`
 }
