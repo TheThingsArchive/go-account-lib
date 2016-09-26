@@ -15,8 +15,9 @@ import (
 
 // FromToken uses the tokenkey provider to parse and validate a token into its
 // corresponding claims
-func FromToken(provider tokenkey.Provider, accessToken string) (claims *Claims, err error) {
-	parsed, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
+func FromToken(provider tokenkey.Provider, accessToken string) (*Claims, error) {
+	var claims Claims
+	parsed, err := jwt.ParseWithClaims(accessToken, &claims, func(token *jwt.Token) (interface{}, error) {
 		if provider == nil {
 			return nil, errors.New("No token provider configured")
 		}
@@ -46,7 +47,7 @@ func FromToken(provider tokenkey.Provider, accessToken string) (claims *Claims, 
 		return nil, fmt.Errorf("token not valid or expired")
 	}
 
-	return claims, nil
+	return &claims, nil
 }
 
 // FromTokenWithoutValidation parses a token into its corresponding claims,
