@@ -4,8 +4,10 @@
 package claims
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/TheThingsNetwork/go-account-lib/tokenkey"
 	jwt "github.com/dgrijalva/jwt-go"
@@ -43,4 +45,24 @@ func FromToken(provider tokenkey.Provider, accessToken string) (claims *Claims, 
 	}
 
 	return claims, nil
+}
+
+func FromTokenWithoutValidation(accessToken string) (*Claims, error) {
+	parts := strings.Split(accessToken, ".")
+	if len(parts) != 3 {
+		return nil, errors.New("Invalid access token segments")
+	}
+
+	segment, err := jwt.DecodeSegment(parts[1])
+	if err != nil {
+		return nil, err
+	}
+
+	var claims Claims
+	err = json.Unmarshal(segment, &claims)
+	if err != nil {
+		return nil, err
+	}
+
+	return &claims, nil
 }
