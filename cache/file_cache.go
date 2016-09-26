@@ -58,5 +58,9 @@ func (c *fileCache) Get(key string) ([]byte, error) {
 
 // Set saves the data to the file determined by key
 func (c *fileCache) Set(key string, data []byte) error {
+	err := os.MkdirAll(c.dirname, 0700)
+	if err != nil {
+		return err
+	}
 	return ioutil.WriteFile(c.filename(key), data, 0644)
 }
