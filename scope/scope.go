@@ -3,14 +3,19 @@
 
 package scope
 
-// Apps is the scope name for apps
-const Apps = "apps"
+const (
+	// Apps is the scope name for apps
+	Apps = "apps"
 
-// Gateways is the scope name for gateways
-const Gateways = "gateways"
+	// Gateways is the scope name for gateways
+	Gateways = "gateways"
 
-// Components is the scope name for components
-const Components = "components"
+	// Components is the scope name for components
+	Components = "components"
+
+	// Profile is the scope name for profiles
+	Profile = "profile"
+)
 
 // App returns the scope for the app with the specific ID
 func App(ID string) string {
