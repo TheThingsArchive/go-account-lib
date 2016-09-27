@@ -78,3 +78,9 @@ type Location struct {
 	Longitude float64 `json:"lng"`
 	Latitude  float64 `json:"lat"`
 }
+
+type FrequencyPlan struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	URL         string `json:"url"`
+}
