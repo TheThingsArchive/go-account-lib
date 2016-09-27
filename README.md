@@ -1,4 +1,4 @@
-
+[![GoDoc](https://godoc.org/github.com/TheThingsNetwork/go-account-lib?status.svg)](https://godoc.org/github.com/TheThingsNetwork/go-account-lib)
 # go-account-lib
 
 This is a client-library for the TTN account server.
