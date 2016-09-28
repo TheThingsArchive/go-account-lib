@@ -16,26 +16,28 @@ type fileCache struct {
 	nameFn  func(string) string
 }
 
-// defaultFilename is the default filename generator
-func defaultFilename(key string) string {
-	return fmt.Sprintf("ttn-%s.data", key)
-}
+const defaultFormat = "ttn-%s.data"
 
 // FileCache returns a cache that stores keys on filesystem
 func FileCache(dirname string) Cache {
-	return &fileCache{
-		dirname: dirname,
-		nameFn:  defaultFilename,
-	}
+	return FileCacheWithFormat(dirname, defaultFormat)
 }
 
-// FileCacheWithNameFn creates a FileCache that has a custom way to generate
+// FileCacheWithNameFn creates a FileCache that has a custom function to generate
 // filenames
 func FileCacheWithNameFn(dirname string, filename func(string) string) Cache {
 	return &fileCache{
 		dirname: dirname,
 		nameFn:  filename,
 	}
+}
+
+// FileCacheWithFormat creates a FileCache that uses a format string to generate
+// filenames
+func FileCacheWithFormat(dirname string, format string) Cache {
+	return FileCacheWithNameFn(dirname, func(key string) string {
+		return fmt.Sprintf(format, key)
+	})
 }
 
 // filename creates the full filename for key based on configuration
