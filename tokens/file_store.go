@@ -32,6 +32,14 @@ func FileStoreWithNameFn(dirname string, nameFn func(string) string) TokenStore 
 	}
 }
 
+// FileStoreWithFormat creates a filestore that stores tokens in the
+// specified directory under with a custom filename
+func FileStoreWithFormat(dirname, format string) TokenStore {
+	return &fileStore{
+		cache: cache.FileCacheWithFormat(dirname, format),
+	}
+}
+
 // key creates a key for storing a token and scope by md5 hashing
 // the pair
 func (s *fileStore) key(parent, scope string) string {

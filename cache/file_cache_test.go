@@ -66,4 +66,8 @@ func TestFileCacheName(t *testing.T) {
 	name = fcache.filename("foo")
 	a.So(name, ShouldEqual, path.Join(dir, "bar"))
 
+	cache = FileCacheWithFormat(dir, "%s-foo")
+	fcache = cache.(*fileCache)
+	name = fcache.filename("foo")
+	a.So(name, ShouldEqual, path.Join(dir, "foo-foo"))
 }
