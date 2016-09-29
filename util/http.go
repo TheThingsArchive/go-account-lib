@@ -6,12 +6,12 @@ package util
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 
 	"github.com/TheThingsNetwork/go-account-lib/auth"
-	"github.com/TheThingsNetwork/ttn/utils/errors"
 )
 
 var (
