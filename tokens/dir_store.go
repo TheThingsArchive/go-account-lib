@@ -12,37 +12,37 @@ import (
 	"github.com/TheThingsNetwork/go-account-lib/claims"
 )
 
-type fileStore struct {
+type dirStore struct {
 	cache cache.Cache
 }
 
-// FileStore creates a filestore that stores tokens in the
+// DirStore creates a filestore that stores tokens in the
 // specified directory
-func FileStore(dirname string) TokenStore {
-	return &fileStore{
+func DirStore(dirname string) TokenStore {
+	return &dirStore{
 		cache: cache.FileCacheWithNameFn(dirname, filename),
 	}
 }
 
-// FileStoreWithNameFn creates a filestore that stores tokens in the
+// DirStoreWithNameFn creates a filestore that stores tokens in the
 // specified directory under with a custom filename
 func FileStoreWithNameFn(dirname string, nameFn func(string) string) TokenStore {
-	return &fileStore{
+	return &dirStore{
 		cache: cache.FileCacheWithNameFn(dirname, nameFn),
 	}
 }
 
-// FileStoreWithFormat creates a filestore that stores tokens in the
+// DirStoreWithFormat creates a filestore that stores tokens in the
 // specified directory under with a custom filename
-func FileStoreWithFormat(dirname, format string) TokenStore {
-	return &fileStore{
+func DirStoreWithFormat(dirname, format string) TokenStore {
+	return &dirStore{
 		cache: cache.FileCacheWithFormat(dirname, format),
 	}
 }
 
 // key creates a key for storing a token and scope by md5 hashing
 // the pair
-func (s *fileStore) key(parent, scope string) string {
+func (s *dirStore) key(parent, scope string) string {
 	data := scope + "." + parent
 	sum := md5.Sum([]byte(data))
 	return hex.EncodeToString(sum[:])
@@ -54,7 +54,7 @@ func filename(name string) string {
 }
 
 // Get gets the token and checks it's TTL
-func (s *fileStore) Get(parent, scope string) (string, error) {
+func (s *dirStore) Get(parent, scope string) (string, error) {
 	key := s.key(parent, scope)
 	data, err := s.cache.Get(key)
 	if err != nil {
@@ -83,7 +83,7 @@ func (s *fileStore) Get(parent, scope string) (string, error) {
 }
 
 // Set saves the token and sets its deadline
-func (s *fileStore) Set(parent string, scopes []string, token string, TTL time.Duration) error {
+func (s *dirStore) Set(parent string, scopes []string, token string, TTL time.Duration) error {
 	// store the token for every scope it has
 	for _, scope := range scopes {
 		key := s.key(parent, scope)
