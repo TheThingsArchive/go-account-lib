@@ -4,10 +4,10 @@
 package tokens
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
+	"strings"
 	"testing"
 	"time"
 
@@ -25,6 +25,14 @@ var (
 	testScopes = []string{testScope}
 )
 
+func lines(filename string) (int, error) {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return 0, err
+	}
+	return len(strings.Split(string(data), "\n")), nil
+}
+
 func TestFileStore(t *testing.T) {
 	a := New(t)
 
@@ -33,7 +41,7 @@ func TestFileStore(t *testing.T) {
 	defer os.RemoveAll(dir)
 
 	fname := path.Join(dir, "store.tokens")
-	store := FileTokenStore(fname)
+	store := FileStore(fname)
 
 	tok, err := store.Get(testParent, testScope)
 	a.So(err, ShouldBeNil)
@@ -49,9 +57,9 @@ func TestFileStore(t *testing.T) {
 	err = store.Set(testParent2, testScopes, testToken, time.Hour)
 	a.So(err, ShouldBeNil)
 
-	data, err := ioutil.ReadFile(fname)
+	n, err := lines(fname)
 	a.So(err, ShouldBeNil)
-	fmt.Println(string(data))
+	a.So(n, ShouldEqual, 2)
 
 	tok, err = store.Get(testParent2, testScope)
 	a.So(err, ShouldBeNil)
@@ -60,12 +68,20 @@ func TestFileStore(t *testing.T) {
 	err = store.Set(testParent2, testScopes, testToken, -time.Hour)
 	a.So(err, ShouldBeNil)
 
+	n, err = lines(fname)
+	a.So(err, ShouldBeNil)
+	a.So(n, ShouldEqual, 1)
+
 	tok, err = store.Get(testParent2, testScope)
 	a.So(err, ShouldBeNil)
 	a.So(tok, ShouldBeEmpty)
 
 	err = store.Set(testParent, testScopes, testToken2, time.Hour)
 	a.So(err, ShouldBeNil)
+
+	n, err = lines(fname)
+	a.So(err, ShouldBeNil)
+	a.So(n, ShouldEqual, 1)
 
 	tok, err = store.Get(testParent, testScope)
 	a.So(err, ShouldBeNil)
