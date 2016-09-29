@@ -81,34 +81,33 @@ type GatewayEdits struct {
 }
 
 // EditGateway edits the fields of a gateway
-func (a *Account) EditGateway(gatewayID string, edits GatewayEdits) (gateway Gateway, err error) {
-	err = a.patch(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/gateways/%s", gatewayID), edits, &gateway)
-	return gateway, err
+func (a *Account) EditGateway(gatewayID string, edits GatewayEdits) error {
+	return a.patch(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/gateways/%s", gatewayID), edits, nil)
 }
 
 // TransferOwnership transfers the owenership of the gateway to another user
-func (a *Account) TransferOwnership(gatewayID, username string) (Gateway, error) {
+func (a *Account) TransferOwnership(gatewayID, username string) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
 		Owner: username,
 	})
 }
 
 // SetPublicRights changes the publicily visible rights of the gateway
-func (a *Account) SetPublicRights(gatewayID string, rights []types.Right) (Gateway, error) {
+func (a *Account) SetPublicRights(gatewayID string, rights []types.Right) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
 		PublicRights: rights,
 	})
 }
 
 // ChangeFrequencyPlan changes the requency plan of a gateway
-func (a *Account) ChangeFrequencyPlan(gatewayID, plan string) (Gateway, error) {
+func (a *Account) ChangeFrequencyPlan(gatewayID, plan string) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
 		FrequencyPlan: plan,
 	})
 }
 
 // ChangeLocation changes the location of the gateway
-func (a *Account) ChangeLocation(gatewayID string, latitude, longitude float64) (Gateway, error) {
+func (a *Account) ChangeLocation(gatewayID string, latitude, longitude float64) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
 		Location: &Location{
 			Longitude: longitude,
