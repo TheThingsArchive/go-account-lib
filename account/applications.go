@@ -88,12 +88,11 @@ type editAppReq struct {
 }
 
 // ChangeName changes the application name
-func (a *Account) ChangeName(appID string, name string) (app Application, err error) {
+func (a *Account) ChangeName(appID string, name string) error {
 	body := editAppReq{
 		Name: name,
 	}
-	err = a.patch(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/applications/%s", appID), body, &app)
-	return app, err
+	return a.patch(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/applications/%s", appID), body, nil)
 }
 
 // AddEUI adds an EUI to the applications list of EUIs
