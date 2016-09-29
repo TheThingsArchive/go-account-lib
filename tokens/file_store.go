@@ -15,7 +15,7 @@ type fileTokenStore struct {
 	filename string
 }
 
-func FileTokenStore(filename string) TokenStore {
+func FileStore(filename string) TokenStore {
 	return &fileTokenStore{
 		filename: filename,
 	}
