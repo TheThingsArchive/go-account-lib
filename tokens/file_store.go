@@ -4,91 +4,119 @@
 package tokens
 
 import (
-	"crypto/md5"
-	"encoding/hex"
+	"encoding/json"
+	"io/ioutil"
+	"os"
+	"strings"
 	"time"
-
-	"github.com/TheThingsNetwork/go-account-lib/cache"
-	"github.com/TheThingsNetwork/go-account-lib/claims"
 )
 
-type fileStore struct {
-	cache cache.Cache
+type fileTokenStore struct {
+	filename string
 }
 
-// FileStore creates a filestore that stores tokens in the
-// specified directory
-func FileStore(dirname string) TokenStore {
-	return &fileStore{
-		cache: cache.FileCacheWithNameFn(dirname, filename),
+func FileTokenStore(filename string) TokenStore {
+	return &fileTokenStore{
+		filename: filename,
 	}
 }
 
-// FileStoreWithNameFn creates a filestore that stores tokens in the
-// specified directory under with a custom filename
-func FileStoreWithNameFn(dirname string, nameFn func(string) string) TokenStore {
-	return &fileStore{
-		cache: cache.FileCacheWithNameFn(dirname, nameFn),
+type fileToken struct {
+	Parent  string    `json:"parent_token"`
+	Scope   string    `json:"scope"`
+	Token   string    `json:"token"`
+	Expires time.Time `json:"expires"`
+}
+
+func (s *fileTokenStore) readTokens() ([]fileToken, error) {
+	// read the token file
+	data, err := ioutil.ReadFile(s.filename)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return []fileToken{}, nil
+		}
+		return nil, err
 	}
-}
 
-// FileStoreWithFormat creates a filestore that stores tokens in the
-// specified directory under with a custom filename
-func FileStoreWithFormat(dirname, format string) TokenStore {
-	return &fileStore{
-		cache: cache.FileCacheWithFormat(dirname, format),
+	now := time.Now()
+	res := make([]fileToken, 0)
+
+	lines := strings.Split(string(data), "\n")
+	for _, line := range lines {
+		if line == "" {
+			continue
+		}
+
+		// unmarshal the token
+		var token fileToken
+		err := json.Unmarshal([]byte(line), &token)
+		if err != nil {
+			return nil, err
+		}
+
+		// only append tokens that are not expired
+		if token.Expires.After(now) {
+			res = append(res, token)
+		}
 	}
+
+	return res, nil
 }
 
-// key creates a key for storing a token and scope by md5 hashing
-// the pair
-func (s *fileStore) key(parent, scope string) string {
-	data := scope + "." + parent
-	sum := md5.Sum([]byte(data))
-	return hex.EncodeToString(sum[:])
+func (s *fileTokenStore) writeTokens(tokens []fileToken) error {
+	now := time.Now()
+	lines := make([]string, 0)
+	for _, token := range tokens {
+		if token.Token != "" && token.Expires.After(now) {
+			data, err := json.Marshal(token)
+			if err != nil {
+				return err
+			}
+			lines = append(lines, string(data))
+		}
+	}
+	return ioutil.WriteFile(s.filename, []byte(strings.Join(lines, "\n")), 0600)
 }
 
-// filename is the default token filename
-func filename(name string) string {
-	return name + ".derived.token"
-}
-
-// Get gets the token and checks it's TTL
-func (s *fileStore) Get(parent, scope string) (string, error) {
-	key := s.key(parent, scope)
-	data, err := s.cache.Get(key)
+func (s *fileTokenStore) Get(parent string, scope string) (string, error) {
+	tokens, err := s.readTokens()
 	if err != nil {
 		return "", err
 	}
 
-	if data == nil {
-		return "", nil
+	for _, token := range tokens {
+		if token.Parent == parent && token.Scope == scope {
+			return token.Token, nil
+		}
 	}
-
-	claims, err := claims.FromTokenWithoutValidation(string(data))
-	if err != nil {
-		return "", err
-	}
-
-	if claims.ExpiresAt == 0 {
-		return "", nil
-	}
-
-	expires := time.Unix(claims.ExpiresAt, 0)
-	if expires.Before(time.Now()) {
-		return "", nil
-	}
-
-	return string(data), nil
+	return "", nil
 }
 
-// Set saves the token and sets its deadline
-func (s *fileStore) Set(parent string, scopes []string, token string, TTL time.Duration) error {
-	// store the token for every scope it has
+func (s *fileTokenStore) Set(parent string, scopes []string, tok string, TTL time.Duration) error {
+	tokens, err := s.readTokens()
+	if err != nil {
+		return err
+	}
+	now := time.Now()
 	for _, scope := range scopes {
-		key := s.key(parent, scope)
-		s.cache.Set(key, []byte(token))
+		updated := false
+		newToken := fileToken{
+			Parent:  parent,
+			Token:   tok,
+			Scope:   scope,
+			Expires: now.Add(TTL),
+		}
+		for i, token := range tokens {
+			if token.Parent == parent && token.Scope == scope {
+				tokens[i] = newToken
+				updated = true
+			}
+		}
+
+		if !updated {
+			tokens = append(tokens, newToken)
+		}
 	}
 
-	return nil
+	return s.writeTokens(tokens)
 }
