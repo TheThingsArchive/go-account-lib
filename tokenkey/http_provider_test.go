@@ -20,18 +20,6 @@ var (
 	}
 )
 
-type constCache struct {
-	data []byte
-}
-
-func (c *constCache) Get(server string) ([]byte, error) {
-	return c.data, nil
-}
-
-func (c *constCache) Set(server string, data []byte) error {
-	return nil
-}
-
 func TestHTTPProviderBadServer(t *testing.T) {
 	a := New(t)
 
@@ -45,7 +33,7 @@ func TestHTTPProviderBadServer(t *testing.T) {
 func TestHTTPProviderBadKey(t *testing.T) {
 	a := New(t)
 
-	cache := &constCache{data: key}
+	cache := cache.ConstCache(key)
 	provider := HTTPProvider(servers, cache)
 
 	_, err := provider.Get(testID, false)
