@@ -55,28 +55,6 @@ aQIDAQAB
 -----END PUBLIC KEY-----`
 )
 
-// constProvider is a tokenkey Provider that always resturns the same tokenkey
-type constProvider struct {
-	key *tokenkey.TokenKey
-}
-
-func (c *constProvider) Get(server string, renew bool) (*tokenkey.TokenKey, error) {
-	return c.key, nil
-}
-
-func (c *constProvider) Update() error {
-	return nil
-}
-
-func ConstProvider(publicKey string) tokenkey.Provider {
-	return &constProvider{
-		key: &tokenkey.TokenKey{
-			Algorithm: "RS256",
-			Key:       publicKey,
-		},
-	}
-}
-
 func buildJWT(claims *Claims) string {
 	builder := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 
@@ -116,7 +94,7 @@ func buildClaims(TTL time.Duration) *Claims {
 func TestParseValidToken(t *testing.T) {
 	a := New(t)
 
-	provider := ConstProvider(publicKey)
+	provider := tokenkey.ConstProvider(publicKey, "RS256")
 
 	claims := buildClaims(time.Hour)
 
@@ -130,7 +108,7 @@ func TestParseValidToken(t *testing.T) {
 func TestParseExpired(t *testing.T) {
 	a := New(t)
 
-	provider := ConstProvider(publicKey)
+	provider := tokenkey.ConstProvider(publicKey, "RS256")
 
 	claims := buildClaims(-1 * time.Hour)
 	token := buildJWT(claims)
