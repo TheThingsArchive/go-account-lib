@@ -6,7 +6,6 @@ package auth
 import (
 	"net/http"
 	"testing"
-	"time"
 
 	"github.com/TheThingsNetwork/go-account-lib/tokens"
 	. "github.com/smartystreets/assertions"
@@ -41,20 +40,10 @@ func TestAccessTokenWithScope(t *testing.T) {
 	a.So(at.scope, ShouldEqual, scope)
 }
 
-type constStore struct{}
-
-func (s *constStore) Get(parent string, scope string) (string, error) {
-	return otherToken, nil
-}
-
-func (s *constStore) Set(parent string, scope []string, token string, ttl time.Duration) error {
-	return nil
-}
-
 func TestAccessTokenWithManager(t *testing.T) {
 	a := New(t)
 
-	store := &constStore{}
+	store := tokens.ConstStore(otherToken)
 
 	strategy := AccessTokenWithManager(token, tokens.HTTPManager("server", token, store))
 	withScope := strategy.WithScope(scope)
