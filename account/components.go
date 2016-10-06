@@ -33,7 +33,7 @@ func plural(in string) (string, error) {
 
 // ListComponents lists all of the users components
 func (a *Account) ListComponents() ([]Component, error) {
-	var components []Component
+	components := make([]Component, 0)
 	err := a.get(a.auth, "/api/components", &components)
 	return components, err
 }
