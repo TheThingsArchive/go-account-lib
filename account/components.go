@@ -17,23 +17,23 @@ func (a *Account) ListComponents() (components []Component, err error) {
 }
 
 // FindComponent finds a comonent of the specified type with the specified id
-func (a *Account) FindComponent(typ, id string) (component []Component, err error) {
+func (a *Account) FindComponent(typ, id string) (component Component, err error) {
 	err = a.get(a.auth.WithScope(scope.Component(id)), fmt.Sprintf("/api/components/%s/%s", typ, id), &component)
 	return component, err
 }
 
 // FindBroker finds a broker with the specified id
-func (a *Account) FindBroker(id string) (component []Component, err error) {
+func (a *Account) FindBroker(id string) (component Component, err error) {
 	return a.FindComponent("broker", id)
 }
 
 // FindRouter finds a router with the specified id
-func (a *Account) FindRouter(id string) (component []Component, err error) {
+func (a *Account) FindRouter(id string) (component Component, err error) {
 	return a.FindComponent("router", id)
 }
 
 // FindHandler finds a handler with the specified id
-func (a *Account) FindHandler(id string) (component []Component, err error) {
+func (a *Account) FindHandler(id string) (component Component, err error) {
 	return a.FindComponent("handler", id)
 }
 
