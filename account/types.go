@@ -60,6 +60,11 @@ func (n *Name) String() string {
 	return n.First + " " + n.Last
 }
 
+type Token struct {
+	Token   string    `json:"token"`
+	Expires time.Time `json:"expires"`
+}
+
 // Gateway represents a gateway on the account server
 type Gateway struct {
 	ID               string         `json:"id" valid:"required"`
@@ -71,8 +76,7 @@ type Gateway struct {
 	Location         *Location      `json:"location"`
 	Collaborators    []Collaborator `json:"collaborator"`
 	Key              string         `json:"key"`
-	Token            string         `json:"token,omitempty"`
-	TokenExpires     time.Time      `json:"token_expires,omitempty"`
+	Token            *Token         `json:"token,omitempty`
 }
 
 // Location is the GPS location of a gateway
