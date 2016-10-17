@@ -23,7 +23,7 @@ func (a *Account) RegisterUser(username, email, password string) error {
 		Password: password,
 	}
 
-	err := a.post(auth.Public, "/api/users", user, nil)
+	err := a.post(auth.Public, "/api/v2/users", user, nil)
 	if err != nil {
 		return fmt.Errorf("Could not register user: %s", err)
 	}
@@ -32,7 +32,7 @@ func (a *Account) RegisterUser(username, email, password string) error {
 
 // Profile gets the user profile of the user that is logged in
 func (a *Account) Profile() (user Profile, err error) {
-	err = a.get(a.auth, "/api/users/me", &user)
+	err = a.get(a.auth, "/api/v2/users/me", &user)
 	if err != nil {
 		return user, fmt.Errorf("Could not get user profile: %s", err)
 	}
@@ -69,7 +69,7 @@ func (a *Account) EditProfile(profile Profile) error {
 		edits.Name = profile.Name
 	}
 
-	err := a.patch(a.auth, "/api/users/me", edits, nil)
+	err := a.patch(a.auth, "/api/v2/users/me", edits, nil)
 	if err != nil {
 		return fmt.Errorf("Could not update profile: %s", err)
 	}
@@ -89,7 +89,7 @@ func (a *Account) EditPassword(oldPassword, newPassword string) error {
 		Password:    newPassword,
 	}
 
-	err := a.patch(a.auth, "/api/users/me", edits, nil)
+	err := a.patch(a.auth, "/api/v2/users/me", edits, nil)
 	if err != nil {
 		return fmt.Errorf("Could change not password: %s", err)
 	}

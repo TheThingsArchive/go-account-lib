@@ -12,13 +12,13 @@ import (
 
 // ListApplications list all applications
 func (a *Account) ListApplications() (apps []Application, err error) {
-	err = a.get(a.auth.WithScope(scope.Apps), "/applications", &apps)
+	err = a.get(a.auth.WithScope(scope.Apps), "/api/v2/applications", &apps)
 	return apps, err
 }
 
 // FindApplication gets a specific application from the account server
 func (a *Account) FindApplication(appID string) (app Application, err error) {
-	err = a.get(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/applications/%s", appID), &app)
+	err = a.get(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s", appID), &app)
 	return app, err
 }
 
@@ -36,13 +36,13 @@ func (a *Account) CreateApplication(appID string, name string, EUIs []types.AppE
 		EUIs:  EUIs,
 	}
 
-	err = a.post(a.auth, "/applications", &body, &app)
+	err = a.post(a.auth, "/api/v2/applications", &body, &app)
 	return app, err
 }
 
 // DeleteApplication deletes an application
 func (a *Account) DeleteApplication(appID string) error {
-	return a.del(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/applications/%s", appID))
+	return a.del(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s", appID))
 }
 
 type grantReq struct {
@@ -54,12 +54,12 @@ func (a *Account) Grant(appID string, username string, rights []types.Right) err
 	req := grantReq{
 		Rights: rights,
 	}
-	return a.put(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/applications/%s/collaborators/%s", appID, username), req, nil)
+	return a.put(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/collaborators/%s", appID, username), req, nil)
 }
 
 // Retract removes rights from a collaborator of the application
 func (a *Account) Retract(appID string, username string) error {
-	return a.del(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/applications/%s/collaborators/%s", appID, username))
+	return a.del(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/collaborators/%s", appID, username))
 }
 
 type addAccessKeyReq struct {
@@ -74,13 +74,13 @@ func (a *Account) AddAccessKey(appID string, name string, rights []types.Right) 
 		Name:   name,
 		Rights: rights,
 	}
-	err = a.post(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/applications/%s/access-keys", appID), body, &key)
+	err = a.post(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/access-keys", appID), body, &key)
 	return key, err
 }
 
 // RemoveAccessKey removes the specified access key from the application
 func (a *Account) RemoveAccessKey(appID string, name string) error {
-	return a.del(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/applications/%s/access-keys/%s", appID, name))
+	return a.del(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/access-keys/%s", appID, name))
 }
 
 type editAppReq struct {
@@ -92,12 +92,12 @@ func (a *Account) ChangeName(appID string, name string) error {
 	body := editAppReq{
 		Name: name,
 	}
-	return a.patch(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/applications/%s", appID), body, nil)
+	return a.patch(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s", appID), body, nil)
 }
 
 // AddEUI adds an EUI to the applications list of EUIs
 func (a *Account) AddEUI(appID string, eui types.AppEUI) error {
-	return a.put(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/applications/%s/euis/%s", appID, eui.String()), nil, nil)
+	return a.put(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/euis/%s", appID, eui.String()), nil, nil)
 }
 
 type genEUIRes struct {
@@ -107,7 +107,7 @@ type genEUIRes struct {
 // GenerateEUI creates a new EUI for the application
 func (a *Account) GenerateEUI(appID string) (*types.AppEUI, error) {
 	var res genEUIRes
-	err := a.post(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/applications/%s/euis", appID), nil, &res)
+	err := a.post(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/euis", appID), nil, &res)
 	if err != nil {
 		return nil, err
 	}
@@ -116,13 +116,13 @@ func (a *Account) GenerateEUI(appID string) (*types.AppEUI, error) {
 
 // RemoveEUI removes the specified EUI from the application
 func (a *Account) RemoveEUI(appID string, eui types.AppEUI) error {
-	return a.del(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/applications/%s/euis/%s", appID, eui.String()))
+	return a.del(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/euis/%s", appID, eui.String()))
 }
 
 // AppRights returns the rights the current account client has to a certain
 // application
 func (a *Account) AppRights(appID string) (rights []types.Right, err error) {
-	err = a.get(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/applications/%s/rights", appID), &rights)
+	err = a.get(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/rights", appID), &rights)
 	if err != nil {
 		return nil, err
 	}

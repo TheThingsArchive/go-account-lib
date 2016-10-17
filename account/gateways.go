@@ -14,13 +14,13 @@ import (
 
 // ListGateways list all gateways
 func (a *Account) ListGateways() (gateways []Gateway, err error) {
-	err = a.get(a.auth, "/gateways", &gateways)
+	err = a.get(a.auth, "/api/v2/gateways", &gateways)
 	return gateways, err
 }
 
 // FindGateway returns the information about a specific gateay
 func (a *Account) FindGateway(gatewayID string) (gateway Gateway, err error) {
-	err = a.get(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/gateways/%s", gatewayID), &gateway)
+	err = a.get(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s", gatewayID), &gateway)
 	return gateway, err
 }
 
@@ -51,14 +51,14 @@ func (a *Account) RegisterGateway(gatewayID string, frequencyPlan string, locati
 		Location:      location,
 	}
 
-	err = a.post(a.auth, "/gateways", req, &gateway)
+	err = a.post(a.auth, "/api/v2/gateways", req, &gateway)
 	return gateway, err
 }
 
 // FindGateway returns the information about a specific gateay
 func (a *Account) GetGatewayToken(gatewayID string) (*Token, error) {
 	var gateway Gateway
-	err := a.get(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/gateways/%s", gatewayID), &gateway)
+	err := a.get(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s", gatewayID), &gateway)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func (a *Account) GetGatewayToken(gatewayID string) (*Token, error) {
 	// didn't get a token, but we can use the Key to get one
 	if gateway.Key != "" {
 		var token Token
-		err = a.get(auth.AccessKey(gateway.Key), fmt.Sprintf("/gateways/%s/token", gatewayID), &token)
+		err = a.get(auth.AccessKey(gateway.Key), fmt.Sprintf("/api/v2/gateways/%s/token", gatewayID), &token)
 		if err != nil {
 			return nil, err
 		}
@@ -84,7 +84,7 @@ func (a *Account) GetGatewayToken(gatewayID string) (*Token, error) {
 
 // DeleteGateway removes a gateway from the account server
 func (a *Account) DeleteGateway(gatewayID string) error {
-	return a.del(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/gateways/%s", gatewayID))
+	return a.del(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s", gatewayID))
 }
 
 // GrantGatewayRights grants rights to a collaborator of the gateway
@@ -92,12 +92,12 @@ func (a *Account) GrantGatewayRights(gatewayID string, username string, rights [
 	req := grantReq{
 		Rights: rights,
 	}
-	return a.put(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/gateways/%s/collaborators/%s", gatewayID, username), req, nil)
+	return a.put(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s/collaborators/%s", gatewayID, username), req, nil)
 }
 
 // RetractGatewayRights removes rights from a collaborator of the gateway
 func (a *Account) RetractGatewayRights(gatewayID string, username string) error {
-	return a.del(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/gateways/%s/collaborators/%s", gatewayID, username))
+	return a.del(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s/collaborators/%s", gatewayID, username))
 }
 
 // GatewayEdits contains editable fields of gateways
@@ -110,7 +110,7 @@ type GatewayEdits struct {
 
 // EditGateway edits the fields of a gateway
 func (a *Account) EditGateway(gatewayID string, edits GatewayEdits) error {
-	return a.patch(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/gateways/%s", gatewayID), edits, nil)
+	return a.patch(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s", gatewayID), edits, nil)
 }
 
 // TransferOwnership transfers the owenership of the gateway to another user

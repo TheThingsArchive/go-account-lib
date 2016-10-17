@@ -34,7 +34,7 @@ func plural(in string) (string, error) {
 // ListComponents lists all of the users components
 func (a *Account) ListComponents() ([]Component, error) {
 	components := make([]Component, 0)
-	err := a.get(a.auth, "/api/components", &components)
+	err := a.get(a.auth, "/api/v2/components", &components)
 	return components, err
 }
 
@@ -44,7 +44,7 @@ func (a *Account) FindComponent(typ, id string) (component Component, err error)
 	if err != nil {
 		return component, err
 	}
-	err = a.get(a.auth.WithScope(scope.Component(id)), fmt.Sprintf("/api/components/%s/%s", p, id), &component)
+	err = a.get(a.auth.WithScope(scope.Component(id)), fmt.Sprintf("/api/v2/components/%s/%s", p, id), &component)
 	return component, err
 }
 
@@ -77,7 +77,7 @@ func (a *Account) CreateComponent(typ, id string) error {
 	body := createComponentReq{
 		ID: id,
 	}
-	return a.post(a.auth, fmt.Sprintf("/api/components/%s", p), body, nil)
+	return a.post(a.auth, fmt.Sprintf("/api/v2/components/%s", p), body, nil)
 }
 
 // CreateBroker creates a broker with the specified id
@@ -109,7 +109,7 @@ func (a *Account) ComponentToken(typ, id string) (token string, err error) {
 	}
 
 	var res componentTokenRes
-	err = a.get(a.auth.WithScope(scope.Component(id)), fmt.Sprintf("/api/components/%s/%s/token", p, id), &res)
+	err = a.get(a.auth.WithScope(scope.Component(id)), fmt.Sprintf("/api/v2/components/%s/%s/token", p, id), &res)
 	return res.Token, err
 }
 
