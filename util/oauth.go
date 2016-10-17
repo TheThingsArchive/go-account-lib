@@ -33,7 +33,7 @@ func MakeKeyConfig(server string, clientID string, clientSecret string) oauth2.C
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
 		Endpoint: oauth2.Endpoint{
-			TokenURL: fmt.Sprintf("%s/applications/token", server),
+			TokenURL: fmt.Sprintf("%s/api/v2/applications/token", server),
 		},
 	}
 }
