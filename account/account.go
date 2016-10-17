@@ -42,6 +42,14 @@ func NewWithKey(server, accessKey string) *Account {
 	}
 }
 
+// NewWithBasicAuth creates an account client that uses basic authentication
+func NewWithBasicAuth(server, username, password string) *Account {
+	return &Account{
+		server: server,
+		auth:   auth.BasicAuth(username, password),
+	}
+}
+
 // NewWithPublic creates an account client that does not use authentication
 func NewWithPublic(server string) *Account {
 	return &Account{
