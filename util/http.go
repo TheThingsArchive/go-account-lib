@@ -12,6 +12,7 @@ import (
 	"net/http"
 
 	"github.com/TheThingsNetwork/go-account-lib/auth"
+	"github.com/apex/log"
 )
 
 var (
@@ -59,7 +60,7 @@ func newRequest(server, method string, URI string, body io.Reader) (*http.Reques
 	return req, nil
 }
 
-func performRequest(server string, strategy auth.Strategy, method, URI string, body, res interface{}, redirects int) (err error) {
+func performRequest(ctx log.Interface, server string, strategy auth.Strategy, method, URI string, body, res interface{}, redirects int) (err error) {
 	var req *http.Request
 
 	if body != nil {
@@ -95,8 +96,20 @@ func performRequest(server string, strategy auth.Strategy, method, URI string, b
 		return err
 	}
 
-	if resp.StatusCode >= 400 {
+	// catch deprecated api
+	if resp.StatusCode == 410 {
+		return fmt.Errorf("API deprecated by The Things Network account server, please update your client")
+	} else if warning := resp.Header.Get("Warning"); warning != "" {
+		// Warning header has format: 123 - "Message"
+		code := warning[0:3]
+		message := warning[7 : len(warning)-1]
+		ctx.WithFields(log.Fields{
+			"code":    code,
+			"message": message,
+		}).Warn("Got server warning. Make sure the client is up to date.")
+	}
 
+	if resp.StatusCode >= 400 {
 		var herr HTTPError
 		defer resp.Body.Close()
 		decoder := json.NewDecoder(resp.Body)
@@ -124,7 +137,7 @@ func performRequest(server string, strategy auth.Strategy, method, URI string, b
 	if resp.StatusCode == 307 {
 		if redirects > 0 {
 			location := resp.Header.Get("Location")
-			return performRequest(server, strategy, method, location, body, res, redirects-1)
+			return performRequest(ctx, server, strategy, method, location, body, res, redirects-1)
 		}
 		return fmt.Errorf("Reached maximum number of redirects")
 	}
@@ -150,29 +163,29 @@ func performRequest(server string, strategy auth.Strategy, method, URI string, b
 }
 
 // GET does a get request to the account server,  decoding the result into the object pointed to byres
-func GET(server string, strategy auth.Strategy, URI string, res interface{}) error {
-	return performRequest(server, strategy, "GET", URI, nil, res, MaxRedirects)
+func GET(ctx log.Interface, server string, strategy auth.Strategy, URI string, res interface{}) error {
+	return performRequest(ctx, server, strategy, "GET", URI, nil, res, MaxRedirects)
 }
 
 // DELETE does a delete request to the account server
-func DELETE(server string, strategy auth.Strategy, URI string) error {
-	return performRequest(server, strategy, "DELETE", URI, nil, nil, MaxRedirects)
+func DELETE(ctx log.Interface, server string, strategy auth.Strategy, URI string) error {
+	return performRequest(ctx, server, strategy, "DELETE", URI, nil, nil, MaxRedirects)
 }
 
 // POST creates an HTTP Post request to the specified server, with the body
 // encoded as JSON, decoding the result into the object pointed to byres
-func POST(server string, strategy auth.Strategy, URI string, body, res interface{}) error {
-	return performRequest(server, strategy, "POST", URI, body, res, MaxRedirects)
+func POST(ctx log.Interface, server string, strategy auth.Strategy, URI string, body, res interface{}) error {
+	return performRequest(ctx, server, strategy, "POST", URI, body, res, MaxRedirects)
 }
 
 // PUT creates an HTTP Put request to the specified server, with the body
 // encoded as JSON, decoding the result into the object pointed to byres
-func PUT(server string, strategy auth.Strategy, URI string, body, res interface{}) error {
-	return performRequest(server, strategy, "PUT", URI, body, res, MaxRedirects)
+func PUT(ctx log.Interface, server string, strategy auth.Strategy, URI string, body, res interface{}) error {
+	return performRequest(ctx, server, strategy, "PUT", URI, body, res, MaxRedirects)
 }
 
 // PATCH creates an HTTP Patch request to the specified server, with the body
 // encoded as JSON, decoding the result into the object pointed to byres
-func PATCH(server string, strategy auth.Strategy, URI string, body, res interface{}) error {
-	return performRequest(server, strategy, "PATCH", URI, body, res, MaxRedirects)
+func PATCH(ctx log.Interface, server string, strategy auth.Strategy, URI string, body, res interface{}) error {
+	return performRequest(ctx, server, strategy, "PATCH", URI, body, res, MaxRedirects)
 }

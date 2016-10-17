@@ -7,7 +7,6 @@ import (
 	"fmt"
 
 	"github.com/TheThingsNetwork/go-account-lib/auth"
-	"github.com/TheThingsNetwork/go-account-lib/util"
 )
 
 type registerUserReq struct {
@@ -16,16 +15,15 @@ type registerUserReq struct {
 	Password string `json:"password"`
 }
 
-// RegisterUser registers a new user with the specified username, email and
-// password on the specified account server
-func RegisterUser(server, username, email, password string) error {
+// RegisterUser registers a user on the account server
+func (a *Account) RegisterUser(username, email, password string) error {
 	user := registerUserReq{
 		Username: username,
 		Email:    email,
 		Password: password,
 	}
 
-	err := util.POST(server, auth.Public, "/api/users", user, nil)
+	err := a.post(auth.Public, "/api/users", user, nil)
 	if err != nil {
 		return fmt.Errorf("Could not register user: %s", err)
 	}

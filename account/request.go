@@ -9,21 +9,21 @@ import (
 )
 
 func (a *Account) get(strategy auth.Strategy, URI string, res interface{}) error {
-	return util.GET(a.server, strategy, URI, res)
+	return util.GET(a.ctx, a.server, strategy, URI, res)
 }
 
 func (a *Account) put(strategy auth.Strategy, URI string, body, res interface{}) error {
-	return util.PUT(a.server, strategy, URI, body, res)
+	return util.PUT(a.ctx, a.server, strategy, URI, body, res)
 }
 
 func (a *Account) post(strategy auth.Strategy, URI string, body, res interface{}) error {
-	return util.POST(a.server, strategy, URI, body, res)
+	return util.POST(a.ctx, a.server, strategy, URI, body, res)
 }
 
 func (a *Account) patch(strategy auth.Strategy, URI string, body, res interface{}) error {
-	return util.PATCH(a.server, strategy, URI, body, res)
+	return util.PATCH(a.ctx, a.server, strategy, URI, body, res)
 }
 
 func (a *Account) del(strategy auth.Strategy, URI string) error {
-	return util.DELETE(a.server, strategy, URI)
+	return util.DELETE(a.ctx, a.server, strategy, URI)
 }
