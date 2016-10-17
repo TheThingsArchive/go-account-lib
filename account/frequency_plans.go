@@ -3,16 +3,12 @@
 
 package account
 
-import (
-	"github.com/TheThingsNetwork/go-account-lib/auth"
-	"github.com/TheThingsNetwork/go-account-lib/util"
-)
+import "github.com/TheThingsNetwork/go-account-lib/auth"
 
-// FrequencyPlans
-func FrequencyPlans(server string) (map[string]FrequencyPlan, error) {
-
+// FrequencyPlans returns the frequency plans the account server supports
+func (a *Account) FrequencyPlans() (map[string]FrequencyPlan, error) {
 	var plans map[string]FrequencyPlan
-	err := util.GET(server, auth.Public, "/frequency-plans", &plans)
+	err := a.get(auth.Public, "/frequency-plans", &plans)
 	if err != nil {
 		return nil, err
 	}
