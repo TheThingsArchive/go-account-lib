@@ -76,7 +76,7 @@ type Gateway struct {
 	Location         *Location      `json:"location"`
 	Collaborators    []Collaborator `json:"collaborator"`
 	Key              string         `json:"key"`
-	Token            *Token         `json:"token,omitempty`
+	Token            *Token         `json:"token,omitempty"`
 }
 
 // Location is the GPS location of a gateway
