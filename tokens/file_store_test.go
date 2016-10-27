@@ -14,17 +14,6 @@ import (
 	. "github.com/smartystreets/assertions"
 )
 
-const (
-	testParent  = "thisistheparenttoken"
-	testParent2 = "thisisanotherparent"
-	testToken   = "thisisthetoken"
-	testToken2  = "thisisanothertoken"
-)
-
-var (
-	testScopes = []string{testScope}
-)
-
 func lines(filename string) (int, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -43,47 +32,47 @@ func TestFileStore(t *testing.T) {
 	fname := path.Join(dir, "store.tokens")
 	store := FileStore(fname)
 
-	tok, err := store.Get(testParent, testScope)
+	tok, err := store.Get(parent, testScope)
 	a.So(err, ShouldBeNil)
 	a.So(tok, ShouldBeEmpty)
 
-	err = store.Set(testParent, testScopes, testToken, time.Hour)
+	err = store.Set(parent, scopes, token, time.Hour)
 	a.So(err, ShouldBeNil)
 
-	tok, err = store.Get(testParent, testScope)
+	tok, err = store.Get(parent, testScope)
 	a.So(err, ShouldBeNil)
-	a.So(tok, ShouldEqual, testToken)
+	a.So(tok, ShouldEqual, token)
 
-	err = store.Set(testParent2, testScopes, testToken, time.Hour)
+	err = store.Set(otherParent, scopes, token, time.Hour)
 	a.So(err, ShouldBeNil)
 
 	n, err := lines(fname)
 	a.So(err, ShouldBeNil)
 	a.So(n, ShouldEqual, 2)
 
-	tok, err = store.Get(testParent2, testScope)
+	tok, err = store.Get(otherParent, testScope)
 	a.So(err, ShouldBeNil)
-	a.So(tok, ShouldEqual, testToken)
+	a.So(tok, ShouldEqual, token)
 
-	err = store.Set(testParent2, testScopes, testToken, -time.Hour)
+	err = store.Set(otherParent, scopes, token, -time.Hour)
 	a.So(err, ShouldBeNil)
 
 	n, err = lines(fname)
 	a.So(err, ShouldBeNil)
 	a.So(n, ShouldEqual, 1)
 
-	tok, err = store.Get(testParent2, testScope)
+	tok, err = store.Get(otherParent, testScope)
 	a.So(err, ShouldBeNil)
 	a.So(tok, ShouldBeEmpty)
 
-	err = store.Set(testParent, testScopes, testToken2, time.Hour)
+	err = store.Set(parent, scopes, otherToken, time.Hour)
 	a.So(err, ShouldBeNil)
 
 	n, err = lines(fname)
 	a.So(err, ShouldBeNil)
 	a.So(n, ShouldEqual, 1)
 
-	tok, err = store.Get(testParent, testScope)
+	tok, err = store.Get(parent, testScope)
 	a.So(err, ShouldBeNil)
-	a.So(tok, ShouldEqual, testToken2)
+	a.So(tok, ShouldEqual, otherToken)
 }

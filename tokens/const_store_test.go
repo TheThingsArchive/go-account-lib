@@ -10,10 +10,6 @@ import (
 	. "github.com/smartystreets/assertions"
 )
 
-const (
-	otherToken = "othertoken"
-)
-
 func TestConstStore(t *testing.T) {
 	a := New(t)
 	store := ConstStore(token)

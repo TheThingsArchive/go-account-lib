@@ -7,17 +7,34 @@ import (
 	"testing"
 	"time"
 
+	"github.com/TheThingsNetwork/go-account-lib/test"
+	jwt "github.com/dgrijalva/jwt-go"
 	. "github.com/smartystreets/assertions"
 )
 
-const (
-	parent     = "abcdefghijklm123"
-	testScope  = "apps:foo"
-	otherScope = "gateways:bar"
-	token      = "token"
-)
+func makeToken(scope []string, dur time.Duration) string {
+	claims := jwt.MapClaims(map[string]interface{}{
+		"sub":   "tester",
+		"exp":   int((time.Now().Add(dur)).Unix()) * 1000,
+		"scope": scope,
+	})
 
-var scopes = []string{testScope}
+	return test.TokenFromClaims(claims)
+}
+
+var (
+	testScope   = "apps:foo"
+	otherScope  = "gateways:bar"
+	scopes      = []string{testScope}
+	otherScopes = []string{otherScope}
+	bothScopes  = []string{testScope, otherScope}
+
+	parent      = makeToken(scopes, time.Second)
+	otherParent = makeToken(otherScopes, time.Second)
+
+	token      = makeToken(scopes, time.Second)
+	otherToken = makeToken(otherScopes, time.Second)
+)
 
 func TestNullStore(t *testing.T) {
 	a := New(t)
