@@ -4,12 +4,18 @@
 package account
 
 import (
+	"io"
+
 	"github.com/TheThingsNetwork/go-account-lib/auth"
 	"github.com/TheThingsNetwork/go-account-lib/util"
 )
 
 func (a *Account) get(strategy auth.Strategy, URI string, res interface{}) error {
 	return util.GET(a.ctx, a.server, strategy, URI, res)
+}
+
+func (a *Account) gets(strategy auth.Strategy, URI string) (io.ReadCloser, error) {
+	return util.GETBody(a.ctx, a.server, strategy, URI)
 }
 
 func (a *Account) put(strategy auth.Strategy, URI string, body, res interface{}) error {

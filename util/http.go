@@ -60,20 +60,21 @@ func newRequest(server, method string, URI string, body io.Reader) (*http.Reques
 	return req, nil
 }
 
-func performRequest(ctx log.Interface, server string, strategy auth.Strategy, method, URI string, body, res interface{}, redirects int) (err error) {
+func performRequestBody(ctx log.Interface, server string, strategy auth.Strategy, method, URI string, body interface{}, redirects int) (io.ReadCloser, error) {
 	var req *http.Request
+	var err error
 
 	if body != nil {
 		// body is not nil, so serialize it and pass it in the request
 		if err = Validate(body); err != nil {
-			return fmt.Errorf("Got an illegal request body: %s", err)
+			return nil, fmt.Errorf("Got an illegal request body: %s", err)
 		}
 
 		buf := new(bytes.Buffer)
 		encoder := json.NewEncoder(buf)
 		err = encoder.Encode(body)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		req, err = newRequest(server, method, URI, buf)
 	} else {
@@ -85,7 +86,7 @@ func performRequest(ctx log.Interface, server string, strategy auth.Strategy, me
 	strategy.DecorateRequest(req)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	client := &http.Client{
@@ -93,12 +94,12 @@ func performRequest(ctx log.Interface, server string, strategy auth.Strategy, me
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// catch deprecated api
 	if resp.StatusCode == 410 {
-		return fmt.Errorf("API deprecated by The Things Network account server, please update your client")
+		return nil, fmt.Errorf("API deprecated by The Things Network account server, please update your client")
 	} else if warning := resp.Header.Get("Warning"); warning != "" {
 		// Warning header has format: 123 - "Message"
 		code := warning[0:3]
@@ -115,7 +116,7 @@ func performRequest(ctx log.Interface, server string, strategy auth.Strategy, me
 		decoder := json.NewDecoder(resp.Body)
 		if err := decoder.Decode(&herr); err != nil {
 			// could not decode body as error, just return http error
-			return HTTPError{
+			return nil, HTTPError{
 				Code:    resp.StatusCode,
 				Message: resp.Status[4:],
 			}
@@ -131,25 +132,35 @@ func performRequest(ctx log.Interface, server string, strategy auth.Strategy, me
 			herr.Message = resp.Status[4:]
 		}
 
-		return herr
+		return nil, herr
 	}
 
 	if resp.StatusCode == 307 {
 		if redirects > 0 {
 			location := resp.Header.Get("Location")
-			return performRequest(ctx, server, strategy, method, location, body, res, redirects-1)
+			return performRequestBody(ctx, server, strategy, method, location, body, redirects-1)
 		}
-		return fmt.Errorf("Reached maximum number of redirects")
+		return nil, fmt.Errorf("Reached maximum number of redirects")
 	}
 
 	if resp.StatusCode >= 300 {
 		// 307 is handled, 301, 302, 304 cannot be
-		return fmt.Errorf("Unexpected %v redirection to %s", resp.StatusCode, resp.Header.Get("Location"))
+		return nil, fmt.Errorf("Unexpected %v redirection to %s", resp.StatusCode, resp.Header.Get("Location"))
+	}
+
+	return resp.Body, nil
+}
+
+// performRequest performs a request and decodes the result
+func performRequest(ctx log.Interface, server string, strategy auth.Strategy, method, URI string, rbody, res interface{}, redirects int) error {
+	body, err := performRequestBody(ctx, server, strategy, method, URI, rbody, redirects)
+	if err != nil {
+		return err
 	}
 
 	if res != nil {
-		defer resp.Body.Close()
-		decoder := json.NewDecoder(resp.Body)
+		defer body.Close()
+		decoder := json.NewDecoder(body)
 		if err := decoder.Decode(res); err != nil {
 			return err
 		}
@@ -165,6 +176,11 @@ func performRequest(ctx log.Interface, server string, strategy auth.Strategy, me
 // GET does a get request to the account server,  decoding the result into the object pointed to byres
 func GET(ctx log.Interface, server string, strategy auth.Strategy, URI string, res interface{}) error {
 	return performRequest(ctx, server, strategy, "GET", URI, nil, res, MaxRedirects)
+}
+
+// GET does a get request to the account server,  decoding the result into the object pointed to byres
+func GETBody(ctx log.Interface, server string, strategy auth.Strategy, URI string) (io.ReadCloser, error) {
+	return performRequestBody(ctx, server, strategy, "GET", URI, nil, MaxRedirects)
 }
 
 // DELETE does a delete request to the account server
