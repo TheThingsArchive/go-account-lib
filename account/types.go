@@ -4,6 +4,7 @@
 package account
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/TheThingsNetwork/ttn/core/types"
@@ -81,6 +82,9 @@ type Gateway struct {
 
 // Location is the GPS location of a gateway
 type Location struct {
+	// Empty denotes that the location is not given as oposed to (0, 0) which is a
+	// valid location
+	Empty     bool    `json:"-"`
 	Longitude float64 `json:"lng"`
 	Latitude  float64 `json:"lat"`
 }
@@ -89,4 +93,53 @@ type FrequencyPlan struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	URL         string `json:"url"`
+}
+
+type location struct {
+	Lng *float64 `json:"lng,omitempty"`
+	Lat *float64 `json:"lat,omitempty"`
+}
+
+// UnmarshalJSON is a custom unmarshaller for location that allows falsy types
+// false | {} | null -> Location{ Empty: true }
+// ... -> Location
+func (loc *Location) UnmarshalJSON(b []byte) error {
+	loc.Empty = true
+	loc.Longitude = 0
+	loc.Latitude = 0
+
+	if string(b) == "false" || string(b) == "null" {
+		return nil
+	}
+
+	var l location
+	err := json.Unmarshal(b, &l)
+	if err != nil {
+		return err
+	}
+
+	if l.Lat == nil || l.Lng == nil {
+		return nil
+	}
+
+	loc.Empty = false
+	loc.Latitude = *l.Lat
+	loc.Longitude = *l.Lng
+
+	return nil
+}
+
+// MarshalJSON is a custom json marshaller for Location that maps an empty
+// Location to `false`
+func (loc Location) MarshalJSON() ([]byte, error) {
+	if loc.Empty {
+		return []byte("false"), nil
+	}
+
+	l := location{
+		Lat: &loc.Latitude,
+		Lng: &loc.Longitude,
+	}
+
+	return json.Marshal(l)
 }
