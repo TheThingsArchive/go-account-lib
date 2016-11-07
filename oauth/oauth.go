@@ -85,3 +85,9 @@ func (o *oauth) ExchangeAppKeyForToken(appID, accessKey string) (*oauth2.Token, 
 	config := o.getKeyConfig()
 	return config.PasswordCredentialsToken(getContext(), appID, accessKey)
 }
+
+// AuthCodeURL returns a URL to OAuth 2.0 provider's consent page that asks for permissions for the required scopes explicitly.
+func (o *oauth) AuthCodeURL(state string, opts ...oauth2.AuthCodeOption) string {
+	config := o.getConfig()
+	return config.AuthCodeURL(state, opts...)
+}
