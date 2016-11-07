@@ -19,4 +19,5 @@ It consists of these packages:
 - `tokens`: A manager library that fetches and stores access tokens with
   different scopes based on an access token.
 - `util`: An internal package that provides helpers for the other packages.
-
+- `oauth`: A wrapper around `golang.org/x/oauth2` that provides extra
+  functionality like caching, following redirects etc.
