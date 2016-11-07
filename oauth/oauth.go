@@ -64,13 +64,15 @@ func getContext() context.Context {
 // Exchange exchanges an OAuth 2.0 Authorization Code for an oauth2.Token
 func (o *Config) Exchange(code string) (*oauth2.Token, error) {
 	config := o.getConfig()
-	return config.Exchange(getContext(), code)
+	token, err := config.Exchange(getContext(), code)
+	return token, fromError(err)
 }
 
 // PasswordCredentialsToken gets an oauth2.Token from username and password
 func (o *Config) PasswordCredentialsToken(username, password string) (*oauth2.Token, error) {
 	config := o.getConfig()
-	return config.PasswordCredentialsToken(getContext(), username, password)
+	token, err := config.PasswordCredentialsToken(getContext(), username, password)
+	return token, fromError(err)
 }
 
 // TokenSource creates oauth2.TokenSource from an oauht2.Token
@@ -83,7 +85,8 @@ func (o *Config) TokenSource(token *oauth2.Token) oauth2.TokenSource {
 func (o *Config) ExchangeAppKeyForToken(appID, accessKey string) (*oauth2.Token, error) {
 	// application Access Token
 	config := o.getKeyConfig()
-	return config.PasswordCredentialsToken(getContext(), appID, accessKey)
+	token, err := config.PasswordCredentialsToken(getContext(), appID, accessKey)
+	return token, fromError(err)
 }
 
 // AuthCodeURL returns a URL to OAuth 2.0 provider's consent page that asks for permissions for the required scopes explicitly.
