@@ -10,7 +10,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
-type oauth struct {
+type Config struct {
 	Server string
 	Client *Client
 }
@@ -23,15 +23,15 @@ type Client struct {
 }
 
 // OAuth creates a new 3-legged OAuth client
-func OAuth(server string, client *Client) *oauth {
-	return &oauth{
+func OAuth(server string, client *Client) *Config {
+	return &Config{
 		Server: server,
 		Client: client,
 	}
 }
 
 // o.getConfig builds the oauth2 config for an OAuth client
-func (o *oauth) getConfig() *oauth2.Config {
+func (o *Config) getConfig() *oauth2.Config {
 	return &oauth2.Config{
 		ClientID:     o.Client.ID,
 		ClientSecret: o.Client.Secret,
@@ -45,7 +45,7 @@ func (o *oauth) getConfig() *oauth2.Config {
 
 // getKeyConfig builds the oauth2 config for an OAuth client to exchange and app
 // key for an app token
-func (o *oauth) getKeyConfig() *oauth2.Config {
+func (o *Config) getKeyConfig() *oauth2.Config {
 	return &oauth2.Config{
 		ClientID:     o.Client.ID,
 		ClientSecret: o.Client.Secret,
@@ -62,32 +62,32 @@ func getContext() context.Context {
 }
 
 // Exchange exchanges an OAuth 2.0 Authorization Code for an oauth2.Token
-func (o *oauth) Exchange(code string) (*oauth2.Token, error) {
+func (o *Config) Exchange(code string) (*oauth2.Token, error) {
 	config := o.getConfig()
 	return config.Exchange(getContext(), code)
 }
 
 // PasswordCredentialsToken gets an oauth2.Token from username and password
-func (o *oauth) PasswordCredentialsToken(username, password string) (*oauth2.Token, error) {
+func (o *Config) PasswordCredentialsToken(username, password string) (*oauth2.Token, error) {
 	config := o.getConfig()
 	return config.PasswordCredentialsToken(getContext(), username, password)
 }
 
 // TokenSource creates oauth2.TokenSource from an oauht2.Token
-func (o *oauth) TokenSource(token *oauth2.Token) oauth2.TokenSource {
+func (o *Config) TokenSource(token *oauth2.Token) oauth2.TokenSource {
 	config := o.getConfig()
 	return config.TokenSource(getContext(), token)
 }
 
 // ExchangeAppKeyForToken exchanges an application Access Key for an equivalent
-func (o *oauth) ExchangeAppKeyForToken(appID, accessKey string) (*oauth2.Token, error) {
+func (o *Config) ExchangeAppKeyForToken(appID, accessKey string) (*oauth2.Token, error) {
 	// application Access Token
 	config := o.getKeyConfig()
 	return config.PasswordCredentialsToken(getContext(), appID, accessKey)
 }
 
 // AuthCodeURL returns a URL to OAuth 2.0 provider's consent page that asks for permissions for the required scopes explicitly.
-func (o *oauth) AuthCodeURL(state string, opts ...oauth2.AuthCodeOption) string {
+func (o *Config) AuthCodeURL(state string, opts ...oauth2.AuthCodeOption) string {
 	config := o.getConfig()
 	return config.AuthCodeURL(state, opts...)
 }
