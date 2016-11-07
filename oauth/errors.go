@@ -26,39 +26,39 @@ func (e *OAuthError) Error() string {
 var codeRe = regexp.MustCompile("oauth2: cannot fetch token: (\\d+)")
 var respRe = regexp.MustCompile("Response: ({.*})")
 
-func fromError(err error) *OAuthError {
-	if err == nil {
-		return nil
+func fromError(orig error) error {
+	if orig == nil {
+		return orig
 	}
+
+	str := orig.Error()
 
 	oerr := &OAuthError{
 		Code:        500,
-		Description: err.Error(),
+		Description: str,
 	}
-
-	str := err.Error()
 
 	matches := codeRe.FindStringSubmatch(str)
 	if len(matches) < 2 {
-		return oerr
+		return orig
 	}
 
 	code, err := strconv.Atoi(matches[1])
 	if err != nil {
-		return oerr
+		return orig
 	}
 
 	oerr.Code = code
 
 	matches = respRe.FindStringSubmatch(str)
 	if len(matches) < 2 {
-		return oerr
+		return orig
 	}
 
 	var resp response
 	err = json.Unmarshal([]byte(matches[1]), &resp)
 	if err != nil {
-		return oerr
+		return orig
 	}
 
 	if resp.Error != "" {
