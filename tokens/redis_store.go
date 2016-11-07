@@ -9,7 +9,7 @@ import (
 
 	"github.com/TheThingsNetwork/go-account-lib/claims"
 
-	redis "gopkg.in/redis.v3"
+	redis "gopkg.in/redis.v5"
 )
 
 const prefix = "token"
