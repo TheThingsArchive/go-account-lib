@@ -61,7 +61,17 @@ func fromError(err error) *OAuthError {
 		return oerr
 	}
 
-	oerr.Description = resp.Description
+	if resp.Error != "" {
+		oerr.Description = resp.Error
+	}
+
+	if resp.Description != "" {
+		oerr.Description = resp.Description
+	}
+
+	if oerr.Description == "" {
+		oerr.Description = str
+	}
 
 	return oerr
 }
