@@ -10,7 +10,7 @@ import (
 	"time"
 
 	. "github.com/smartystreets/assertions"
-	redis "gopkg.in/redis.v3"
+	redis "gopkg.in/redis.v5"
 )
 
 func getRedisClient() *redis.Client {
