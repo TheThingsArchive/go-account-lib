@@ -22,11 +22,8 @@ const (
 	// WriteDownlink is the right to send messages to devices of the application
 	WriteDownlink = "messages:down:w"
 
-	// ReadDevices is the right to list and view devices for the application on a handler
-	ReadDevices = "devices:r"
-
-	// WriteDevices is the right to list, view, add, edit and delete devices for the application on a handler
-	WriteDevices = "devices:w"
+	// evices is the right to list, edit and remove devices for the application on a handler
+	Devices = "devices"
 
 	// GatewaySettings is the right to read and write access to the gateway settings
 	GatewaySettings = "gateway:settings"
