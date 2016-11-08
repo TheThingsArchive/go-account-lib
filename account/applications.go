@@ -4,7 +4,9 @@
 package account
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 
 	"github.com/TheThingsNetwork/go-account-lib/scope"
 	"github.com/TheThingsNetwork/ttn/core/types"
@@ -14,6 +16,56 @@ import (
 func (a *Account) ListApplications() (apps []Application, err error) {
 	err = a.get(a.auth.WithScope(scope.Apps), "/api/v2/applications", &apps)
 	return apps, err
+}
+
+// GatewayStream is a stream of gateways that can be closed
+type ApplicationStream struct {
+	body    io.ReadCloser
+	decoder *json.Decoder
+}
+
+// Close closes the gateway stream
+func (s *ApplicationStream) Close() error {
+	return s.body.Close()
+}
+
+// Next requests the next gateway on the stream, blocking until there is one
+// If there are no more gateways, the error will be io.EOF
+func (s *ApplicationStream) Next() (*Application, error) {
+	var application Application
+	if s.decoder.More() {
+		err := s.decoder.Decode(&application)
+		return &application, err
+	}
+
+	// parse last token
+	_, err := s.decoder.Token()
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, io.EOF
+}
+
+// StreamGateways lists all gateways in a streaming fashion
+func (a *Account) StreamApplications() (*ApplicationStream, error) {
+	body, err := a.gets(a.auth, "/api/v2/applications")
+	if err != nil {
+		return nil, err
+	}
+
+	stream := &ApplicationStream{
+		decoder: json.NewDecoder(body),
+		body:    body,
+	}
+
+	// parse the first array bracket
+	_, err = stream.decoder.Token()
+	if err != nil {
+		return nil, err
+	}
+
+	return stream, err
 }
 
 // FindApplication gets a specific application from the account server
