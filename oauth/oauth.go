@@ -7,12 +7,14 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/TheThingsNetwork/go-account-lib/cache"
 	"golang.org/x/oauth2"
 )
 
 type Config struct {
 	Server string
 	Client *Client
+	cache  cache.Cache
 }
 
 // Client represents a client for the OAuth 2.0 flow
@@ -27,6 +29,17 @@ func OAuth(server string, client *Client) *Config {
 	return &Config{
 		Server: server,
 		Client: client,
+		cache:  cache.EmptyCache,
+	}
+}
+
+// OAuth creates a new 3-legged OAuth client that uses a cache to cache token
+// exchanges
+func OAuthWithCache(server string, client *Client, cache cache.Cache) *Config {
+	return &Config{
+		Server: server,
+		Client: client,
+		cache:  cache,
 	}
 }
 
@@ -85,8 +98,25 @@ func (o *Config) TokenSource(token *oauth2.Token) oauth2.TokenSource {
 func (o *Config) ExchangeAppKeyForToken(appID, accessKey string) (*oauth2.Token, error) {
 	// application Access Token
 	config := o.getKeyConfig()
-	token, err := config.PasswordCredentialsToken(getContext(), appID, accessKey)
-	return token, fromError(err)
+
+	token, err := getTokenFromCache(o.cache, appID, accessKey)
+	if err != nil {
+		return nil, err
+	}
+
+	if token != nil {
+		return token, nil
+	}
+
+	token, err = config.PasswordCredentialsToken(getContext(), appID, accessKey)
+	if err != nil {
+		return nil, fromError(err)
+	}
+
+	// ignore errors when saving to cache
+	_ = saveTokenToCache(o.cache, appID, accessKey, token)
+
+	return token, nil
 }
 
 // AuthCodeURL returns a URL to OAuth 2.0 provider's consent page that asks for permissions for the required scopes explicitly.
