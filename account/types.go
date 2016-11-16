@@ -72,6 +72,7 @@ type Gateway struct {
 	Activated        bool           `json:"activated"`
 	FrequencyPlan    string         `json:"frequency_plan"`
 	FrequencyPlanURL string         `json:"frequency_plan_url"`
+	PublicRights     []types.Right  `json:"public_rights"`
 	LocationPublic   bool           `json:"location_public"`
 	StatusPublic     bool           `json:"status_public"`
 	Location         *Location      `json:"location"`
