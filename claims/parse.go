@@ -13,16 +13,15 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-// FromToken uses the tokenkey provider to parse and validate a token into its
-// corresponding claims
-func FromToken(provider tokenkey.Provider, accessToken string) (*Claims, error) {
-	var claims Claims
-	parsed, err := jwt.ParseWithClaims(accessToken, &claims, func(token *jwt.Token) (interface{}, error) {
+// fromToken parser a token given the tokenkey provider into the desired claims
+// structure
+func fromToken(provider tokenkey.Provider, token string, claims TTNClaims) error {
+	parsed, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		if provider == nil {
 			return nil, errors.New("No token provider configured")
 		}
 
-		k, err := provider.Get(claims.Issuer, false)
+		k, err := provider.Get(claims.Issuer(), false)
 		if err != nil {
 			return nil, err
 		}
@@ -40,34 +39,33 @@ func FromToken(provider tokenkey.Provider, accessToken string) (*Claims, error) 
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("unable to parse token: %s", err)
+		return fmt.Errorf("unable to parse token: %s", err)
 	}
 
 	if !parsed.Valid {
-		return nil, fmt.Errorf("token not valid or expired")
+		return fmt.Errorf("token not valid or expired")
 	}
 
-	return &claims, nil
+	return nil
 }
 
-// FromTokenWithoutValidation parses a token into its corresponding claims,
+// FromTokenWithoutValidation parses a token into the desired claims structure,
 // without checking the token signature
-func FromTokenWithoutValidation(accessToken string) (*Claims, error) {
-	parts := strings.Split(accessToken, ".")
+func fromTokenWithoutValidation(token string, claims jwt.Claims) error {
+	parts := strings.Split(token, ".")
 	if len(parts) != 3 {
-		return nil, errors.New("Invalid access token segments")
+		return errors.New("Invalid access token segments")
 	}
 
 	segment, err := jwt.DecodeSegment(parts[1])
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	var claims Claims
-	err = json.Unmarshal(segment, &claims)
+	err = json.Unmarshal(segment, claims)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &claims, nil
+	return nil
 }
