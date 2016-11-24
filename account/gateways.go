@@ -157,6 +157,7 @@ type GatewayEdits struct {
 	Owner         string        `json:"owner,omitempty"`
 	PublicRights  []types.Right `json:"public_rights,omitempty"`
 	FrequencyPlan string        `json:"frequency_plan,omitempty"`
+	AutoUpdate    *bool         `json:"auto_update,omitempty"`
 	Location      *Location     `json:"location,omitempty"`
 }
 
