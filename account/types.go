@@ -75,6 +75,7 @@ type Gateway struct {
 	PublicRights     []types.Right  `json:"public_rights"`
 	LocationPublic   bool           `json:"location_public"`
 	StatusPublic     bool           `json:"status_public"`
+	AutoUpdate       bool           `json:"auto_update"`
 	Location         *Location      `json:"location"`
 	Collaborators    []Collaborator `json:"collaborator"`
 	Key              string         `json:"key"`
