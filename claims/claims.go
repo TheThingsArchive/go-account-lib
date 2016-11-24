@@ -5,6 +5,11 @@ package claims
 
 import jwt "github.com/dgrijalva/jwt-go"
 
+type TTNClaims interface {
+	jwt.Claims
+	Issuer() string
+}
+
 // Claims represents all the claims an access token can have
 type Claims struct {
 	jwt.StandardClaims
@@ -20,4 +25,20 @@ type Claims struct {
 		First string `json:"first"`
 		Last  string `json:"last"`
 	} `json:"name"`
+}
+
+func (c *Claims) Issuer() string {
+	return c.StandardClaims.Issuer
+}
+
+// GatewayClaims represents all the claims an access token can have
+type GatewayClaims struct {
+	jwt.StandardClaims
+	Type           string `json:"type"`
+	LocationPublic bool   `json:"location_public"`
+	StatusPublic   bool   `json:"status_public"`
+}
+
+func (c *GatewayClaims) Issuer() string {
+	return c.StandardClaims.Issuer
 }
