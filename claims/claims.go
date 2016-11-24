@@ -5,6 +5,8 @@ package claims
 
 import jwt "github.com/dgrijalva/jwt-go"
 
+// TTNClaims is the interface all claims
+// that are issued by TTN need to adhere to
 type TTNClaims interface {
 	jwt.Claims
 	Issuer() string
@@ -27,6 +29,7 @@ type Claims struct {
 	} `json:"name"`
 }
 
+// Issuer returns the issuer of the claims
 func (c *Claims) Issuer() string {
 	return c.StandardClaims.Issuer
 }
@@ -39,6 +42,7 @@ type GatewayClaims struct {
 	StatusPublic   bool   `json:"status_public"`
 }
 
+// Issuer returns the issuer of the claims
 func (c *GatewayClaims) Issuer() string {
 	return c.StandardClaims.Issuer
 }
