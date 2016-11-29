@@ -7,9 +7,9 @@ import jwt "github.com/dgrijalva/jwt-go"
 
 // TTNClaims is the interface all claims
 // that are issued by TTN need to adhere to
-type TTNClaims interface {
+type ClaimsWithIssuer interface {
 	jwt.Claims
-	Issuer() string
+	GetIssuer() string
 }
 
 // Claims represents all the claims an access token can have
@@ -30,7 +30,7 @@ type Claims struct {
 }
 
 // Issuer returns the issuer of the claims
-func (c *Claims) Issuer() string {
+func (c *Claims) GetIssuer() string {
 	return c.StandardClaims.Issuer
 }
 
@@ -43,6 +43,6 @@ type GatewayClaims struct {
 }
 
 // Issuer returns the issuer of the claims
-func (c *GatewayClaims) Issuer() string {
+func (c *GatewayClaims) GetIssuer() string {
 	return c.StandardClaims.Issuer
 }

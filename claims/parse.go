@@ -15,13 +15,13 @@ import (
 
 // fromToken parser a token given the tokenkey provider into the desired claims
 // structure
-func fromToken(provider tokenkey.Provider, token string, claims TTNClaims) error {
+func fromToken(provider tokenkey.Provider, token string, claims ClaimsWithIssuer) error {
 	parsed, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		if provider == nil {
 			return nil, errors.New("No token provider configured")
 		}
 
-		k, err := provider.Get(claims.Issuer(), false)
+		k, err := provider.Get(claims.GetIssuer(), false)
 		if err != nil {
 			return nil, err
 		}
