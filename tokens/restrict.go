@@ -49,7 +49,7 @@ func RestrictScope(server string, token string, scope []string) (string, error) 
 
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "bearer "+token)
+	req.Header.Set("Authorization", "Bearer "+token)
 
 	client := http.Client{}
 	resp, err := client.Do(req)
