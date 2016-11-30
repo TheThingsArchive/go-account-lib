@@ -24,7 +24,7 @@ func TestAccessTokenDecorate(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/foo", nil)
 
 	strategy.DecorateRequest(req)
-	a.So(req.Header.Get("Authorization"), ShouldEqual, "bearer "+token)
+	a.So(req.Header.Get("Authorization"), ShouldEqual, "Bearer "+token)
 }
 
 func TestAccessTokenWithScope(t *testing.T) {
@@ -51,5 +51,5 @@ func TestAccessTokenWithManager(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/foo", nil)
 
 	withScope.DecorateRequest(req)
-	a.So(req.Header.Get("Authorization"), ShouldEqual, "bearer "+otherToken)
+	a.So(req.Header.Get("Authorization"), ShouldEqual, "Bearer "+otherToken)
 }
