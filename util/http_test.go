@@ -13,7 +13,8 @@ import (
 
 	"github.com/TheThingsNetwork/go-account-lib/auth"
 	"github.com/TheThingsNetwork/go-utils/handlers/cli"
-	"github.com/apex/log"
+	wrap "github.com/TheThingsNetwork/go-utils/log/apex"
+	apex "github.com/apex/log"
 	. "github.com/smartystreets/assertions"
 )
 
@@ -21,9 +22,9 @@ var (
 	url           = "/foo"
 	token         = "token"
 	tokenStrategy = auth.AccessToken(token)
-	ctx           = &log.Logger{
+	ctx           = wrap.Wrap(&apex.Logger{
 		Handler: cli.New(os.Stdout),
-	}
+	})
 )
 
 type OKResp struct {

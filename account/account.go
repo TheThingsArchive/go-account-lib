@@ -9,7 +9,9 @@ import (
 	"github.com/TheThingsNetwork/go-account-lib/auth"
 	"github.com/TheThingsNetwork/go-account-lib/tokens"
 	"github.com/TheThingsNetwork/go-utils/handlers/cli"
-	"github.com/apex/log"
+	"github.com/TheThingsNetwork/go-utils/log"
+	wrap "github.com/TheThingsNetwork/go-utils/log/apex"
+	apex "github.com/apex/log"
 )
 
 // Account is a client to an account server
@@ -24,9 +26,9 @@ func New(server string) *Account {
 	return &Account{
 		server: server,
 		auth:   auth.Public,
-		ctx: &log.Logger{
+		ctx: wrap.Wrap(&apex.Logger{
 			Handler: cli.New(os.Stdout),
-		},
+		}),
 	}
 }
 

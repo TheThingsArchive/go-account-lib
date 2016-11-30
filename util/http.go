@@ -12,7 +12,7 @@ import (
 	"net/http"
 
 	"github.com/TheThingsNetwork/go-account-lib/auth"
-	"github.com/apex/log"
+	"github.com/TheThingsNetwork/go-utils/log"
 )
 
 var (
@@ -104,7 +104,7 @@ func performRequestBody(ctx log.Interface, server string, strategy auth.Strategy
 		// Warning header has format: 123 - "Message"
 		code := warning[0:3]
 		message := warning[7 : len(warning)-1]
-		ctx.WithFields(log.Fields{
+		ctx.WithFields(map[string]interface{}{
 			"code":    code,
 			"message": message,
 		}).Warn("Got server warning. Make sure the client is up to date.")
