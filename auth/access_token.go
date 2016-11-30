@@ -32,7 +32,7 @@ func (a *accessToken) DecorateRequest(req *http.Request) {
 		token = a.accessToken
 	}
 
-	req.Header.Set("Authorization", fmt.Sprintf("bearer %s", token))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 }
 
 // WithScope creates a new Strategy with

@@ -38,7 +38,7 @@ func OKHandler(a *Assertion, method string) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		a.So(r.RequestURI, ShouldEqual, url)
 		a.So(r.Method, ShouldEqual, method)
-		a.So(r.Header.Get("Authorization"), ShouldEqual, "bearer "+token)
+		a.So(r.Header.Get("Authorization"), ShouldEqual, "Bearer "+token)
 		resp := OKResp{
 			OK: token,
 		}
@@ -52,7 +52,7 @@ func FooHandler(a *Assertion, method string) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		a.So(r.RequestURI, ShouldEqual, url)
 		a.So(r.Method, ShouldEqual, method)
-		a.So(r.Header.Get("Authorization"), ShouldEqual, "bearer "+token)
+		a.So(r.Header.Get("Authorization"), ShouldEqual, "Bearer "+token)
 		resp := FooResp{
 			Foo: token,
 		}
@@ -64,7 +64,7 @@ func FooHandler(a *Assertion, method string) http.HandlerFunc {
 
 func RedirectHandler(a *Assertion, method string) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		a.So(r.Header.Get("Authorization"), ShouldEqual, "bearer "+token)
+		a.So(r.Header.Get("Authorization"), ShouldEqual, "Bearer "+token)
 		if r.RequestURI == url {
 			w.Header().Set("Location", "/bar")
 			w.WriteHeader(307)
@@ -84,7 +84,7 @@ func EchoHandler(a *Assertion, method string) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		a.So(r.RequestURI, ShouldEqual, url)
 		a.So(r.Method, ShouldEqual, method)
-		a.So(r.Header.Get("Authorization"), ShouldEqual, "bearer "+token)
+		a.So(r.Header.Get("Authorization"), ShouldEqual, "Bearer "+token)
 		w.WriteHeader(http.StatusOK)
 		defer r.Body.Close()
 		body, err := ioutil.ReadAll(r.Body)
