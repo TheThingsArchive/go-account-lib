@@ -46,3 +46,14 @@ type GatewayClaims struct {
 func (c *GatewayClaims) GetIssuer() string {
 	return c.StandardClaims.Issuer
 }
+
+// ComponentClaims represent the claims a network component can have
+type ComponentClaims struct {
+	jwt.StandardClaims
+	Type string `json:"type"`
+}
+
+// GetIssuer returns the issuer of the claims
+func (c *ComponentClaims) GetIssuer() string {
+	return c.StandardClaims.Issuer
+}
