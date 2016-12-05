@@ -26,11 +26,7 @@ func FromComponentToken(provider tokenkey.Provider, accessToken string) (*Compon
 	}
 
 	switch claims.Type {
-	case RouterType:
-		fallthrough
-	case BrokerType:
-		fallthrough
-	case HandlerType:
+	case RouterType, BrokerType, HandlerType:
 		return claims, nil
 	default:
 		return nil, fmt.Errorf("Expected component token to have type 'router', 'broker' or 'handler', got '%s' instead", claims.Type)
