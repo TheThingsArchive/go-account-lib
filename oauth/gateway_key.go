@@ -14,9 +14,8 @@ import (
 
 // ExchangeGatewayKeyForToken exchanges an application Access Key for an equivalent
 func (o *Config) ExchangeGatewayKeyForToken(gatewayID, gatewayKey string) (*oauth2.Token, error) {
-	var ctx log.Interface
 	strategy := auth.AccessKey(gatewayKey)
 	token := &oauth2.Token{}
-	err := util.GET(ctx, o.Server, strategy, fmt.Sprintf("/api/v2/gateways/%s/token", gatewayID), token)
+	err := util.GET(log.Get(), o.Server, strategy, fmt.Sprintf("/api/v2/gateways/%s/token", gatewayID), token)
 	return token, err
 }
