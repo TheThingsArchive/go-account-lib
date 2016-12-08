@@ -16,7 +16,7 @@ import (
 // fromToken parser a token given the tokenkey provider into the desired claims
 // structure
 func fromToken(provider tokenkey.Provider, token string, claims ClaimsWithIssuer) error {
-	parsed, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+	parsed, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (key interface{}, err error) {
 		if provider == nil {
 			return nil, errors.New("No token provider configured")
 		}
@@ -30,7 +30,14 @@ func fromToken(provider tokenkey.Provider, token string, claims ClaimsWithIssuer
 			return nil, fmt.Errorf("expected algorithm %v but got %v", k.Algorithm, token.Header["alg"])
 		}
 
-		key, err := jwt.ParseRSAPublicKeyFromPEM([]byte(k.Key))
+		switch k.Algorithm {
+		case "RS256":
+			key, err = jwt.ParseRSAPublicKeyFromPEM([]byte(k.Key))
+		case "ES256":
+			key, err = jwt.ParseECPublicKeyFromPEM([]byte(k.Key))
+		default:
+			err = fmt.Errorf("Token provider returned public key with unknown algorithm %s", k.Algorithm)
+		}
 		if err != nil {
 			return nil, err
 		}
