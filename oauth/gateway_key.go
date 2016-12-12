@@ -24,7 +24,7 @@ func (tok *tok) Token() *oauth2.Token {
 	}
 	return &oauth2.Token{
 		AccessToken: tok.AccessToken,
-		Expiry:      time.Now().Add(time.Duration(token.ExpiresIn) * time.Second),
+		Expiry:      time.Now().Add(time.Duration(tok.ExpiresIn) * time.Second),
 	}
 }
 
