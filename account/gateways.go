@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"io"
 
+	"golang.org/x/oauth2"
+
 	"github.com/TheThingsNetwork/go-account-lib/auth"
 	"github.com/TheThingsNetwork/go-account-lib/scope"
 	"github.com/TheThingsNetwork/ttn/core/types"
@@ -37,6 +39,7 @@ func (s *GatewayStream) Next() (*Gateway, error) {
 	var gateway Gateway
 	if s.decoder.More() {
 		err := s.decoder.Decode(&gateway)
+		gateway.Token = gateway.token.Token()
 		return &gateway, err
 	}
 
@@ -73,6 +76,7 @@ func (a *Account) StreamGateways() (*GatewayStream, error) {
 // FindGateway returns the information about a specific gateay
 func (a *Account) FindGateway(gatewayID string) (gateway Gateway, err error) {
 	err = a.get(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s", gatewayID), &gateway)
+	gateway.Token = gateway.token.Token()
 	return gateway, err
 }
 
@@ -107,9 +111,14 @@ func (a *Account) RegisterGateway(gatewayID string, frequencyPlan string, locati
 	return gateway, err
 }
 
+type gatewayWithToken struct {
+	Key   string        `json:"key"`
+	Token *gatewayToken `json:"token"`
+}
+
 // FindGateway returns the information about a specific gateay
-func (a *Account) GetGatewayToken(gatewayID string) (*Token, error) {
-	var gateway Gateway
+func (a *Account) GetGatewayToken(gatewayID string) (*oauth2.Token, error) {
+	var gateway gatewayWithToken
 	err := a.get(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s", gatewayID), &gateway)
 	if err != nil {
 		return nil, err
@@ -117,18 +126,18 @@ func (a *Account) GetGatewayToken(gatewayID string) (*Token, error) {
 
 	// already have the token!
 	if gateway.Token != nil {
-		return gateway.Token, nil
+		return gateway.Token.Token(), nil
 	}
 
 	// didn't get a token, but we can use the Key to get one
 	if gateway.Key != "" {
-		var token Token
-		err = a.get(auth.AccessKey(gateway.Key), fmt.Sprintf("/api/v2/gateways/%s/token", gatewayID), &token)
+		var token *gatewayToken
+		err = a.get(auth.AccessKey(gateway.Key), fmt.Sprintf("/api/v2/gateways/%s/token", gatewayID), token)
 		if err != nil {
 			return nil, err
 		}
 
-		return &token, nil
+		return token.Token(), nil
 	}
 
 	return nil, errors.New("Cannot get token using this authentication method")
