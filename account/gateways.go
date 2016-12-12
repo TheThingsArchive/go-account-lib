@@ -9,11 +9,10 @@ import (
 	"fmt"
 	"io"
 
-	"golang.org/x/oauth2"
-
 	"github.com/TheThingsNetwork/go-account-lib/auth"
 	"github.com/TheThingsNetwork/go-account-lib/scope"
 	"github.com/TheThingsNetwork/ttn/core/types"
+	"golang.org/x/oauth2"
 )
 
 // ListGateways list all gateways

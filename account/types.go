@@ -7,9 +7,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"golang.org/x/oauth2"
-
 	"github.com/TheThingsNetwork/ttn/core/types"
+	"golang.org/x/oauth2"
 )
 
 // Application represents an application on The Things Network
