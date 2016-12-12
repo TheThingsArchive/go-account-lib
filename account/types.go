@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/TheThingsNetwork/ttn/core/types"
+	"golang.org/x/oauth2"
 )
 
 // Application represents an application on The Things Network
@@ -61,9 +62,21 @@ func (n *Name) String() string {
 	return n.First + " " + n.Last
 }
 
-type Token struct {
-	Token   string    `json:"token"`
-	Expires time.Time `json:"expires"`
+type gatewayToken struct {
+	AccessToken string `json:"access_token"`
+	ExpiresIn   uint64 `json:"expires_in"`
+}
+
+// Token transfroms a gateway token to oauth token with correct expiry
+func (token *gatewayToken) Token() *oauth2.Token {
+	if token == nil {
+		return nil
+	}
+
+	return &oauth2.Token{
+		AccessToken: token.AccessToken,
+		Expiry:      time.Now().Add(time.Duration(token.ExpiresIn) * time.Second),
+	}
 }
 
 // Gateway represents a gateway on the account server
@@ -79,7 +92,8 @@ type Gateway struct {
 	Location         *Location      `json:"location"`
 	Collaborators    []Collaborator `json:"collaborator"`
 	Key              string         `json:"key"`
-	Token            *Token         `json:"token,omitempty"`
+	token            *gatewayToken  `json:"token,omitempty"`
+	Token            *oauth2.Token
 }
 
 // Location is the GPS location of a gateway

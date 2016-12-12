@@ -104,10 +104,12 @@ func performRequestBody(ctx log.Interface, server string, strategy auth.Strategy
 		// Warning header has format: 123 - "Message"
 		code := warning[0:3]
 		message := warning[7 : len(warning)-1]
-		ctx.WithFields(map[string]interface{}{
-			"code":    code,
-			"message": message,
-		}).Warn("Got server warning. Make sure the client is up to date.")
+		if ctx != nil {
+			ctx.WithFields(map[string]interface{}{
+				"code":    code,
+				"message": message,
+			}).Warn("Got server warning. Make sure the client is up to date.")
+		}
 	}
 
 	if resp.StatusCode >= 400 {

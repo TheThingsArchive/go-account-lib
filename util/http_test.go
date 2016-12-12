@@ -271,3 +271,12 @@ func TestDeprecated(t *testing.T) {
 	err := GET(ctx, server.URL, tokenStrategy, url, nil)
 	a.So(err, ShouldBeNil)
 }
+
+func TestNilCtx(t *testing.T) {
+	a := New(t)
+	server := httptest.NewServer(DeprecatedHandler(a, "GET"))
+	defer server.Close()
+
+	err := GET(nil, server.URL, tokenStrategy, url, nil)
+	a.So(err, ShouldBeNil)
+}
