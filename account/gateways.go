@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/TheThingsNetwork/go-account-lib/auth"
 	"github.com/TheThingsNetwork/go-account-lib/scope"
 	"github.com/TheThingsNetwork/ttn/core/types"
 	"golang.org/x/oauth2"
@@ -110,36 +109,15 @@ func (a *Account) RegisterGateway(gatewayID string, frequencyPlan string, locati
 	return gateway, err
 }
 
-type gatewayWithToken struct {
-	Key   string        `json:"key"`
-	Token *gatewayToken `json:"token"`
-}
-
-// FindGateway returns the information about a specific gateay
+// GetGatewayToken gets the gateway token
 func (a *Account) GetGatewayToken(gatewayID string) (*oauth2.Token, error) {
-	var gateway gatewayWithToken
-	err := a.get(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s", gatewayID), &gateway)
+	token := new(gatewayToken)
+	err := a.get(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s/token", gatewayID), token)
 	if err != nil {
 		return nil, err
 	}
 
-	// already have the token!
-	if gateway.Token != nil {
-		return gateway.Token.Token(), nil
-	}
-
-	// didn't get a token, but we can use the Key to get one
-	if gateway.Key != "" {
-		token := new(gatewayToken)
-		err = a.get(auth.AccessKey(gateway.Key), fmt.Sprintf("/api/v2/gateways/%s/token", gatewayID), token)
-		if err != nil {
-			return nil, err
-		}
-
-		return token.Token(), nil
-	}
-
-	return nil, errors.New("Cannot get token using this authentication method")
+	return token.Token(), nil
 }
 
 // DeleteGateway removes a gateway from the account server
