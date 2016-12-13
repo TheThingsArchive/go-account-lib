@@ -130,7 +130,7 @@ func (a *Account) GetGatewayToken(gatewayID string) (*oauth2.Token, error) {
 
 	// didn't get a token, but we can use the Key to get one
 	if gateway.Key != "" {
-		var token *gatewayToken
+		token := new(gatewayToken)
 		err = a.get(auth.AccessKey(gateway.Key), fmt.Sprintf("/api/v2/gateways/%s/token", gatewayID), token)
 		if err != nil {
 			return nil, err
