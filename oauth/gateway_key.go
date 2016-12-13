@@ -32,6 +32,6 @@ func (tok *tok) Token() *oauth2.Token {
 func (o *Config) ExchangeGatewayKeyForToken(gatewayID, gatewayKey string) (*oauth2.Token, error) {
 	strategy := auth.AccessKey(gatewayKey)
 	token := &tok{}
-	err := util.GET(log.Get(), o.Server, strategy, fmt.Sprintf("/api/v2/gateways/%s/token", gatewayID), token)
+	err := util.GET(log.Get(), o.Server, strategy, fmt.Sprintf("/api/v2/gateways/%s/token", gatewayID), o.Client.ExtraHeaders, token)
 	return token.Token(), err
 }

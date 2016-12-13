@@ -25,6 +25,7 @@ var (
 	ctx           = wrap.Wrap(&apex.Logger{
 		Handler: cli.New(os.Stdout),
 	})
+	headers = map[string]string{}
 )
 
 type OKResp struct {
@@ -109,7 +110,7 @@ func TestGET(t *testing.T) {
 	defer server.Close()
 
 	var resp OKResp
-	err := GET(ctx, server.URL, tokenStrategy, url, &resp)
+	err := GET(ctx, server.URL, tokenStrategy, url, headers, &resp)
 	a.So(err, ShouldBeNil)
 	a.So(resp.OK, ShouldEqual, token)
 }
@@ -119,7 +120,7 @@ func TestGETDropResponse(t *testing.T) {
 	server := httptest.NewServer(OKHandler(a, "GET"))
 	defer server.Close()
 
-	err := GET(ctx, server.URL, tokenStrategy, url, nil)
+	err := GET(ctx, server.URL, tokenStrategy, url, headers, nil)
 	a.So(err, ShouldBeNil)
 }
 
@@ -129,7 +130,7 @@ func TestGETIllegalResponse(t *testing.T) {
 	defer server.Close()
 
 	var resp FooResp
-	err := GET(ctx, server.URL, tokenStrategy, url, &resp)
+	err := GET(ctx, server.URL, tokenStrategy, url, headers, &resp)
 	a.So(err, ShouldNotBeNil)
 }
 
@@ -139,7 +140,7 @@ func TestGETIllegalResponseIgnore(t *testing.T) {
 	defer server.Close()
 
 	var resp OKResp
-	err := GET(ctx, server.URL, tokenStrategy, url, &resp)
+	err := GET(ctx, server.URL, tokenStrategy, url, headers, &resp)
 	a.So(err, ShouldBeNil)
 }
 
@@ -149,7 +150,7 @@ func TestGETRedirect(t *testing.T) {
 	defer server.Close()
 
 	var resp OKResp
-	err := GET(ctx, server.URL, tokenStrategy, url, &resp)
+	err := GET(ctx, server.URL, tokenStrategy, url, headers, &resp)
 	a.So(err, ShouldBeNil)
 }
 
@@ -162,7 +163,7 @@ func TestPUT(t *testing.T) {
 	body := FooResp{
 		Foo: token,
 	}
-	err := PUT(ctx, server.URL, tokenStrategy, url, body, &resp)
+	err := PUT(ctx, server.URL, tokenStrategy, url, headers, body, &resp)
 	a.So(err, ShouldBeNil)
 	a.So(resp.Foo, ShouldEqual, body.Foo)
 }
@@ -174,7 +175,7 @@ func TestPUTIllegalRequest(t *testing.T) {
 
 	var resp FooResp
 	body := FooResp{}
-	err := PUT(ctx, server.URL, tokenStrategy, url, body, &resp)
+	err := PUT(ctx, server.URL, tokenStrategy, url, headers, body, &resp)
 	a.So(err, ShouldNotBeNil)
 }
 
@@ -184,7 +185,7 @@ func TestPUTIllegalResponse(t *testing.T) {
 	defer server.Close()
 
 	var resp FooResp
-	err := PUT(ctx, server.URL, tokenStrategy, url, nil, &resp)
+	err := PUT(ctx, server.URL, tokenStrategy, url, headers, nil, &resp)
 	a.So(err, ShouldNotBeNil)
 }
 
@@ -194,7 +195,7 @@ func TestPUTRedirect(t *testing.T) {
 	defer server.Close()
 
 	var resp FooResp
-	err := PUT(ctx, server.URL, tokenStrategy, url, nil, &resp)
+	err := PUT(ctx, server.URL, tokenStrategy, url, headers, nil, &resp)
 	a.So(err, ShouldBeNil)
 	a.So(resp.Foo, ShouldEqual, token)
 }
@@ -208,7 +209,7 @@ func TestPOST(t *testing.T) {
 	body := FooResp{
 		Foo: token,
 	}
-	err := POST(ctx, server.URL, tokenStrategy, url, body, &resp)
+	err := POST(ctx, server.URL, tokenStrategy, url, headers, body, &resp)
 	a.So(err, ShouldBeNil)
 	a.So(resp.Foo, ShouldEqual, body.Foo)
 }
@@ -220,7 +221,7 @@ func TestPOSTIllegalRequest(t *testing.T) {
 
 	var resp FooResp
 	body := FooResp{}
-	err := POST(ctx, server.URL, tokenStrategy, url, body, &resp)
+	err := POST(ctx, server.URL, tokenStrategy, url, headers, body, &resp)
 	a.So(err, ShouldNotBeNil)
 }
 
@@ -230,7 +231,7 @@ func TestPOSTIllegalResponse(t *testing.T) {
 	defer server.Close()
 
 	var resp FooResp
-	err := POST(ctx, server.URL, tokenStrategy, url, nil, &resp)
+	err := POST(ctx, server.URL, tokenStrategy, url, headers, nil, &resp)
 	a.So(err, ShouldNotBeNil)
 }
 
@@ -240,7 +241,7 @@ func TestPOSTRedirect(t *testing.T) {
 	defer server.Close()
 
 	var resp FooResp
-	err := POST(ctx, server.URL, tokenStrategy, url, nil, &resp)
+	err := POST(ctx, server.URL, tokenStrategy, url, headers, nil, &resp)
 	a.So(err, ShouldBeNil)
 	a.So(resp.Foo, ShouldEqual, token)
 }
@@ -250,7 +251,7 @@ func TestDELETE(t *testing.T) {
 	server := httptest.NewServer(OKHandler(a, "DELETE"))
 	defer server.Close()
 
-	err := DELETE(ctx, server.URL, tokenStrategy, url)
+	err := DELETE(ctx, server.URL, tokenStrategy, url, headers)
 	a.So(err, ShouldBeNil)
 }
 
@@ -259,7 +260,7 @@ func TestDELETERedirect(t *testing.T) {
 	server := httptest.NewServer(RedirectHandler(a, "DELETE"))
 	defer server.Close()
 
-	err := DELETE(ctx, server.URL, tokenStrategy, url)
+	err := DELETE(ctx, server.URL, tokenStrategy, url, headers)
 	a.So(err, ShouldBeNil)
 }
 
@@ -268,7 +269,7 @@ func TestDeprecated(t *testing.T) {
 	server := httptest.NewServer(DeprecatedHandler(a, "GET"))
 	defer server.Close()
 
-	err := GET(ctx, server.URL, tokenStrategy, url, nil)
+	err := GET(ctx, server.URL, tokenStrategy, url, headers, nil)
 	a.So(err, ShouldBeNil)
 }
 
@@ -277,6 +278,6 @@ func TestNilCtx(t *testing.T) {
 	server := httptest.NewServer(DeprecatedHandler(a, "GET"))
 	defer server.Close()
 
-	err := GET(nil, server.URL, tokenStrategy, url, nil)
+	err := GET(nil, server.URL, tokenStrategy, url, headers, nil)
 	a.So(err, ShouldBeNil)
 }

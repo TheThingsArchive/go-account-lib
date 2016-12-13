@@ -60,7 +60,7 @@ func newRequest(server, method string, URI string, body io.Reader) (*http.Reques
 	return req, nil
 }
 
-func performRequestBody(ctx log.Interface, server string, strategy auth.Strategy, method, URI string, body interface{}, redirects int) (io.ReadCloser, error) {
+func performRequestBody(ctx log.Interface, server string, strategy auth.Strategy, method, URI string, headers map[string]string, body interface{}, redirects int) (io.ReadCloser, error) {
 	var req *http.Request
 	var err error
 
@@ -91,6 +91,7 @@ func performRequestBody(ctx log.Interface, server string, strategy auth.Strategy
 
 	client := &http.Client{
 		CheckRedirect: checkRedirect,
+		Transport:     NewRoundTripper(ctx, headers),
 	}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -100,16 +101,6 @@ func performRequestBody(ctx log.Interface, server string, strategy auth.Strategy
 	// catch deprecated api
 	if resp.StatusCode == 410 {
 		return nil, fmt.Errorf("API deprecated by The Things Network account server, please update your client")
-	} else if warning := resp.Header.Get("Warning"); warning != "" {
-		// Warning header has format: 123 - "Message"
-		code := warning[0:3]
-		message := warning[7 : len(warning)-1]
-		if ctx != nil {
-			ctx.WithFields(map[string]interface{}{
-				"code":    code,
-				"message": message,
-			}).Warn("Got server warning. Make sure the client is up to date.")
-		}
 	}
 
 	if resp.StatusCode >= 400 {
@@ -140,7 +131,7 @@ func performRequestBody(ctx log.Interface, server string, strategy auth.Strategy
 	if resp.StatusCode == 307 {
 		if redirects > 0 {
 			location := resp.Header.Get("Location")
-			return performRequestBody(ctx, server, strategy, method, location, body, redirects-1)
+			return performRequestBody(ctx, server, strategy, method, location, headers, body, redirects-1)
 		}
 		return nil, fmt.Errorf("Reached maximum number of redirects")
 	}
@@ -154,8 +145,8 @@ func performRequestBody(ctx log.Interface, server string, strategy auth.Strategy
 }
 
 // performRequest performs a request and decodes the result
-func performRequest(ctx log.Interface, server string, strategy auth.Strategy, method, URI string, rbody, res interface{}, redirects int) error {
-	body, err := performRequestBody(ctx, server, strategy, method, URI, rbody, redirects)
+func performRequest(ctx log.Interface, server string, strategy auth.Strategy, method, URI string, headers map[string]string, rbody, res interface{}, redirects int) error {
+	body, err := performRequestBody(ctx, server, strategy, method, URI, headers, rbody, redirects)
 	if err != nil {
 		return err
 	}
@@ -176,34 +167,34 @@ func performRequest(ctx log.Interface, server string, strategy auth.Strategy, me
 }
 
 // GET does a get request to the account server,  decoding the result into the object pointed to byres
-func GET(ctx log.Interface, server string, strategy auth.Strategy, URI string, res interface{}) error {
-	return performRequest(ctx, server, strategy, "GET", URI, nil, res, MaxRedirects)
+func GET(ctx log.Interface, server string, strategy auth.Strategy, URI string, headers map[string]string, res interface{}) error {
+	return performRequest(ctx, server, strategy, "GET", URI, headers, nil, res, MaxRedirects)
 }
 
 // GET does a get request to the account server,  decoding the result into the object pointed to byres
-func GETBody(ctx log.Interface, server string, strategy auth.Strategy, URI string) (io.ReadCloser, error) {
-	return performRequestBody(ctx, server, strategy, "GET", URI, nil, MaxRedirects)
+func GETBody(ctx log.Interface, server string, strategy auth.Strategy, URI string, headers map[string]string) (io.ReadCloser, error) {
+	return performRequestBody(ctx, server, strategy, "GET", URI, headers, nil, MaxRedirects)
 }
 
 // DELETE does a delete request to the account server
-func DELETE(ctx log.Interface, server string, strategy auth.Strategy, URI string) error {
-	return performRequest(ctx, server, strategy, "DELETE", URI, nil, nil, MaxRedirects)
+func DELETE(ctx log.Interface, server string, strategy auth.Strategy, URI string, headers map[string]string) error {
+	return performRequest(ctx, server, strategy, "DELETE", URI, headers, nil, nil, MaxRedirects)
 }
 
 // POST creates an HTTP Post request to the specified server, with the body
 // encoded as JSON, decoding the result into the object pointed to byres
-func POST(ctx log.Interface, server string, strategy auth.Strategy, URI string, body, res interface{}) error {
-	return performRequest(ctx, server, strategy, "POST", URI, body, res, MaxRedirects)
+func POST(ctx log.Interface, server string, strategy auth.Strategy, URI string, headers map[string]string, body, res interface{}) error {
+	return performRequest(ctx, server, strategy, "POST", URI, headers, body, res, MaxRedirects)
 }
 
 // PUT creates an HTTP Put request to the specified server, with the body
 // encoded as JSON, decoding the result into the object pointed to byres
-func PUT(ctx log.Interface, server string, strategy auth.Strategy, URI string, body, res interface{}) error {
-	return performRequest(ctx, server, strategy, "PUT", URI, body, res, MaxRedirects)
+func PUT(ctx log.Interface, server string, strategy auth.Strategy, URI string, headers map[string]string, body, res interface{}) error {
+	return performRequest(ctx, server, strategy, "PUT", URI, headers, body, res, MaxRedirects)
 }
 
 // PATCH creates an HTTP Patch request to the specified server, with the body
 // encoded as JSON, decoding the result into the object pointed to byres
-func PATCH(ctx log.Interface, server string, strategy auth.Strategy, URI string, body, res interface{}) error {
-	return performRequest(ctx, server, strategy, "PATCH", URI, body, res, MaxRedirects)
+func PATCH(ctx log.Interface, server string, strategy auth.Strategy, URI string, headers map[string]string, body, res interface{}) error {
+	return performRequest(ctx, server, strategy, "PATCH", URI, headers, body, res, MaxRedirects)
 }
