@@ -5,6 +5,7 @@ package util
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/TheThingsNetwork/go-utils/log"
 )
@@ -25,7 +26,11 @@ func NewRoundTripper(ctx log.Interface, headers map[string]string) *RoundTripper
 
 func (t *RoundTripper) addHeaders(req *http.Request) {
 	for name, value := range t.headers {
-		req.Header.Set(name, value)
+		switch strings.ToLower(name) {
+		case "authorization":
+		default:
+			req.Header.Set(name, value)
+		}
 	}
 }
 
