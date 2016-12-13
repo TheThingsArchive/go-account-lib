@@ -16,9 +16,10 @@ import (
 
 // Account is a client to an account server
 type Account struct {
-	server string
-	auth   auth.Strategy
-	ctx    log.Interface
+	server  string
+	auth    auth.Strategy
+	ctx     log.Interface
+	headers map[string]string
 }
 
 // New creates a new account that will use no authentication
@@ -29,6 +30,7 @@ func New(server string) *Account {
 		ctx: wrap.Wrap(&apex.Logger{
 			Handler: cli.New(os.Stdout),
 		}),
+		headers: map[string]string{},
 	}
 }
 
@@ -41,6 +43,12 @@ func (a *Account) WithLogger(logger log.Interface) *Account {
 // WithAuth sets the authentication strategy the account will use
 func (a *Account) WithAuth(strategy auth.Strategy) *Account {
 	a.auth = strategy
+	return a
+}
+
+// WithHeader adds the header to every request to the account server
+func (a *Account) WithHeader(name, value string) *Account {
+	a.headers[name] = value
 	return a
 }
 
