@@ -79,6 +79,21 @@ func (token *gatewayToken) Token() *oauth2.Token {
 	}
 }
 
+type Placement string
+
+const (
+	Indoor  Placement = "indoor"
+	Outdoor Placement = "outdoor"
+)
+
+type GatewayAttributes struct {
+	Brand        string    `json:"brand"`
+	Model        string    `json:"model"`
+	Placement    Placement `json:"placement"`
+	AntennaType  string    `json:"antenna_type"`
+	AntennaModel string    `json:"antenna_model"`
+}
+
 // Gateway represents a gateway on the account server
 type Gateway struct {
 	ID               string         `json:"id" valid:"required"`
@@ -90,10 +105,13 @@ type Gateway struct {
 	StatusPublic     bool           `json:"status_public"`
 	AutoUpdate       bool           `json:"auto_update"`
 	Location         *Location      `json:"location"`
+	Altitude         float64        `json:"altitude"`
 	Collaborators    []Collaborator `json:"collaborator"`
 	Key              string         `json:"key"`
 	token            *gatewayToken  `json:"token,omitempty"`
 	Token            *oauth2.Token
+	Attributes       GatewayAttributes `json:"attributes"`
+	Router           string            `json:"string"`
 }
 
 // Location is the GPS location of a gateway
