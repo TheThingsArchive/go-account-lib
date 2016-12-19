@@ -79,7 +79,20 @@ func (token *gatewayToken) Token() *oauth2.Token {
 	}
 }
 
-type GatewayAttributes map[string]interface{}
+type Placement string
+
+const (
+	Indoor  Placement = "indoor"
+	Outdoor Placement = "outdoor"
+)
+
+type GatewayAttributes struct {
+	Brand        string    `json:"brand"`
+	Model        string    `json:"model"`
+	Placement    Placement `json:"placement"`
+	AntennaType  string    `json:"antenna_type"`
+	AntennaModel string    `json:"antenna_model"`
+}
 
 // Gateway represents a gateway on the account server
 type Gateway struct {
