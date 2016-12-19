@@ -146,14 +146,14 @@ func (a *Account) RetractGatewayRights(gatewayID string, username string) error 
 
 // GatewayEdits contains editable fields of gateways
 type GatewayEdits struct {
-	Owner         string            `json:"owner,omitempty"`
-	PublicRights  []types.Right     `json:"public_rights,omitempty"`
-	FrequencyPlan string            `json:"frequency_plan,omitempty"`
-	AutoUpdate    *bool             `json:"auto_update,omitempty"`
-	Location      *Location         `json:"location,omitempty"`
-	Altitude      float64           `json:"altitude,omitempty"`
-	Attributes    GatewayAttributes `json:"attributes,omitempty"`
-	Router        string            `json:"router,omitempty"`
+	Owner         string             `json:"owner,omitempty"`
+	PublicRights  []types.Right      `json:"public_rights,omitempty"`
+	FrequencyPlan string             `json:"frequency_plan,omitempty"`
+	AutoUpdate    *bool              `json:"auto_update,omitempty"`
+	Location      *Location          `json:"location,omitempty"`
+	Altitude      float64            `json:"altitude,omitempty"`
+	Attributes    *GatewayAttributes `json:"attributes,omitempty"`
+	Router        string             `json:"router,omitempty"`
 }
 
 // EditGateway edits the fields of a gateway
