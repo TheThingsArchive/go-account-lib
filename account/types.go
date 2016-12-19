@@ -92,6 +92,7 @@ type GatewayAttributes struct {
 	Placement    Placement `json:"placement"`
 	AntennaType  string    `json:"antenna_type"`
 	AntennaModel string    `json:"antenna_model"`
+	Description  string    `json:"description"`
 }
 
 // Gateway represents a gateway on the account server
