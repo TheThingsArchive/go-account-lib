@@ -147,7 +147,7 @@ func (a *Account) RetractGatewayRights(gatewayID string, username string) error 
 // GatewayEdits contains editable fields of gateways
 type GatewayEdits struct {
 	Owner         string             `json:"owner,omitempty"`
-	PublicRights  []types.Right      `json:"public_rights,omitempty"`
+	PublicRights  *[]types.Right     `json:"public_rights,omitempty"`
 	FrequencyPlan string             `json:"frequency_plan,omitempty"`
 	AutoUpdate    *bool              `json:"auto_update,omitempty"`
 	Location      *Location          `json:"location,omitempty"`
@@ -171,7 +171,7 @@ func (a *Account) TransferOwnership(gatewayID, username string) error {
 // SetPublicRights changes the publicily visible rights of the gateway
 func (a *Account) SetPublicRights(gatewayID string, rights []types.Right) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
-		PublicRights: rights,
+		PublicRights: &rights,
 	})
 }
 
