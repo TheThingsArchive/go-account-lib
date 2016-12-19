@@ -90,6 +90,9 @@ type registerGatewayReq struct {
 
 	// Attributes is a free-form map of attributes
 	Attributes map[string]interface{} `json:"attributes,omitempty"`
+
+	// Router is the router this gateway talks to
+	Router string `json:"router,omitempty"`
 }
 
 // RegisterGateway registers a new gateway on the account server
@@ -150,6 +153,7 @@ type GatewayEdits struct {
 	Location      *Location         `json:"location,omitempty"`
 	Altitude      float64           `json:"altitude,omitempty"`
 	Attributes    GatewayAttributes `json:"attributes,omitempty"`
+	Router        string            `json:"router,omitempty"`
 }
 
 // EditGateway edits the fields of a gateway
@@ -192,5 +196,12 @@ func (a *Account) ChangeLocation(gatewayID string, latitude, longitude float64) 
 func (a *Account) ChangeAltitude(gatewayID string, altitude float64) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
 		Altitude: altitude,
+	})
+}
+
+// ChangeRouter changes the router the gateway talks to
+func (a *Account) ChangeRouter(gatewayID string, router string) error {
+	return a.EditGateway(gatewayID, GatewayEdits{
+		Router: router,
 	})
 }
