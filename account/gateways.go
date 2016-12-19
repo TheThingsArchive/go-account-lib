@@ -85,8 +85,11 @@ type registerGatewayReq struct {
 	// Country is the country code of the new gateway (required)
 	FrequencyPlan string `json:"frequency_plan"`
 
-	// Location is the location of the new gateway
+	// Location is the location of the new gatewal
 	Location *Location `json:"location,omitempty"`
+
+	// Attributes is a free-form map of attributes
+	Attributes map[string]interface{} `json:"attributes,omitempty"`
 }
 
 // RegisterGateway registers a new gateway on the account server
@@ -140,11 +143,13 @@ func (a *Account) RetractGatewayRights(gatewayID string, username string) error 
 
 // GatewayEdits contains editable fields of gateways
 type GatewayEdits struct {
-	Owner         string        `json:"owner,omitempty"`
-	PublicRights  []types.Right `json:"public_rights,omitempty"`
-	FrequencyPlan string        `json:"frequency_plan,omitempty"`
-	AutoUpdate    *bool         `json:"auto_update,omitempty"`
-	Location      *Location     `json:"location,omitempty"`
+	Owner         string            `json:"owner,omitempty"`
+	PublicRights  []types.Right     `json:"public_rights,omitempty"`
+	FrequencyPlan string            `json:"frequency_plan,omitempty"`
+	AutoUpdate    *bool             `json:"auto_update,omitempty"`
+	Location      *Location         `json:"location,omitempty"`
+	Altitude      float64           `json:"altitude,omitempty"`
+	Attributes    GatewayAttributes `json:"attributes,omitempty"`
 }
 
 // EditGateway edits the fields of a gateway
@@ -180,5 +185,12 @@ func (a *Account) ChangeLocation(gatewayID string, latitude, longitude float64) 
 			Longitude: longitude,
 			Latitude:  latitude,
 		},
+	})
+}
+
+// ChangeAltitude changes the altitude of the gateway with the specified ID
+func (a *Account) ChangeAltitude(gatewayID string, altitude float64) error {
+	return a.EditGateway(gatewayID, GatewayEdits{
+		Altitude: altitude,
 	})
 }
