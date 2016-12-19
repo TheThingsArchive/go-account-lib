@@ -85,7 +85,7 @@ type registerGatewayReq struct {
 	// Country is the country code of the new gateway (required)
 	FrequencyPlan string `json:"frequency_plan"`
 
-	// Location is the location of the new gatewal
+	// Location is the location of the new gateway
 	Location *Location `json:"location,omitempty"`
 
 	// Attributes is a free-form map of attributes
