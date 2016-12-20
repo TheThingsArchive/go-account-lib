@@ -87,12 +87,12 @@ const (
 )
 
 type GatewayAttributes struct {
-	Brand        string    `json:"brand"`
-	Model        string    `json:"model"`
-	Placement    Placement `json:"placement"`
-	AntennaType  string    `json:"antenna_type"`
-	AntennaModel string    `json:"antenna_model"`
-	Description  string    `json:"description"`
+	Brand        *string    `json:"brand,omitempty"`
+	Model        *string    `json:"model,omitempty"`
+	Placement    *Placement `json:"placement,omitempty"`
+	AntennaType  *string    `json:"antenna_type,omitempty"`
+	AntennaModel *string    `json:"antenna_model,omitempty"`
+	Description  *string    `json:"description,omitempty"`
 }
 
 // Gateway represents a gateway on the account server
