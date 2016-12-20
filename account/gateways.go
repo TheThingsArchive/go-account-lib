@@ -205,3 +205,14 @@ func (a *Account) ChangeRouter(gatewayID string, router string) error {
 		Router: router,
 	})
 }
+
+// GatewayRights returns the rights the current account client has to a certain
+// gateway
+func (a *Account) GatewayRights(gatewayID string) (rights []types.Right, err error) {
+	err = a.get(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s/rights", gatewayID), &rights)
+	if err != nil {
+		return nil, err
+	}
+
+	return rights, nil
+}
