@@ -107,7 +107,7 @@ type Gateway struct {
 	AutoUpdate       bool           `json:"auto_update"`
 	Location         *Location      `json:"location"`
 	Altitude         float64        `json:"altitude"`
-	Collaborators    []Collaborator `json:"collaborator"`
+	Collaborators    []Collaborator `json:"collaborators"`
 	Key              string         `json:"key"`
 	token            *gatewayToken  `json:"token,omitempty"`
 	Token            *oauth2.Token
