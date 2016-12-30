@@ -3,9 +3,12 @@
 
 package cache
 
+import "sync"
+
 // memoryCache represents a cache that stores keys in memory
 type memoryCache struct {
 	cache map[string][]byte
+	sync.RWMutex
 }
 
 // MemoryCache returns a cache that stores keys in memory
@@ -17,6 +20,9 @@ func MemoryCache() Cache {
 
 // Get gets the data from memory if it exists
 func (c *memoryCache) Get(key string) ([]byte, error) {
+	c.RLock()
+	defer c.RUnlock()
+
 	cached, ok := c.cache[key]
 	if ok {
 		return cached, nil
@@ -27,6 +33,9 @@ func (c *memoryCache) Get(key string) ([]byte, error) {
 
 // Set saves the data to memory
 func (c *memoryCache) Set(key string, data []byte) error {
+	c.Lock()
+	defer c.Unlock()
+
 	c.cache[key] = data
 	return nil
 }
