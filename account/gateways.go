@@ -216,3 +216,14 @@ func (a *Account) GatewayRights(gatewayID string) (rights []types.Right, err err
 
 	return rights, nil
 }
+
+// GatewayCollaborators fetches the gateway collaborators
+func (a *Account) GatewayCollaborators(gwID string) ([]Collaborator, error) {
+	collaborators := make([]Collaborator, 0)
+	err := a.get(a.auth.WithScope(scope.Gateway(gwID)), fmt.Sprintf("/api/v2/gateways/%s/collaborators", gwID), &collaborators)
+	if err != nil {
+		return nil, err
+	}
+
+	return collaborators, nil
+}
