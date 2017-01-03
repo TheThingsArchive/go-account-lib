@@ -181,3 +181,14 @@ func (a *Account) AppRights(appID string) (rights []types.Right, err error) {
 
 	return rights, nil
 }
+
+// AppCollaborators fetches the application collaborators
+func (a *Account) AppCollaborators(appID string) ([]Collaborator, error) {
+	collaborators := make([]Collaborator, 0)
+	err := a.get(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/collaborators", appID), &collaborators)
+	if err != nil {
+		return nil, err
+	}
+
+	return collaborators, nil
+}
