@@ -3,49 +3,51 @@
 
 package rights
 
+type Right string
+
 const (
 	// AppSettings is the right to read and write access to the settings, devices and access keys of the application
-	AppSettings = "settings"
+	AppSettings Right = "settings"
 
 	// AppCollaborators is the right to edit and modify collaborators of the application
-	AppCollaborators = "collaborators"
+	AppCollaborators Right = "collaborators"
 
 	// is the right to delete the application
-	AppDelete = "delete"
+	AppDelete Right = "delete"
 
 	// ReadUplink is the right to view messages sent by devices of the application
-	ReadUplink = "messages:up:r"
+	ReadUplink Right = "messages:up:r"
 
 	// WriteUplink is the right to send messages to the application
-	WriteUplink = "messages:up:w"
+	WriteUplink Right = "messages:up:w"
 
 	// WriteDownlink is the right to send messages to devices of the application
-	WriteDownlink = "messages:down:w"
+	WriteDownlink Right = "messages:down:w"
 
 	// evices is the right to list, edit and remove devices for the application on a handler
-	Devices = "devices"
+	Devices Right = "devices"
 
 	// GatewaySettings is the right to read and write access to the gateway settings
-	GatewaySettings = "gateway:settings"
+	GatewaySettings Right = "gateway:settings"
 
 	// GatewayCollaborators is the right to edit the gateway collaborators
-	GatewayCollaborators = "gateway:collaborators"
+	GatewayCollaborators Right = "gateway:collaborators"
 
 	// GatewayDelete is the right to delete a gatweay
-	GatewayDelete = "gateway:delete"
+	GatewayDelete Right = "gateway:delete"
 
 	// GatewayLocation is the right to view the exact location of the gateway, otherwise only approximate location will be shown
-	GatewayLocation = "gateway:location"
+	GatewayLocation Right = "gateway:location"
 
 	// GatewayStatus is the right to view the gateway status and metrics about the gateway
-	GatewayStatus = "gateway:status"
+	GatewayStatus Right = "gateway:status"
 
 	// GatewayOwner is the right to view the owner of the gateway
-	GatewayOwner = "gateway:owner"
+	GatewayOwner Right = "gateway:owner"
 
 	// ComponentSettings is the right to read and write access to the settings and access key of a network component
-	ComponentSettings = "component:settings"
+	ComponentSettings Right = "component:settings"
 
 	// ComponentDelete is the right to delete the network component
-	ComponentDelete = "component:delete"
+	ComponentDelete Right = "component:delete"
 )
