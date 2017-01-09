@@ -94,7 +94,7 @@ type registerGatewayReq struct {
 	// Attributes is a free-form map of attributes
 	Attributes map[string]interface{} `json:"attributes,omitempty"`
 
-	// Router is the router this gateway talks to
+	// Router is the address (hostname:port) of the router this gateway talks to
 	Router string `json:"router,omitempty"`
 }
 
