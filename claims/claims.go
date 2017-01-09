@@ -3,7 +3,10 @@
 
 package claims
 
-import jwt "github.com/dgrijalva/jwt-go"
+import (
+	"github.com/TheThingsNetwork/go-account-lib/rights"
+	jwt "github.com/dgrijalva/jwt-go"
+)
 
 // TTNClaims is the interface all claims
 // that are issued by TTN need to adhere to
@@ -15,14 +18,14 @@ type ClaimsWithIssuer interface {
 // Claims represents all the claims an access token can have
 type Claims struct {
 	jwt.StandardClaims
-	Client     string              `json:"client"`
-	Scope      []string            `json:"scope"`
-	Type       string              `json:"type,omitempty"`
-	Apps       map[string][]string `json:"apps,omitempty"`
-	Gateways   map[string][]string `json:"gateways,omitempty"`
-	Components map[string][]string `json:"components,omitempty"`
-	Username   string              `json:"username"`
-	Email      string              `json:"email"`
+	Client     string                    `json:"client"`
+	Scope      []string                  `json:"scope"`
+	Type       string                    `json:"type,omitempty"`
+	Apps       map[string][]rights.Right `json:"apps,omitempty"`
+	Gateways   map[string][]rights.Right `json:"gateways,omitempty"`
+	Components map[string][]rights.Right `json:"components,omitempty"`
+	Username   string                    `json:"username"`
+	Email      string                    `json:"email"`
 	Name       struct {
 		First string `json:"first"`
 		Last  string `json:"last"`

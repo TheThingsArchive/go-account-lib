@@ -3,8 +3,19 @@
 
 package claims
 
+import "github.com/TheThingsNetwork/go-account-lib/rights"
+
 // contains checks for membership of a string in a stringmap
 func contains(slice []string, el string) bool {
+	for _, e := range slice {
+		if e == el {
+			return true
+		}
+	}
+	return false
+}
+
+func containsRight(slice []rights.Right, el rights.Right) bool {
 	for _, e := range slice {
 		if e == el {
 			return true
