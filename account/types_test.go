@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/TheThingsNetwork/ttn/core/types"
+	"github.com/TheThingsNetwork/go-account-lib/rights"
 	"github.com/smartystreets/assertions"
 )
 
@@ -15,13 +15,13 @@ func TestCollaboratorRights(t *testing.T) {
 	a := assertions.New(t)
 	c := Collaborator{
 		Username: "username",
-		Rights: []types.Right{
-			types.Right("right"),
+		Rights: []rights.Right{
+			rights.Right("right"),
 		},
 	}
 
-	a.So(c.HasRight(types.Right("right")), assertions.ShouldBeTrue)
-	a.So(c.HasRight(types.Right("foo")), assertions.ShouldBeFalse)
+	a.So(c.HasRight(rights.Right("right")), assertions.ShouldBeTrue)
+	a.So(c.HasRight(rights.Right("foo")), assertions.ShouldBeFalse)
 }
 
 func TestNameString(t *testing.T) {
