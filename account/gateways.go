@@ -85,8 +85,25 @@ type registerGatewayReq struct {
 	// Country is the country code of the new gateway (required)
 	FrequencyPlan string `json:"frequency_plan"`
 
+	// Altitude is the altitude of the new gateway
+	Altitude float64 `json:"altitude,omitempty"`
+
 	// Location is the location of the new gateway
 	Location *Location `json:"location,omitempty"`
+
+	// Attributes is a free-form map of attributes
+	Attributes map[string]interface{} `json:"attributes,omitempty"`
+
+	// Router is the address (hostname:port) of the router this gateway talks to
+	Router string `json:"router,omitempty"`
+}
+
+type GatewaySettings struct {
+	// Location is the location of the new gateway
+	Location *Location `json:"location,omitempty"`
+
+	// Altitude is the altitude of the new gateway
+	Altitude float64 `json:"altitude,omitempty"`
 
 	// Attributes is a free-form map of attributes
 	Attributes map[string]interface{} `json:"attributes,omitempty"`
@@ -96,19 +113,25 @@ type registerGatewayReq struct {
 }
 
 // RegisterGateway registers a new gateway on the account server
-func (a *Account) RegisterGateway(gatewayID string, frequencyPlan string, location *Location) (gateway Gateway, err error) {
+func (a *Account) RegisterGateway(gatewayID string, frequencyPlan string, opts ...GatewaySettings) (gateway Gateway, err error) {
 	if gatewayID == "" {
 		return gateway, errors.New("Cannot create gateway: no ID given")
 	}
 
 	if frequencyPlan == "" {
-		return gateway, errors.New("Cannot create gateway: no FrequencyPlan given")
+		return gateway, errors.New("Cannot create gateway: no frequency plan given")
 	}
 
 	req := registerGatewayReq{
 		ID:            gatewayID,
 		FrequencyPlan: frequencyPlan,
-		Location:      location,
+	}
+
+	if len(opts) >= 1 {
+		for _, opt := range opts {
+			req.Location = opt.Location
+			req.Attributes = opt.Attributes
+		}
 	}
 
 	err = a.post(a.auth, "/api/v2/gateways", req, &gateway)
