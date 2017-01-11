@@ -98,20 +98,19 @@ type GatewayAttributes struct {
 
 // Gateway represents a gateway on the account server
 type Gateway struct {
-	ID               string         `json:"id" valid:"required"`
-	Activated        bool           `json:"activated"`
-	FrequencyPlan    string         `json:"frequency_plan"`
-	FrequencyPlanURL string         `json:"frequency_plan_url"`
-	PublicRights     []rights.Right `json:"public_rights"`
-	LocationPublic   bool           `json:"location_public"`
-	StatusPublic     bool           `json:"status_public"`
-	AutoUpdate       bool           `json:"auto_update"`
-	Location         *Location      `json:"location"`
-	Altitude         float64        `json:"altitude"`
-	Collaborators    []Collaborator `json:"collaborators"`
-	Key              string         `json:"key"`
-	token            *gatewayToken  `json:"token,omitempty"`
-	Token            *oauth2.Token
+	ID               string            `json:"id" valid:"required"`
+	Activated        bool              `json:"activated"`
+	FrequencyPlan    string            `json:"frequency_plan"`
+	FrequencyPlanURL string            `json:"frequency_plan_url"`
+	PublicRights     []rights.Right    `json:"public_rights"`
+	LocationPublic   bool              `json:"location_public"`
+	StatusPublic     bool              `json:"status_public"`
+	AutoUpdate       bool              `json:"auto_update"`
+	Location         *Location         `json:"location"`
+	Altitude         float64           `json:"altitude"`
+	Collaborators    []Collaborator    `json:"collaborators"`
+	Key              string            `json:"key"`
+	Token            *oauth2.Token     `json:"token,omitempty"`
 	Attributes       GatewayAttributes `json:"attributes"`
 	Router           string            `json:"string"`
 }

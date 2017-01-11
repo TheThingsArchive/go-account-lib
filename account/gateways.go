@@ -34,10 +34,10 @@ func (s *GatewayStream) Close() error {
 // Next requests the next gateway on the stream, blocking until there is one
 // If there are no more gateways, the error will be io.EOF
 func (s *GatewayStream) Next() (*Gateway, error) {
-	var gateway Gateway
+	var res gatewayRes
 	if s.decoder.More() {
-		err := s.decoder.Decode(&gateway)
-		gateway.Token = gateway.token.Token()
+		err := s.decoder.Decode(&res)
+		gateway := res.ToGateway()
 		return &gateway, err
 	}
 
@@ -71,11 +71,25 @@ func (a *Account) StreamGateways() (*GatewayStream, error) {
 	return stream, err
 }
 
+type gatewayRes struct {
+	Gateway
+	GWToken gatewayToken `json:"token"`
+}
+
+func (r *gatewayRes) ToGateway() Gateway {
+	gateway := r.Gateway
+	gateway.Token = r.GWToken.Token()
+	return gateway
+}
+
 // FindGateway returns the information about a specific gateay
 func (a *Account) FindGateway(gatewayID string) (gateway Gateway, err error) {
-	err = a.get(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s", gatewayID), &gateway)
-	gateway.Token = gateway.token.Token()
-	return gateway, err
+	var res gatewayRes
+	err = a.get(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s", gatewayID), &res)
+	if err != nil {
+		return gateway, err
+	}
+	return res.ToGateway(), err
 }
 
 type registerGatewayReq struct {
