@@ -15,6 +15,7 @@ type fileTokenStore struct {
 	filename string
 }
 
+// FileStore returns a TokenStore that stores the tokens in a file
 func FileStore(filename string) TokenStore {
 	return &fileTokenStore{
 		filename: filename,

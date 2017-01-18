@@ -80,13 +80,18 @@ func (token *gatewayToken) Token() *oauth2.Token {
 	}
 }
 
+// Placement is represents antenna placement
 type Placement string
 
 const (
-	Indoor  Placement = "indoor"
+	// Indoor represents an indoor gateway
+	Indoor Placement = "indoor"
+
+	// Outdoor represents an outdoor gateway
 	Outdoor Placement = "outdoor"
 )
 
+// GatewayAttributes represents attributes of a gateway
 type GatewayAttributes struct {
 	Brand        *string    `json:"brand,omitempty"`
 	Model        *string    `json:"model,omitempty"`
@@ -124,6 +129,7 @@ type Location struct {
 	Latitude  float64 `json:"lat"`
 }
 
+// FrequencyPlan is the frequency plan used by a gateway
 type FrequencyPlan struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`

@@ -13,6 +13,9 @@ import (
 )
 
 const prefix = "token"
+
+// TTLMargin is the margin to expire the tokens by
+// token will expire a bit too soon in the store, by this margin.
 const TTLMargin = 5 * time.Second
 
 // hash hashes the parent token to make shorter redis keys

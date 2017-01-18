@@ -3,6 +3,7 @@
 
 package rights
 
+// Right is the type of rights on The Things Network
 type Right string
 
 const (

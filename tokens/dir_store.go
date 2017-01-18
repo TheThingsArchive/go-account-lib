@@ -24,7 +24,7 @@ func DirStore(dirname string) TokenStore {
 	}
 }
 
-// DirStoreWithNameFn creates a filestore that stores tokens in the
+// FileStoreWithNameFn creates a filestore that stores tokens in the
 // specified directory under with a custom filename
 func FileStoreWithNameFn(dirname string, nameFn func(string) string) TokenStore {
 	return &dirStore{

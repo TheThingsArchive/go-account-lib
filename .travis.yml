@@ -1,0 +1,25 @@
+language: go
+
+go:
+  - 1.7
+
+services:
+  - redis
+
+cache:
+  directories:
+    - vendor
+
+before_install:
+  - echo "machine github.com login ${GITHUB_ACCESS_TOKEN}" >> ~/.netrc
+
+install:
+  - make tools
+  - git checkout vendor/vendor.json
+  - make deps
+
+script:
+  - make fmt
+  - make vet
+  - make test
+  - make lint
