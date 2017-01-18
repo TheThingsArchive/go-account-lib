@@ -19,3 +19,4 @@ script:
   - make fmt
   - make vet
   - make test
+  - make lint
