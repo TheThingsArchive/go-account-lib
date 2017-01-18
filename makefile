@@ -1,7 +1,7 @@
 SHELL = bash
 
 go = go
-golint = golint
+golint = golint -set_exit_status
 pkgs = $(go) list ./... | grep -vE go-account-lib/vendor
 
 cover_file=coverage.out
@@ -41,5 +41,5 @@ fmt:
 	[[ -z "`$(pkgs) | xargs go fmt | tee -a /dev/stderr`" ]]
 
 lint:
-	for pkg in `$(pkgs)`; do $(golint) $$pkg; done
+	(for pkg in `$(pkgs)`; do $(golint) $$pkg || exit 1; done)
 
