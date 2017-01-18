@@ -12,7 +12,7 @@ const (
 	// AppCollaborators is the right to edit and modify collaborators of the application
 	AppCollaborators Right = "collaborators"
 
-	// is the right to delete the application
+	// AppDelete is the right to delete the application
 	AppDelete Right = "delete"
 
 	// ReadUplink is the right to view messages sent by devices of the application
@@ -24,7 +24,7 @@ const (
 	// WriteDownlink is the right to send messages to devices of the application
 	WriteDownlink Right = "messages:down:w"
 
-	// evices is the right to list, edit and remove devices for the application on a handler
+	// Devices is the right to list, edit and remove devices for the application on a handler
 	Devices Right = "devices"
 
 	// GatewaySettings is the right to read and write access to the gateway settings
