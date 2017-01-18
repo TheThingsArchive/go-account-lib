@@ -42,7 +42,7 @@ func (t *RoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 	}
 
 	// get server warnings
-	if warning := res.Header.Get("Warning"); warning != "" {
+	if warning := res.Header.Get("Warning"); len(warning) >= 8 {
 		// Warning header has format: 123 - "Message"
 		code := warning[0:3]
 		message := warning[7 : len(warning)-1]
