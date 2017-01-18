@@ -171,7 +171,8 @@ func GET(ctx log.Interface, server string, strategy auth.Strategy, URI string, h
 	return performRequest(ctx, server, strategy, "GET", URI, headers, nil, res, MaxRedirects)
 }
 
-// GET does a get request to the account server,  decoding the result into the object pointed to byres
+// GETBody does a get request to the account server and returns the body as a
+// ReadCloser
 func GETBody(ctx log.Interface, server string, strategy auth.Strategy, URI string, headers map[string]string) (io.ReadCloser, error) {
 	return performRequestBody(ctx, server, strategy, "GET", URI, headers, nil, MaxRedirects)
 }

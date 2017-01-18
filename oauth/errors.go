@@ -9,7 +9,8 @@ import (
 	"strconv"
 )
 
-type OAuthError struct {
+// Error is an error that can occure during an OAuth exchange
+type Error struct {
 	Code        int    `json:"code"`
 	Description string `json:"description"`
 }
@@ -19,7 +20,8 @@ type response struct {
 	Description string `json:"error_description"`
 }
 
-func (e *OAuthError) Error() string {
+// Error returns the error description
+func (e *Error) Error() string {
 	return e.Description
 }
 
@@ -33,7 +35,7 @@ func fromError(orig error) error {
 
 	str := orig.Error()
 
-	oerr := &OAuthError{
+	oerr := &Error{
 		Code:        500,
 		Description: str,
 	}

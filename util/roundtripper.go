@@ -10,12 +10,16 @@ import (
 	"github.com/TheThingsNetwork/go-utils/log"
 )
 
+// RoundTripper is a http.RoundTripper that check the Warning header
+// and can add extra headers to the request
 type RoundTripper struct {
 	ctx       log.Interface
 	transport http.RoundTripper
 	headers   map[string]string
 }
 
+// NewRoundTripper creates a new RoundTripper that will add the provided headers
+// to each request
 func NewRoundTripper(ctx log.Interface, headers map[string]string) *RoundTripper {
 	return &RoundTripper{
 		ctx:       ctx,
@@ -34,6 +38,8 @@ func (t *RoundTripper) addHeaders(req *http.Request) {
 	}
 }
 
+// RoundTrip performs one HTTP roundtrip, adding the headers and checking
+// warnings
 func (t *RoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 	t.addHeaders(req)
 	res, err := t.transport.RoundTrip(req)

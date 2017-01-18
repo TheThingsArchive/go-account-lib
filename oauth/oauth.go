@@ -14,6 +14,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// Config is the configuration for an OAuth client
 type Config struct {
 	Server string
 	Client *Client
@@ -37,9 +38,9 @@ func OAuth(server string, client *Client) *Config {
 	}
 }
 
-// OAuth creates a new 3-legged OAuth client that uses a cache to cache token
-// exchanges
-func OAuthWithCache(server string, client *Client, cache cache.Cache) *Config {
+// NewWithCache creates a new 3-legged OAuth client that uses a cache to cache
+// tokens
+func NewWithCache(server string, client *Client, cache cache.Cache) *Config {
 	return &Config{
 		Server: server,
 		Client: client,
@@ -47,28 +48,28 @@ func OAuthWithCache(server string, client *Client, cache cache.Cache) *Config {
 	}
 }
 
-// o.getConfig builds the oauth2 config for an OAuth client
-func (o *Config) getConfig() *oauth2.Config {
+// c.getConfig builds the oauth2 config for an OAuth client
+func (c *Config) getConfig() *oauth2.Config {
 	return &oauth2.Config{
-		ClientID:     o.Client.ID,
-		ClientSecret: o.Client.Secret,
-		RedirectURL:  o.Client.RedirectURL,
+		ClientID:     c.Client.ID,
+		ClientSecret: c.Client.Secret,
+		RedirectURL:  c.Client.RedirectURL,
 		Endpoint: oauth2.Endpoint{
-			TokenURL: fmt.Sprintf("%s/users/token", o.Server),
-			AuthURL:  fmt.Sprintf("%s/users/authorize", o.Server),
+			TokenURL: fmt.Sprintf("%s/users/token", c.Server),
+			AuthURL:  fmt.Sprintf("%s/users/authorize", c.Server),
 		},
 	}
 }
 
 // getKeyConfig builds the oauth2 config for an OAuth client to exchange and app
 // key for an app token
-func (o *Config) getKeyConfig() *oauth2.Config {
+func (c *Config) getKeyConfig() *oauth2.Config {
 	return &oauth2.Config{
-		ClientID:     o.Client.ID,
-		ClientSecret: o.Client.Secret,
-		RedirectURL:  o.Client.RedirectURL,
+		ClientID:     c.Client.ID,
+		ClientSecret: c.Client.Secret,
+		RedirectURL:  c.Client.RedirectURL,
 		Endpoint: oauth2.Endpoint{
-			TokenURL: fmt.Sprintf("%s/api/v2/applications/token", o.Server),
+			TokenURL: fmt.Sprintf("%s/api/v2/applications/token", c.Server),
 		},
 	}
 }
@@ -83,31 +84,31 @@ func (c *Config) getContext() context.Context {
 }
 
 // Exchange exchanges an OAuth 2.0 Authorization Code for an oauth2.Token
-func (o *Config) Exchange(code string) (*oauth2.Token, error) {
-	config := o.getConfig()
-	token, err := config.Exchange(o.getContext(), code)
+func (c *Config) Exchange(code string) (*oauth2.Token, error) {
+	config := c.getConfig()
+	token, err := config.Exchange(c.getContext(), code)
 	return token, fromError(err)
 }
 
 // PasswordCredentialsToken gets an oauth2.Token from username and password
-func (o *Config) PasswordCredentialsToken(username, password string) (*oauth2.Token, error) {
-	config := o.getConfig()
-	token, err := config.PasswordCredentialsToken(o.getContext(), username, password)
+func (c *Config) PasswordCredentialsToken(username, password string) (*oauth2.Token, error) {
+	config := c.getConfig()
+	token, err := config.PasswordCredentialsToken(c.getContext(), username, password)
 	return token, fromError(err)
 }
 
 // TokenSource creates oauth2.TokenSource from an oauht2.Token
-func (o *Config) TokenSource(token *oauth2.Token) oauth2.TokenSource {
-	config := o.getConfig()
-	return config.TokenSource(o.getContext(), token)
+func (c *Config) TokenSource(token *oauth2.Token) oauth2.TokenSource {
+	config := c.getConfig()
+	return config.TokenSource(c.getContext(), token)
 }
 
 // ExchangeAppKeyForToken exchanges an application Access Key for an equivalent
-func (o *Config) ExchangeAppKeyForToken(appID, accessKey string) (*oauth2.Token, error) {
+func (c *Config) ExchangeAppKeyForToken(appID, accessKey string) (*oauth2.Token, error) {
 	// application Access Token
-	config := o.getKeyConfig()
+	config := c.getKeyConfig()
 
-	token, err := getTokenFromCache(o.cache, appID, accessKey)
+	token, err := getTokenFromCache(c.cache, appID, accessKey)
 	if err != nil {
 		return nil, err
 	}
@@ -116,19 +117,19 @@ func (o *Config) ExchangeAppKeyForToken(appID, accessKey string) (*oauth2.Token,
 		return token, nil
 	}
 
-	token, err = config.PasswordCredentialsToken(o.getContext(), appID, accessKey)
+	token, err = config.PasswordCredentialsToken(c.getContext(), appID, accessKey)
 	if err != nil {
 		return nil, fromError(err)
 	}
 
 	// ignore errors when saving to cache
-	_ = saveTokenToCache(o.cache, appID, accessKey, token)
+	_ = saveTokenToCache(c.cache, appID, accessKey, token)
 
 	return token, nil
 }
 
 // AuthCodeURL returns a URL to OAuth 2.0 provider's consent page that asks for permissions for the required scopes explicitly.
-func (o *Config) AuthCodeURL(state string, opts ...oauth2.AuthCodeOption) string {
-	config := o.getConfig()
+func (c *Config) AuthCodeURL(state string, opts ...oauth2.AuthCodeOption) string {
+	config := c.getConfig()
 	return config.AuthCodeURL(state, opts...)
 }

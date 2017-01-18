@@ -20,8 +20,8 @@ func (a *basicAuth) WithScope(scope string) Strategy {
 	return a
 }
 
-// AccessKey creates a authorization strategy that uses
-// the specified access key
+// BasicAuth creates a authorization strategy that uses
+// uses username and password in HTTP Basic Auth
 func BasicAuth(username, password string) Strategy {
 	return &basicAuth{
 		username: username,

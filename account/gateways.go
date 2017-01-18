@@ -112,6 +112,7 @@ type registerGatewayReq struct {
 	Router string `json:"router,omitempty"`
 }
 
+// GatewaySettings represents settings that can be changed on a gateway
 type GatewaySettings struct {
 	// Location is the location of the new gateway
 	Location *Location `json:"location,omitempty"`

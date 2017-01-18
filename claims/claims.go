@@ -8,9 +8,9 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-// TTNClaims is the interface all claims
-// that are issued by TTN need to adhere to
-type ClaimsWithIssuer interface {
+// WithIssuer is the interface of claims that
+// have an issuer (iss) field
+type WithIssuer interface {
 	jwt.Claims
 	GetIssuer() string
 }
@@ -32,7 +32,7 @@ type Claims struct {
 	} `json:"name"`
 }
 
-// Issuer returns the issuer of the claims
+// GetIssuer returns the issuer of the claims
 func (c *Claims) GetIssuer() string {
 	return c.StandardClaims.Issuer
 }
@@ -45,7 +45,7 @@ type GatewayClaims struct {
 	StatusPublic   bool   `json:"status_public"`
 }
 
-// Issuer returns the issuer of the claims
+// GetIssuer returns the issuer of the claims
 func (c *GatewayClaims) GetIssuer() string {
 	return c.StandardClaims.Issuer
 }

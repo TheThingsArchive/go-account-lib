@@ -15,7 +15,7 @@ import (
 
 // fromToken parser a token given the tokenkey provider into the desired claims
 // structure
-func fromToken(provider tokenkey.Provider, token string, claims ClaimsWithIssuer) error {
+func fromToken(provider tokenkey.Provider, token string, claims WithIssuer) error {
 	parsed, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (key interface{}, err error) {
 		if provider == nil {
 			return nil, errors.New("No token provider configured")

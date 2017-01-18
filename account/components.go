@@ -10,12 +10,18 @@ import (
 	"github.com/TheThingsNetwork/go-account-lib/scope"
 )
 
+// ComponentType represents the type of a component
 type ComponentType string
 
 const (
+	// Handler is the type of a handler component
 	Handler ComponentType = "handler"
-	Router  ComponentType = "router"
-	Broker  ComponentType = "broker"
+
+	// Router is the type of a router component
+	Router ComponentType = "router"
+
+	// Broker is the type of a broker component
+	Broker ComponentType = "broker"
 )
 
 func plural(in string) (string, error) {

@@ -10,8 +10,13 @@ import (
 )
 
 const (
-	RouterType  = "router"
-	BrokerType  = "broker"
+	// RouterType is the type of a router token
+	RouterType = "router"
+
+	// BrokerType is the type of a broker token
+	BrokerType = "broker"
+
+	// HandlerType is the type of a handler token
 	HandlerType = "handler"
 )
 
@@ -33,7 +38,7 @@ func FromComponentToken(provider tokenkey.Provider, accessToken string) (*Compon
 	}
 }
 
-// FromTokenWithoutValidation parses a token into its corresponding claims,
+// FromComponentTokenWithoutValidation parses a token into its corresponding claims,
 // without checking the token signature
 func FromComponentTokenWithoutValidation(accessToken string) (*ComponentClaims, error) {
 	claims := &ComponentClaims{}
