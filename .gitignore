@@ -26,3 +26,6 @@ _testmain.go
 # Coverage profiles
 .cover
 coverage.out
+
+# vendor folder
+vendor/

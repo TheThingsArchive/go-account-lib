@@ -14,6 +14,7 @@ tools:
 	$(go) get -u github.com/mattn/goveralls
 	$(go) get -u github.com/golang/lint/golint
 	$(go) get -u github.com/onsi/ginkgo/ginkgo
+	$(go) get -u github.com/kardianos/govendor
 
 test:
 	@for pkg in $$($(pkgs)); do   \
@@ -38,3 +39,5 @@ lint:
 watch:
 	@ginkgo watch -coverprofile=/dev/null $$($(pkgs) | sed "s/.*$$(basename $$PWD)\//.\//")
 
+deps:
+	govendor sync -v
