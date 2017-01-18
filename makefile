@@ -41,3 +41,6 @@ watch:
 
 deps:
 	govendor sync -v
+
+fmt:
+	[[ -z "`$(pkgs) | xargs go fmt | tee -a /dev/stderr`" ]]
