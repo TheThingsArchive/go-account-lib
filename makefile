@@ -1,6 +1,7 @@
 SHELL = bash
 
 go = go
+golint = golint
 pkgs = $(go) list ./... | grep -vE go-account-lib/vendor
 
 cover_file=coverage.out
@@ -30,9 +31,6 @@ cover:
 vet:
 	$(pkgs) | xargs $(go) vet
 
-lint:
-	$(pkgs) | xargs golint
-
 watch:
 	@ginkgo watch -coverprofile=/dev/null $$($(pkgs) | sed "s/.*$$(basename $$PWD)\//.\//")
 
@@ -41,3 +39,7 @@ deps:
 
 fmt:
 	[[ -z "`$(pkgs) | xargs go fmt | tee -a /dev/stderr`" ]]
+
+lint:
+	for pkg in `$(pkgs)`; do $(golint) $$pkg; done
+
