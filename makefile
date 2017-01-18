@@ -15,10 +15,7 @@ tools:
 	@command -v golint > /dev/null || $(go) get -u github.com/golang/lint/golint
 
 test:
-	@for pkg in $$($(pkgs)); do   \
-		profile=$$([ "$$COVER" = "1" ] && echo "-coverprofile=$(tmp_cover_dir)/$$(echo $$pkg | tr -d '/').cover"); \
-		$(go) test -cover $$profile $$pkg; \
-	done
+	$(pkgs) | xargs go test
 
 cover:
 	@mkdir -p $(tmp_cover_dir)
