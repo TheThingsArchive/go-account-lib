@@ -18,19 +18,19 @@ func (a *Account) ListApplications() (apps []Application, err error) {
 	return apps, err
 }
 
-// GatewayStream is a stream of gateways that can be closed
+// ApplicationStream is a stream of applications that can be closed
 type ApplicationStream struct {
 	body    io.ReadCloser
 	decoder *json.Decoder
 }
 
-// Close closes the gateway stream
+// Close closes the application stream
 func (s *ApplicationStream) Close() error {
 	return s.body.Close()
 }
 
-// Next requests the next gateway on the stream, blocking until there is one
-// If there are no more gateways, the error will be io.EOF
+// Next requests the next application on the stream, blocking until there is one
+// If there are no more applications, the error will be io.EOF
 func (s *ApplicationStream) Next() (*Application, error) {
 	var application Application
 	if s.decoder.More() {
@@ -47,7 +47,7 @@ func (s *ApplicationStream) Next() (*Application, error) {
 	return nil, io.EOF
 }
 
-// StreamGateways lists all gateways in a streaming fashion
+// StreamApplications lists all applications in a streaming fashion
 func (a *Account) StreamApplications() (*ApplicationStream, error) {
 	body, err := a.gets(a.auth, "/api/v2/applications")
 	if err != nil {
