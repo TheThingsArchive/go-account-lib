@@ -10,11 +10,8 @@ tmp_cover_dir ?= .cover
 
 tools:
 	@echo fething dev deps...
-	$(go) get -u golang.org/x/tools/cmd/cover
-	$(go) get -u github.com/mattn/goveralls
-	$(go) get -u github.com/golang/lint/golint
-	$(go) get -u github.com/onsi/ginkgo/ginkgo
-	$(go) get -u github.com/kardianos/govendor
+	@command -v cover $(go) get -u github.com/kardianos/govendor
+	@command -v cover $(go) get -u github.com/golang/lint/golint
 
 test:
 	@for pkg in $$($(pkgs)); do   \
