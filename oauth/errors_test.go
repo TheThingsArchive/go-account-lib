@@ -32,6 +32,16 @@ Response: {"code":401,"error":"Invalid client id or secret"}`))
 		a.So(err.Code, ShouldEqual, 401)
 		a.So(err.Description, ShouldEqual, "Invalid client id or secret")
 	}
+
+	{
+		e := fromError(errors.New(`oauth2: cannot fetch token: 401 Unauthorized
+Response: {"error":401,"error_description":"Invalid client id or secret"}`))
+
+		err := e.(*Error)
+
+		a.So(err.Code, ShouldEqual, 401)
+		a.So(err.Description, ShouldEqual, "Invalid client id or secret")
+	}
 }
 
 func TestParseBadError(t *testing.T) {

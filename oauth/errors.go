@@ -16,8 +16,8 @@ type Error struct {
 }
 
 type response struct {
-	Error       string `json:"error"`
-	Description string `json:"error_description"`
+	Error       interface{} `json:"error"`
+	Description string      `json:"error_description"`
 }
 
 // Error returns the error description
@@ -63,8 +63,8 @@ func fromError(orig error) error {
 		return orig
 	}
 
-	if resp.Error != "" {
-		oerr.Description = resp.Error
+	if str, ok := resp.Error.(string); ok {
+		oerr.Description = str
 	}
 
 	if resp.Description != "" {
