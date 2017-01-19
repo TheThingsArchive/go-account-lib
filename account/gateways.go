@@ -128,7 +128,7 @@ type GatewaySettings struct {
 }
 
 // RegisterGateway registers a new gateway on the account server
-func (a *Account) RegisterGateway(gatewayID string, frequencyPlan string, opts ...GatewaySettings) (gateway Gateway, err error) {
+func (a *Account) RegisterGateway(gatewayID string, frequencyPlan string, opts GatewaySettings) (gateway Gateway, err error) {
 	if gatewayID == "" {
 		return gateway, errors.New("Cannot create gateway: no ID given")
 	}
@@ -140,13 +140,10 @@ func (a *Account) RegisterGateway(gatewayID string, frequencyPlan string, opts .
 	req := registerGatewayReq{
 		ID:            gatewayID,
 		FrequencyPlan: frequencyPlan,
-	}
-
-	if len(opts) >= 1 {
-		for _, opt := range opts {
-			req.Location = opt.Location
-			req.Attributes = opt.Attributes
-		}
+		Location:      opts.Location,
+		Altitude:      ots.Altitude,
+		Attributes:    opts.Attributes,
+		Router:        opts.Router,
 	}
 
 	err = a.post(a.auth, "/api/v2/gateways", req, &gateway)
