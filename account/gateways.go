@@ -141,7 +141,7 @@ func (a *Account) RegisterGateway(gatewayID string, frequencyPlan string, opts G
 		ID:            gatewayID,
 		FrequencyPlan: frequencyPlan,
 		Location:      opts.Location,
-		Altitude:      ots.Altitude,
+		Altitude:      opts.Altitude,
 		Attributes:    opts.Attributes,
 		Router:        opts.Router,
 	}
