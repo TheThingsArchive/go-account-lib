@@ -7,7 +7,7 @@ import (
 	"github.com/TheThingsNetwork/go-account-lib/util"
 )
 
-// Get a status code from an error
+// StatusCode gets the status code from an error, defaulting to 500
 func StatusCode(err error) int {
 	switch err.(type) {
 	case util.HTTPError:
