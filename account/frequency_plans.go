@@ -13,11 +13,5 @@ func (a *Account) FrequencyPlans() (map[string]FrequencyPlan, error) {
 		return nil, err
 	}
 
-	// fill in the names
-	for key, plan := range plans {
-		plan.Name = key
-		plans[key] = plan
-	}
-
 	return plans, nil
 }
