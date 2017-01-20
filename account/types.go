@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/TheThingsNetwork/go-account-lib/rights"
 	"github.com/TheThingsNetwork/ttn/core/types"
 	"golang.org/x/oauth2"
 )
@@ -24,12 +23,12 @@ type Application struct {
 
 // Collaborator is a user that has rights to a certain application
 type Collaborator struct {
-	Username string         `json:"username" valid:"required"`
-	Rights   []rights.Right `json:"rights"   valid:"required"`
+	Username string        `json:"username" valid:"required"`
+	Rights   []types.Right `json:"rights"   valid:"required"`
 }
 
 // HasRight checks if the collaborator has a specific right
-func (c *Collaborator) HasRight(right rights.Right) bool {
+func (c *Collaborator) HasRight(right types.Right) bool {
 	for _, r := range c.Rights {
 		if r == right {
 			return true
@@ -107,7 +106,7 @@ type Gateway struct {
 	Activated        bool              `json:"activated"`
 	FrequencyPlan    string            `json:"frequency_plan"`
 	FrequencyPlanURL string            `json:"frequency_plan_url"`
-	PublicRights     []rights.Right    `json:"public_rights"`
+	PublicRights     []types.Right     `json:"public_rights"`
 	LocationPublic   bool              `json:"location_public"`
 	StatusPublic     bool              `json:"status_public"`
 	AutoUpdate       bool              `json:"auto_update"`

@@ -3,22 +3,22 @@
 
 package claims
 
-import "github.com/TheThingsNetwork/go-account-lib/rights"
+import "github.com/TheThingsNetwork/ttn/core/types"
 
 // AppRight checks if the token grants the specified right for
 // the app with the specified ID
-func (claims *Claims) AppRight(appID string, right rights.Right) bool {
+func (claims *Claims) AppRight(appID string, right types.Right) bool {
 	return claims.AppAccess(appID) && containsRight(claims.Apps[appID], right)
 }
 
 // GatewayRight checks if the token grants the specified right for
 // the Gateway with the specified ID
-func (claims *Claims) GatewayRight(gatewayID string, right rights.Right) bool {
+func (claims *Claims) GatewayRight(gatewayID string, right types.Right) bool {
 	return claims.GatewayAccess(gatewayID) && containsRight(claims.Gateways[gatewayID], right)
 }
 
 // ComponentRight checks if the token grants the specified right for
 // the Component with the specified ID
-func (claims *Claims) ComponentRight(componentID string, right rights.Right) bool {
+func (claims *Claims) ComponentRight(componentID string, right types.Right) bool {
 	return claims.ComponentAccess(componentID) && containsRight(claims.Components[componentID], right)
 }
