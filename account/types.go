@@ -130,9 +130,11 @@ type Location struct {
 
 // FrequencyPlan is the frequency plan used by a gateway
 type FrequencyPlan struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	URL         string `json:"url"`
+	ID            string `json:"id"`
+	Name          string `json:"name"`
+	Description   string `json:"description"`
+	URL           string `json:"url"`
+	BaseFrequency int    `json:"base_freq"`
 }
 
 type location struct {
