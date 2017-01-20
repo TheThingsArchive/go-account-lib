@@ -4,7 +4,7 @@
 package claims
 
 import (
-	"github.com/TheThingsNetwork/go-account-lib/rights"
+	"github.com/TheThingsNetwork/ttn/core/types"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
@@ -18,14 +18,14 @@ type WithIssuer interface {
 // Claims represents all the claims an access token can have
 type Claims struct {
 	jwt.StandardClaims
-	Client     string                    `json:"client"`
-	Scope      []string                  `json:"scope"`
-	Type       string                    `json:"type,omitempty"`
-	Apps       map[string][]rights.Right `json:"apps,omitempty"`
-	Gateways   map[string][]rights.Right `json:"gateways,omitempty"`
-	Components map[string][]rights.Right `json:"components,omitempty"`
-	Username   string                    `json:"username"`
-	Email      string                    `json:"email"`
+	Client     string                   `json:"client"`
+	Scope      []string                 `json:"scope"`
+	Type       string                   `json:"type,omitempty"`
+	Apps       map[string][]types.Right `json:"apps,omitempty"`
+	Gateways   map[string][]types.Right `json:"gateways,omitempty"`
+	Components map[string][]types.Right `json:"components,omitempty"`
+	Username   string                   `json:"username"`
+	Email      string                   `json:"email"`
 	Name       struct {
 		First string `json:"first"`
 		Last  string `json:"last"`

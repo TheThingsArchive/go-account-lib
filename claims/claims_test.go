@@ -3,12 +3,12 @@
 
 package claims
 
-import "github.com/TheThingsNetwork/go-account-lib/rights"
+import "github.com/TheThingsNetwork/ttn/core/types"
 
 const appID = "foo"
 const gatewayID = "foo"
 const componentID = "foo"
-const right = rights.Right("settings")
+const right = types.Right("settings")
 const otherRight = "delete"
 
 var none *Claims
@@ -16,8 +16,8 @@ var empty = Claims{}
 
 var withAppAccess = Claims{
 	Scope: []string{"apps:" + appID},
-	Apps: map[string][]rights.Right{
-		appID: []rights.Right{right},
+	Apps: map[string][]types.Right{
+		appID: []types.Right{right},
 	},
 }
 
@@ -26,15 +26,15 @@ var withAppsScope = Claims{
 }
 
 var appRightsButNoScope = Claims{
-	Apps: map[string][]rights.Right{
-		appID: []rights.Right{right},
+	Apps: map[string][]types.Right{
+		appID: []types.Right{right},
 	},
 }
 
 var withGatewayAccess = Claims{
 	Scope: []string{"gateways:" + gatewayID},
-	Gateways: map[string][]rights.Right{
-		gatewayID: []rights.Right{right},
+	Gateways: map[string][]types.Right{
+		gatewayID: []types.Right{right},
 	},
 }
 
@@ -43,15 +43,15 @@ var withGatewaysScope = Claims{
 }
 
 var gatewayRightsButNoScope = Claims{
-	Gateways: map[string][]rights.Right{
-		gatewayID: []rights.Right{right},
+	Gateways: map[string][]types.Right{
+		gatewayID: []types.Right{right},
 	},
 }
 
 var withComponentAccess = Claims{
 	Scope: []string{"components:" + componentID},
-	Components: map[string][]rights.Right{
-		componentID: []rights.Right{right},
+	Components: map[string][]types.Right{
+		componentID: []types.Right{right},
 	},
 }
 
@@ -60,7 +60,7 @@ var withComponentsScope = Claims{
 }
 
 var componentRightsButNoScope = Claims{
-	Components: map[string][]rights.Right{
-		componentID: []rights.Right{right},
+	Components: map[string][]types.Right{
+		componentID: []types.Right{right},
 	},
 }

@@ -3,7 +3,7 @@
 
 package claims
 
-import "github.com/TheThingsNetwork/go-account-lib/rights"
+import "github.com/TheThingsNetwork/ttn/core/types"
 
 // contains checks for membership of a string in a stringmap
 func contains(slice []string, el string) bool {
@@ -15,7 +15,7 @@ func contains(slice []string, el string) bool {
 	return false
 }
 
-func containsRight(slice []rights.Right, el rights.Right) bool {
+func containsRight(slice []types.Right, el types.Right) bool {
 	for _, e := range slice {
 		if e == el {
 			return true

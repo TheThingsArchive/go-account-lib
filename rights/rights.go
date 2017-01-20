@@ -3,52 +3,51 @@
 
 package rights
 
-// Right is the type of rights on The Things Network
-type Right string
+import "github.com/TheThingsNetwork/ttn/core/types"
 
 const (
-	// AppSettings is the right to read and write access to the settings, devices and access keys of the application
-	AppSettings Right = "settings"
+	// AppSettings is the types.Right to read and write access to the settings, devices and access keys of the application
+	AppSettings types.Right = "settings"
 
-	// AppCollaborators is the right to edit and modify collaborators of the application
-	AppCollaborators Right = "collaborators"
+	// AppCollaborators is the types.Right to edit and modify collaborators of the application
+	AppCollaborators types.Right = "collaborators"
 
-	// AppDelete is the right to delete the application
-	AppDelete Right = "delete"
+	// AppDelete is the types.Right to delete the application
+	AppDelete types.Right = "delete"
 
-	// ReadUplink is the right to view messages sent by devices of the application
-	ReadUplink Right = "messages:up:r"
+	// ReadUplink is the types.Right to view messages sent by devices of the application
+	ReadUplink types.Right = "messages:up:r"
 
-	// WriteUplink is the right to send messages to the application
-	WriteUplink Right = "messages:up:w"
+	// WriteUplink is the types.Right to send messages to the application
+	WriteUplink types.Right = "messages:up:w"
 
-	// WriteDownlink is the right to send messages to devices of the application
-	WriteDownlink Right = "messages:down:w"
+	// WriteDownlink is the types.Right to send messages to devices of the application
+	WriteDownlink types.Right = "messages:down:w"
 
-	// Devices is the right to list, edit and remove devices for the application on a handler
-	Devices Right = "devices"
+	// Devices is the types.Right to list, edit and remove devices for the application on a handler
+	Devices types.Right = "devices"
 
-	// GatewaySettings is the right to read and write access to the gateway settings
-	GatewaySettings Right = "gateway:settings"
+	// GatewaySettings is the types.Right to read and write access to the gateway settings
+	GatewaySettings types.Right = "gateway:settings"
 
-	// GatewayCollaborators is the right to edit the gateway collaborators
-	GatewayCollaborators Right = "gateway:collaborators"
+	// GatewayCollaborators is the types.Right to edit the gateway collaborators
+	GatewayCollaborators types.Right = "gateway:collaborators"
 
-	// GatewayDelete is the right to delete a gatweay
-	GatewayDelete Right = "gateway:delete"
+	// GatewayDelete is the types.Right to delete a gatweay
+	GatewayDelete types.Right = "gateway:delete"
 
-	// GatewayLocation is the right to view the exact location of the gateway, otherwise only approximate location will be shown
-	GatewayLocation Right = "gateway:location"
+	// GatewayLocation is the types.Right to view the exact location of the gateway, otherwise only approximate location will be shown
+	GatewayLocation types.Right = "gateway:location"
 
-	// GatewayStatus is the right to view the gateway status and metrics about the gateway
-	GatewayStatus Right = "gateway:status"
+	// GatewayStatus is the types.Right to view the gateway status and metrics about the gateway
+	GatewayStatus types.Right = "gateway:status"
 
-	// GatewayOwner is the right to view the owner of the gateway
-	GatewayOwner Right = "gateway:owner"
+	// GatewayOwner is the types.Right to view the owner of the gateway
+	GatewayOwner types.Right = "gateway:owner"
 
-	// ComponentSettings is the right to read and write access to the settings and access key of a network component
-	ComponentSettings Right = "component:settings"
+	// ComponentSettings is the types.Right to read and write access to the settings and access key of a network component
+	ComponentSettings types.Right = "component:settings"
 
-	// ComponentDelete is the right to delete the network component
-	ComponentDelete Right = "component:delete"
+	// ComponentDelete is the types.Right to delete the network component
+	ComponentDelete types.Right = "component:delete"
 )
