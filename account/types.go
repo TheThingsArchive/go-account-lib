@@ -117,6 +117,10 @@ type Gateway struct {
 	Token            *oauth2.Token     `json:"token,omitempty"`
 	Attributes       GatewayAttributes `json:"attributes"`
 	Router           string            `json:"string"`
+	Owner            struct {
+		ID       string `json:"id"`
+		Username string `json:"username"`
+	} `json:"owner"`
 }
 
 // Location is the GPS location of a gateway
