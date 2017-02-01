@@ -73,7 +73,7 @@ func (a *Account) StreamGateways() (*GatewayStream, error) {
 
 type gatewayRes struct {
 	Gateway
-	GWToken gatewayToken `json:"token"`
+	GWToken tokenRes `json:"token"`
 }
 
 func (r *gatewayRes) ToGateway() Gateway {
@@ -152,7 +152,7 @@ func (a *Account) RegisterGateway(gatewayID string, frequencyPlan string, opts G
 
 // GetGatewayToken gets the gateway token
 func (a *Account) GetGatewayToken(gatewayID string) (*oauth2.Token, error) {
-	token := new(gatewayToken)
+	token := new(tokenRes)
 	err := a.get(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s/token", gatewayID), token)
 	if err != nil {
 		return nil, err

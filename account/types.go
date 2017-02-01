@@ -62,13 +62,13 @@ func (n *Name) String() string {
 	return n.First + " " + n.Last
 }
 
-type gatewayToken struct {
+type tokenRes struct {
 	AccessToken string `json:"access_token"`
 	ExpiresIn   uint64 `json:"expires_in"`
 }
 
 // Token transfroms a gateway token to oauth token with correct expiry
-func (token *gatewayToken) Token() *oauth2.Token {
+func (token *tokenRes) Token() *oauth2.Token {
 	if token == nil {
 		return nil
 	}
