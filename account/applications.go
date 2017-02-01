@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"io"
 
+	"golang.org/x/oauth2"
+
 	"github.com/TheThingsNetwork/go-account-lib/scope"
 	"github.com/TheThingsNetwork/ttn/core/types"
 )
@@ -191,4 +193,31 @@ func (a *Account) AppCollaborators(appID string) ([]Collaborator, error) {
 	}
 
 	return collaborators, nil
+}
+
+type exchangeReq struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type exchangeRes struct {
+	AccessToken string `json:"access_token"`
+	ExpiresIn   int    `json:"expires_in"`
+}
+
+// ExchangeAppKeyForToken exchanges an app ID and app Key for an app token
+func (a *Account) ExchangeAppKeyForToken(appID, accessKey string) (*oauth2.Token, error) {
+	req := exchangeReq{
+		Username: appID,
+		Password: accessKey,
+	}
+
+	var res tokenRes
+
+	err := a.post(a.auth, "/api/v2/applications/token", &req, &res)
+	if err != nil {
+		return nil, err
+	}
+
+	return res.Token(), nil
 }
