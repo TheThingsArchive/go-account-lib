@@ -20,6 +20,12 @@ func (a *Account) ListApplications() (apps []Application, err error) {
 	return apps, err
 }
 
+// ListApplicationsWithDeleted list all applications, even deleted ones
+func (a *Account) ListApplicationsWithDeleted() (apps []Application, err error) {
+	err = a.get(a.auth.WithScope(scope.Apps), "/api/v2/applications?deleted=1", &apps)
+	return apps, err
+}
+
 // ApplicationStream is a stream of applications that can be closed
 type ApplicationStream struct {
 	body    io.ReadCloser
@@ -51,7 +57,24 @@ func (s *ApplicationStream) Next() (*Application, error) {
 
 // StreamApplications lists all applications in a streaming fashion
 func (a *Account) StreamApplications() (*ApplicationStream, error) {
-	body, err := a.gets(a.auth, "/api/v2/applications")
+	return a.streamApplications(false)
+}
+
+// StreamApplicationsWithDeleted lists all applications in a streaming fashion,
+// even deleted ones
+func (a *Account) StreamApplicationsWithDeleted() (*ApplicationStream, error) {
+	return a.streamApplications(true)
+}
+
+// streamApplications lists all applications in a streaming fashion and has a
+// flag to denote wether or not to allow deleted apps
+func (a *Account) streamApplications(deleted bool) (*ApplicationStream, error) {
+	uri := "/api/v2/applications"
+	if deleted {
+		uri = uri + "?deleted=1"
+	}
+
+	body, err := a.gets(a.auth, uri)
 	if err != nil {
 		return nil, err
 	}
@@ -220,4 +243,9 @@ func (a *Account) ExchangeAppKeyForToken(appID, accessKey string) (*oauth2.Token
 	}
 
 	return res.Token(), nil
+}
+
+// RestoreApp restores a previously deleted app
+func (a *Account) RestoreApp(appID string) error {
+	return a.post(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/restore", appID), nil, nil)
 }
