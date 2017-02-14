@@ -6,7 +6,7 @@ package test
 import jwt "github.com/dgrijalva/jwt-go"
 
 // GatewayClaims creates a jwt.Claims that represents the gateway
-func GatewayClaims(id, locationPublic, statusPublic bool) jwt.Claims {
+func GatewayClaims(id string, locationPublic, statusPublic bool) jwt.Claims {
 	return jwt.MapClaims{
 		"iss":             Issuer,
 		"sub":             id,
@@ -17,6 +17,6 @@ func GatewayClaims(id, locationPublic, statusPublic bool) jwt.Claims {
 }
 
 // GatewayToken creates a token that is singed by PrivateKey, and has the GatewayClaims
-func GatewayToken(id, locationPublic, statusPublic bool) string {
+func GatewayToken(id string, locationPublic, statusPublic bool) string {
 	return TokenFromClaims(GatewayClaims(id, locationPublic, statusPublic))
 }
