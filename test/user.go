@@ -28,15 +28,15 @@ func UserToken(id string, username string, scope []string) string {
 func DerivedUserClaims(id string, username string, apps map[string]types.Right, gateways map[string]types.Right, components map[string]types.Right) jwt.Claims {
 	scope := make([]string, 0, len(apps)+len(gateways)+len(components))
 
-	for id, _ := range apps {
+	for id := range apps {
 		scope = append(scope, "app:"+id)
 	}
 
-	for id, _ := range gateways {
+	for id := range gateways {
 		scope = append(scope, "gateway:"+id)
 	}
 
-	for id, _ := range gateways {
+	for id := range gateways {
 		scope = append(scope, "component:"+id)
 	}
 
