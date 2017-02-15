@@ -10,10 +10,10 @@ import (
 )
 
 // UserClaims creates user claims for top level scopes (like apps, profile, gateways)
-func UserClaims(username string, scopes []string) jwt.Claims {
+func UserClaims(id string, scopes []string) jwt.Claims {
 	return jwt.MapClaims{
 		"iss":             Issuer,
-		"sub":             username,
+		"sub":             id,
 		"type":            "user",
 		"interchangeable": true,
 		"scope":           scopes,
@@ -21,12 +21,12 @@ func UserClaims(username string, scopes []string) jwt.Claims {
 }
 
 // UserToken creates user claims for top level scopes (like apps, profile, gateways)
-func UserToken(username string, scopes []string) string {
-	return TokenFromClaims(UserClaims(username, scopes))
+func UserToken(id string, scopes []string) string {
+	return TokenFromClaims(UserClaims(id, scopes))
 }
 
 // DerivedUserClaims creates a user token with derived claims (like app:foo)
-func DerivedUserClaims(username string, apps map[string][]types.Right, gateways map[string][]types.Right, components map[string][]types.Right) jwt.Claims {
+func DerivedUserClaims(id string, apps map[string][]types.Right, gateways map[string][]types.Right, components map[string][]types.Right) jwt.Claims {
 	scopes := make([]string, 0, len(apps)+len(gateways)+len(components))
 
 	for id := range apps {
@@ -43,7 +43,7 @@ func DerivedUserClaims(username string, apps map[string][]types.Right, gateways 
 
 	return jwt.MapClaims{
 		"iss":             Issuer,
-		"sub":             username,
+		"sub":             id,
 		"type":            "user",
 		"interchangeable": false,
 		"scope":           scopes,
@@ -54,6 +54,6 @@ func DerivedUserClaims(username string, apps map[string][]types.Right, gateways 
 }
 
 // DerivedUserToken creates a user token with derived claims (like app:foo)
-func DerivedUserToken(username string, apps map[string][]types.Right, gateways map[string][]types.Right, components map[string][]types.Right) string {
-	return TokenFromClaims(DerivedUserClaims(username, apps, gateways, components))
+func DerivedUserToken(id string, apps map[string][]types.Right, gateways map[string][]types.Right, components map[string][]types.Right) string {
+	return TokenFromClaims(DerivedUserClaims(id, apps, gateways, components))
 }
