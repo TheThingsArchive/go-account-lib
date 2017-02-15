@@ -53,6 +53,6 @@ func DerivedUserClaims(id string, apps map[string][]types.Right, gateways map[st
 }
 
 // DerivedUserToken creates a user token with derived claims (like app:foo)
-func DerivedUserToken(id string, apps map[string]types.Right, gateways map[string]types.Right, components map[string]types.Right) string {
+func DerivedUserToken(id string, apps map[string][]types.Right, gateways map[string][]types.Right, components map[string][]types.Right) string {
 	return TokenFromClaims(DerivedUserClaims(id, apps, gateways, components))
 }
