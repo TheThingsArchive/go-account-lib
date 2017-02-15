@@ -25,7 +25,7 @@ func UserToken(id string, scope []string) string {
 }
 
 // DerivedUserClaims creates a user token with derived claims (like app:foo)
-func DerivedUserClaims(id string, apps map[string]types.Right, gateways map[string]types.Right, components map[string]types.Right) jwt.Claims {
+func DerivedUserClaims(id string, apps map[string][]types.Right, gateways map[string][]types.Right, components map[string][]types.Right) jwt.Claims {
 	scope := make([]string, 0, len(apps)+len(gateways)+len(components))
 
 	for id := range apps {
