@@ -100,7 +100,7 @@ type registerGatewayReq struct {
 	FrequencyPlan string `json:"frequency_plan"`
 
 	// Altitude is the altitude of the new gateway
-	Altitude float64 `json:"altitude,omitempty"`
+	Altitude *float64 `json:"altitude,omitempty"`
 
 	// Location is the location of the new gateway
 	Location *Location `json:"location,omitempty"`
@@ -118,7 +118,7 @@ type GatewaySettings struct {
 	Location *Location `json:"location,omitempty"`
 
 	// Altitude is the altitude of the new gateway
-	Altitude float64 `json:"altitude,omitempty"`
+	Altitude *float64 `json:"altitude,omitempty"`
 
 	// Attributes is a free-form map of attributes
 	Attributes map[string]interface{} `json:"attributes,omitempty"`
@@ -186,7 +186,7 @@ type GatewayEdits struct {
 	FrequencyPlan string             `json:"frequency_plan,omitempty"`
 	AutoUpdate    *bool              `json:"auto_update,omitempty"`
 	Location      *Location          `json:"location,omitempty"`
-	Altitude      float64            `json:"altitude,omitempty"`
+	Altitude      *float64           `json:"altitude,omitempty"`
 	Attributes    *GatewayAttributes `json:"attributes,omitempty"`
 	Router        string             `json:"router,omitempty"`
 }
@@ -230,7 +230,7 @@ func (a *Account) ChangeLocation(gatewayID string, latitude, longitude float64) 
 // ChangeAltitude changes the altitude of the gateway with the specified ID
 func (a *Account) ChangeAltitude(gatewayID string, altitude float64) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
-		Altitude: altitude,
+		Altitude: &altitude,
 	})
 }
 
