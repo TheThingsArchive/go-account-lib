@@ -116,7 +116,7 @@ type Gateway struct {
 	Key              string            `json:"key"`
 	Token            *oauth2.Token     `json:"token,omitempty"`
 	Attributes       GatewayAttributes `json:"attributes"`
-	Router           string            `json:"string"`
+	Router           string            `json:"router"`
 	Owner            struct {
 		ID       string `json:"id"`
 		Username string `json:"username"`
