@@ -100,6 +100,12 @@ type GatewayAttributes struct {
 	Description  *string    `json:"description,omitempty"`
 }
 
+type GatewayRouter struct {
+	ID          string `json:"id"`
+	NetAddress  string `json:"address,omitempty"`
+	MQTTAddress string `json:"mqtt_address,omitempty"`
+}
+
 // Gateway represents a gateway on the account server
 type Gateway struct {
 	ID               string            `json:"id" valid:"required"`
@@ -116,7 +122,8 @@ type Gateway struct {
 	Key              string            `json:"key"`
 	Token            *oauth2.Token     `json:"token,omitempty"`
 	Attributes       GatewayAttributes `json:"attributes"`
-	Router           string            `json:"router"`
+	Router           *GatewayRouter    `json:"router"`
+	FallbackRouters  []GatewayRouter   `json:"fallback_routers"`
 	Owner            struct {
 		ID       string `json:"id"`
 		Username string `json:"username"`
