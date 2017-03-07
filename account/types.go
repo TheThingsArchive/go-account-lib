@@ -100,6 +100,7 @@ type GatewayAttributes struct {
 	Description  *string    `json:"description,omitempty"`
 }
 
+// GatewayRouter is the description of a router that the gateway should connect to
 type GatewayRouter struct {
 	ID          string `json:"id"`
 	NetAddress  string `json:"address,omitempty"`
