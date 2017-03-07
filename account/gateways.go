@@ -188,7 +188,7 @@ type GatewayEdits struct {
 	Location      *Location          `json:"location,omitempty"`
 	Altitude      *float64           `json:"altitude,omitempty"`
 	Attributes    *GatewayAttributes `json:"attributes,omitempty"`
-	Router        string             `json:"router,omitempty"`
+	Router        *string            `json:"router,omitempty"`
 }
 
 // EditGateway edits the fields of a gateway
@@ -237,7 +237,7 @@ func (a *Account) ChangeAltitude(gatewayID string, altitude float64) error {
 // ChangeRouter changes the router the gateway talks to
 func (a *Account) ChangeRouter(gatewayID string, router string) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
-		Router: router,
+		Router: &router,
 	})
 }
 
