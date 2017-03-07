@@ -123,8 +123,12 @@ type GatewaySettings struct {
 	// Attributes is a free-form map of attributes
 	Attributes map[string]interface{} `json:"attributes,omitempty"`
 
-	// Router is the router this gateway talks to
+	// Router is the primary router this gateway talks to
 	Router string `json:"router,omitempty"`
+
+	// FallbackRouters are the id's of routers the gateway can connect to when the
+	// primary router goes down
+	FallbackRouters []string `json:"fallback_routers,omitempty"`
 }
 
 // RegisterGateway registers a new gateway on the account server
@@ -181,14 +185,15 @@ func (a *Account) RetractGatewayRights(gatewayID string, username string) error 
 
 // GatewayEdits contains editable fields of gateways
 type GatewayEdits struct {
-	Owner         string             `json:"owner,omitempty"`
-	PublicRights  *[]types.Right     `json:"public_rights,omitempty"`
-	FrequencyPlan string             `json:"frequency_plan,omitempty"`
-	AutoUpdate    *bool              `json:"auto_update,omitempty"`
-	Location      *Location          `json:"location,omitempty"`
-	Altitude      *float64           `json:"altitude,omitempty"`
-	Attributes    *GatewayAttributes `json:"attributes,omitempty"`
-	Router        *string            `json:"router,omitempty"`
+	Owner           string             `json:"owner,omitempty"`
+	PublicRights    *[]types.Right     `json:"public_rights,omitempty"`
+	FrequencyPlan   string             `json:"frequency_plan,omitempty"`
+	AutoUpdate      *bool              `json:"auto_update,omitempty"`
+	Location        *Location          `json:"location,omitempty"`
+	Altitude        *float64           `json:"altitude,omitempty"`
+	Attributes      *GatewayAttributes `json:"attributes,omitempty"`
+	Router          *string            `json:"router,omitempty"`
+	FallbackRouters *[]string          `json:"fallback_routers,omitempty"`
 }
 
 // EditGateway edits the fields of a gateway
