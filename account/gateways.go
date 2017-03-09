@@ -99,11 +99,8 @@ type registerGatewayReq struct {
 	// Country is the country code of the new gateway (required)
 	FrequencyPlan string `json:"frequency_plan"`
 
-	// Altitude is the altitude of the new gateway
-	Altitude *float64 `json:"altitude,omitempty"`
-
-	// Location is the location of the new gateway
-	Location *Location `json:"location,omitempty"`
+	// AntennaLocation is the location of the gateway antenna
+	AntennaLocation *AntennaLocation `json:"antenna_location,omitempty"`
 
 	// Attributes is a free-form map of attributes
 	Attributes map[string]interface{} `json:"attributes,omitempty"`
@@ -114,11 +111,8 @@ type registerGatewayReq struct {
 
 // GatewaySettings represents settings that can be changed on a gateway
 type GatewaySettings struct {
-	// Location is the location of the new gateway
-	Location *Location `json:"location,omitempty"`
-
-	// Altitude is the altitude of the new gateway
-	Altitude *float64 `json:"altitude,omitempty"`
+	// AntennaLocation is the location of the gateway antenna
+	AntennaLocation *AntennaLocation `json:"location,omitempty"`
 
 	// Attributes is a free-form map of attributes
 	Attributes map[string]interface{} `json:"attributes,omitempty"`
@@ -142,12 +136,11 @@ func (a *Account) RegisterGateway(gatewayID string, frequencyPlan string, opts G
 	}
 
 	req := registerGatewayReq{
-		ID:            gatewayID,
-		FrequencyPlan: frequencyPlan,
-		Location:      opts.Location,
-		Altitude:      opts.Altitude,
-		Attributes:    opts.Attributes,
-		Router:        opts.Router,
+		ID:              gatewayID,
+		FrequencyPlan:   frequencyPlan,
+		AntennaLocation: opts.AntennaLocation,
+		Attributes:      opts.Attributes,
+		Router:          opts.Router,
 	}
 
 	err = a.post(a.auth, "/api/v2/gateways", req, &gateway)
@@ -189,8 +182,7 @@ type GatewayEdits struct {
 	PublicRights    *[]types.Right     `json:"public_rights,omitempty"`
 	FrequencyPlan   string             `json:"frequency_plan,omitempty"`
 	AutoUpdate      *bool              `json:"auto_update,omitempty"`
-	Location        *Location          `json:"location,omitempty"`
-	Altitude        *float64           `json:"altitude,omitempty"`
+	AntennaLocation *AntennaLocation   `json:"antenna_location,omitempty"`
 	Attributes      *GatewayAttributes `json:"attributes,omitempty"`
 	Router          *string            `json:"router,omitempty"`
 	FallbackRouters *[]string          `json:"fallback_routers,omitempty"`
@@ -222,10 +214,11 @@ func (a *Account) ChangeFrequencyPlan(gatewayID, plan string) error {
 	})
 }
 
-// ChangeLocation changes the location of the gateway
+// ChangeLocation changes the location of the gateway, set to nil, nil if you
+// want to remove the location
 func (a *Account) ChangeLocation(gatewayID string, latitude, longitude float64) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
-		Location: &Location{
+		AntennaLocation: &AntennaLocation{
 			Longitude: longitude,
 			Latitude:  latitude,
 		},
@@ -235,7 +228,9 @@ func (a *Account) ChangeLocation(gatewayID string, latitude, longitude float64) 
 // ChangeAltitude changes the altitude of the gateway with the specified ID
 func (a *Account) ChangeAltitude(gatewayID string, altitude float64) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
-		Altitude: &altitude,
+		AntennaLocation: &AntennaLocation{
+			Altitude: altitude,
+		},
 	})
 }
 
