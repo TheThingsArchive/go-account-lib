@@ -219,8 +219,8 @@ func (a *Account) ChangeFrequencyPlan(gatewayID, plan string) error {
 func (a *Account) ChangeLocation(gatewayID string, latitude, longitude float64) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
 		AntennaLocation: &AntennaLocation{
-			Longitude: longitude,
-			Latitude:  latitude,
+			Longitude: &longitude,
+			Latitude:  &latitude,
 		},
 	})
 }
@@ -229,7 +229,7 @@ func (a *Account) ChangeLocation(gatewayID string, latitude, longitude float64) 
 func (a *Account) ChangeAltitude(gatewayID string, altitude float64) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
 		AntennaLocation: &AntennaLocation{
-			Altitude: altitude,
+			Altitude: &altitude,
 		},
 	})
 }

@@ -131,14 +131,14 @@ type Gateway struct {
 type AntennaLocation struct {
 	// Longitude is the GPS longitude of the gateway antenna, it can be empty if
 	// the location is not set
-	Longitude float64 `json:"longitude,omitempty"`
+	Longitude *float64 `json:"longitude,omitempty"`
 
 	// Latitude is the GPS latitude of the gateway antenna, it can be empty if
 	// the location is not set
-	Latitude float64 `json:"latitude,omitempty"`
+	Latitude *float64 `json:"latitude,omitempty"`
 
 	// Altitude is the height of the gateway antenna (with respect to sea level)
-	Altitude float64 `json:"altitude,omitempty"`
+	Altitude *float64 `json:"altitude,omitempty"`
 }
 
 // FrequencyPlan is the frequency plan used by a gateway
