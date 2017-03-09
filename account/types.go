@@ -4,7 +4,6 @@
 package account
 
 import (
-	"encoding/json"
 	"time"
 
 	"github.com/TheThingsNetwork/ttn/core/types"
@@ -114,11 +113,8 @@ type Gateway struct {
 	FrequencyPlan    string            `json:"frequency_plan"`
 	FrequencyPlanURL string            `json:"frequency_plan_url"`
 	PublicRights     []types.Right     `json:"public_rights"`
-	LocationPublic   bool              `json:"location_public"`
-	StatusPublic     bool              `json:"status_public"`
 	AutoUpdate       bool              `json:"auto_update"`
-	Location         *Location         `json:"location"`
-	Altitude         float64           `json:"altitude"`
+	AntennaLocation  *AntennaLocation  `json:"antenna_location"`
 	Collaborators    []Collaborator    `json:"collaborators"`
 	Key              string            `json:"key"`
 	Token            *oauth2.Token     `json:"token,omitempty"`
@@ -131,13 +127,18 @@ type Gateway struct {
 	} `json:"owner"`
 }
 
-// Location is the GPS location of a gateway
-type Location struct {
-	// Empty denotes that the location is not given as oposed to (0, 0) which is a
-	// valid location
-	Empty     bool    `json:"-"`
-	Longitude float64 `json:"lng"`
-	Latitude  float64 `json:"lat"`
+// AntennaLocation is the GPS location of a gateway antenna
+type AntennaLocation struct {
+	// Longitude is the GPS longitude of the gateway antenna, it can be empty if
+	// the location is not set
+	Longitude *float64 `json:"longitude,omitempty"`
+
+	// Latitude is the GPS latitude of the gateway antenna, it can be empty if
+	// the location is not set
+	Latitude *float64 `json:"latitude,omitempty"`
+
+	// Altitude is the height of the gateway antenna (with respect to sea level)
+	Altitude *float64 `json:"altitude,omitempty"`
 }
 
 // FrequencyPlan is the frequency plan used by a gateway
@@ -147,53 +148,4 @@ type FrequencyPlan struct {
 	Description   string `json:"description"`
 	URL           string `json:"url"`
 	BaseFrequency int    `json:"base_freq"`
-}
-
-type location struct {
-	Lng *float64 `json:"lng,omitempty"`
-	Lat *float64 `json:"lat,omitempty"`
-}
-
-// UnmarshalJSON is a custom unmarshaller for location that allows falsy types
-// false | {} | null -> Location{ Empty: true }
-// ... -> Location
-func (loc *Location) UnmarshalJSON(b []byte) error {
-	loc.Empty = true
-	loc.Longitude = 0
-	loc.Latitude = 0
-
-	if string(b) == "false" || string(b) == "null" {
-		return nil
-	}
-
-	var l location
-	err := json.Unmarshal(b, &l)
-	if err != nil {
-		return err
-	}
-
-	if l.Lat == nil || l.Lng == nil {
-		return nil
-	}
-
-	loc.Empty = false
-	loc.Latitude = *l.Lat
-	loc.Longitude = *l.Lng
-
-	return nil
-}
-
-// MarshalJSON is a custom json marshaller for Location that maps an empty
-// Location to `false`
-func (loc Location) MarshalJSON() ([]byte, error) {
-	if loc.Empty {
-		return []byte("false"), nil
-	}
-
-	l := location{
-		Lat: &loc.Latitude,
-		Lng: &loc.Longitude,
-	}
-
-	return json.Marshal(l)
 }
