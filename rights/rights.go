@@ -45,6 +45,9 @@ const (
 	// GatewayOwner is the types.Right to view the owner of the gateway
 	GatewayOwner types.Right = "gateway:owner"
 
+	// GatewayMessages is the types.Right to view the messages of a gateway
+	GatewayMessages types.Right = "gateway:messages"
+
 	// ComponentSettings is the types.Right to read and write access to the settings and access key of a network component
 	ComponentSettings types.Right = "component:settings"
 
