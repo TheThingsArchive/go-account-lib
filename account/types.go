@@ -127,6 +127,17 @@ type Gateway struct {
 	} `json:"owner"`
 }
 
+// IsPublic checks whether or not the given right is public on the gateway
+func (gtw *Gateway) IsPublic(right types.Right) bool {
+	for _, r := range gtw.PublicRights {
+		if r == right {
+			return true
+		}
+	}
+
+	return false
+}
+
 // AntennaLocation is the GPS location of a gateway antenna
 type AntennaLocation struct {
 	// Longitude is the GPS longitude of the gateway antenna, it can be empty if
