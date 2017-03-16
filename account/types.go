@@ -112,8 +112,10 @@ type Gateway struct {
 	Activated        bool              `json:"activated"`
 	FrequencyPlan    string            `json:"frequency_plan"`
 	FrequencyPlanURL string            `json:"frequency_plan_url"`
-	PublicRights     []types.Right     `json:"public_rights"`
 	AutoUpdate       bool              `json:"auto_update"`
+	LocationPublic   bool              `json:"location_public"`
+	StatusPublic     bool              `json:"status_public"`
+	OwnerPublic      bool              `json:"owner_public"`
 	AntennaLocation  *Location         `json:"antenna_location,omitempty"`
 	Collaborators    []Collaborator    `json:"collaborators"`
 	Key              string            `json:"key"`
@@ -125,17 +127,6 @@ type Gateway struct {
 		ID       string `json:"id"`
 		Username string `json:"username"`
 	} `json:"owner"`
-}
-
-// IsPublic checks whether or not the given right is public on the gateway
-func (gtw *Gateway) IsPublic(right types.Right) bool {
-	for _, r := range gtw.PublicRights {
-		if r == right {
-			return true
-		}
-	}
-
-	return false
 }
 
 // Location is the GPS location
