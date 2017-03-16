@@ -100,7 +100,7 @@ type registerGatewayReq struct {
 	FrequencyPlan string `json:"frequency_plan"`
 
 	// AntennaLocation is the location of the gateway antenna
-	AntennaLocation *AntennaLocation `json:"antenna_location,omitempty"`
+	AntennaLocation *Location `json:"antenna_location,omitempty"`
 
 	// Attributes is a free-form map of attributes
 	Attributes map[string]interface{} `json:"attributes,omitempty"`
@@ -112,7 +112,7 @@ type registerGatewayReq struct {
 // GatewaySettings represents settings that can be changed on a gateway
 type GatewaySettings struct {
 	// AntennaLocation is the location of the gateway antenna
-	AntennaLocation *AntennaLocation `json:"location,omitempty"`
+	AntennaLocation *Location `json:"location,omitempty"`
 
 	// Attributes is a free-form map of attributes
 	Attributes map[string]interface{} `json:"attributes,omitempty"`
@@ -182,7 +182,7 @@ type GatewayEdits struct {
 	PublicRights    *[]types.Right     `json:"public_rights,omitempty"`
 	FrequencyPlan   string             `json:"frequency_plan,omitempty"`
 	AutoUpdate      *bool              `json:"auto_update,omitempty"`
-	AntennaLocation *AntennaLocation   `json:"antenna_location,omitempty"`
+	AntennaLocation *Location          `json:"antenna_location,omitempty"`
 	Attributes      *GatewayAttributes `json:"attributes,omitempty"`
 	Router          *string            `json:"router,omitempty"`
 	FallbackRouters *[]string          `json:"fallback_routers,omitempty"`
@@ -218,7 +218,7 @@ func (a *Account) ChangeFrequencyPlan(gatewayID, plan string) error {
 // want to remove the location
 func (a *Account) ChangeLocation(gatewayID string, latitude, longitude float64) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
-		AntennaLocation: &AntennaLocation{
+		AntennaLocation: &Location{
 			Longitude: longitude,
 			Latitude:  latitude,
 		},
@@ -228,7 +228,7 @@ func (a *Account) ChangeLocation(gatewayID string, latitude, longitude float64) 
 // ChangeAltitude changes the altitude of the gateway with the specified ID
 func (a *Account) ChangeAltitude(gatewayID string, altitude int) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
-		AntennaLocation: &AntennaLocation{
+		AntennaLocation: &Location{
 			Altitude: altitude,
 		},
 	})

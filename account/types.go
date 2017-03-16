@@ -114,7 +114,7 @@ type Gateway struct {
 	FrequencyPlanURL string            `json:"frequency_plan_url"`
 	PublicRights     []types.Right     `json:"public_rights"`
 	AutoUpdate       bool              `json:"auto_update"`
-	AntennaLocation  *AntennaLocation  `json:"antenna_location,omitempty"`
+	AntennaLocation  *Location         `json:"antenna_location,omitempty"`
 	Collaborators    []Collaborator    `json:"collaborators"`
 	Key              string            `json:"key"`
 	Token            *oauth2.Token     `json:"token,omitempty"`
@@ -138,8 +138,8 @@ func (gtw *Gateway) IsPublic(right types.Right) bool {
 	return false
 }
 
-// AntennaLocation is the GPS location of a gateway antenna
-type AntennaLocation struct {
+// Location is the GPS location
+type Location struct {
 	// Longitude is the GPS longitude of the gateway antenna
 	Longitude float64 `json:"longitude"`
 
