@@ -140,12 +140,10 @@ func (gtw *Gateway) IsPublic(right types.Right) bool {
 
 // AntennaLocation is the GPS location of a gateway antenna
 type AntennaLocation struct {
-	// Longitude is the GPS longitude of the gateway antenna, it can be empty if
-	// the location is not set
+	// Longitude is the GPS longitude of the gateway antenna
 	Longitude float64 `json:"longitude,omitempty"`
 
-	// Latitude is the GPS latitude of the gateway antenna, it can be empty if
-	// the location is not set
+	// Latitude is the GPS latitude of the gateway antenna
 	Latitude float64 `json:"latitude,omitempty"`
 
 	// Altitude is the height of the gateway antenna (with respect to sea level)
