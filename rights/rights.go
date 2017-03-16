@@ -42,7 +42,7 @@ const (
 	// GatewayStatus is the types.Right to view the gateway status and metrics about the gateway
 	GatewayStatus types.Right = "gateway:status"
 
-	// GatewayOwner is the types.Right to view the owner of the gateway
+	// GatewayOwner is the types.Right that states that a collaborator is an owner
 	GatewayOwner types.Right = "gateway:owner"
 
 	// GatewayMessages is the types.Right to view the messages of a gateway
