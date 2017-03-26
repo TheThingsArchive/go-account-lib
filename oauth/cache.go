@@ -5,7 +5,6 @@ package oauth
 
 import (
 	"encoding/json"
-	"fmt"
 	"time"
 
 	"github.com/TheThingsNetwork/go-account-lib/cache"
@@ -30,8 +29,6 @@ func getTokenFromCache(cache cache.Cache, appID, accessKey string) (*oauth2.Toke
 		if err != nil {
 			return nil, err
 		}
-
-		fmt.Println(token.Expiry, time.Now())
 
 		// only return token if not expired
 		if token.Expiry.After(time.Now()) {
