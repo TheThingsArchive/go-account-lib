@@ -161,13 +161,22 @@ func (a *Account) RemoveAccessKey(appID string, name string) error {
 }
 
 type editAppReq struct {
-	Name string `json:"name,omitempty"`
+	Name                     string `json:"name,omitempty"`
+	AllowUnregisteredDevices bool   `json:"allowUnregisteredDevices,omitempty"`
 }
 
 // ChangeName changes the application name
 func (a *Account) ChangeName(appID string, name string) error {
 	body := editAppReq{
 		Name: name,
+	}
+	return a.patch(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s", appID), body, nil)
+}
+
+// AllowUnregisteredDevices changes the "Unregistered devices allowed" value
+func (a *Account) AllowUnregisteredDevices(appID string, allow bool) error {
+	body := editAppReq{
+		AllowUnregisteredDevices: allow,
 	}
 	return a.patch(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s", appID), body, nil)
 }
