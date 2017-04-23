@@ -18,6 +18,8 @@ type Application struct {
 	AccessKeys    []types.AccessKey `json:"access_keys,omitempty"`
 	Created       time.Time         `json:"created,omitempty"`
 	Collaborators []Collaborator    `json:"collaborators,omitempty"`
+	// Allowing unregistered devices
+	AllowUnregisteredDevices bool `json:"allowUnregisteredDevices,omitempty"`
 }
 
 // Collaborator is a user that has rights to a certain application
