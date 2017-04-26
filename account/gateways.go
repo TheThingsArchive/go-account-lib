@@ -73,12 +73,14 @@ func (a *Account) StreamGateways() (*GatewayStream, error) {
 
 type gatewayRes struct {
 	Gateway
-	GWToken tokenRes `json:"token"`
+	GWToken *tokenRes `json:"token,omitempty"`
 }
 
 func (r *gatewayRes) ToGateway() Gateway {
 	gateway := r.Gateway
-	gateway.Token = r.GWToken.Token()
+	if r.GWToken != nil {
+		gateway.Token = r.GWToken.Token()
+	}
 	return gateway
 }
 
