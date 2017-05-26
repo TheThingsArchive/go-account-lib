@@ -100,8 +100,8 @@ func (a *Account) FindApplication(appID string) (app Application, err error) {
 }
 
 type createApplicationReq struct {
-	Name  string         `json:"name" valid:"required"`
-	AppID string         `json:"id"   valid:"required"`
+	Name  string         `json:"name"`
+	AppID string         `json:"id" valid:"required"`
 	EUIs  []types.AppEUI `json:"euis"`
 }
 
