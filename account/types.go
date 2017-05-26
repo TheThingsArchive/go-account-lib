@@ -12,8 +12,8 @@ import (
 
 // Application represents an application on The Things Network
 type Application struct {
-	ID            string            `json:"id"   valid:"required"`
-	Name          string            `json:"name" valid:"required"`
+	ID            string            `json:"id" valid:"required"`
+	Name          string            `json:"name"`
 	EUIs          []types.AppEUI    `json:"euis,omitempty"`
 	AccessKeys    []types.AccessKey `json:"access_keys,omitempty"`
 	Created       time.Time         `json:"created,omitempty"`
