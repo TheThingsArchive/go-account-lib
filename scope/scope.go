@@ -15,6 +15,9 @@ const (
 
 	// Profile is the scope name for profiles
 	Profile = "profile"
+
+	// Clients is the scope name for OAuth clients
+	Clients = "clients"
 )
 
 // App returns the scope for the app with the specific ID
