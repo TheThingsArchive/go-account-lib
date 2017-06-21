@@ -157,10 +157,6 @@ func performRequest(ctx log.Interface, server string, strategy auth.Strategy, me
 		if err := decoder.Decode(res); err != nil {
 			return err
 		}
-
-		if err := Validate(res); err != nil {
-			return fmt.Errorf("Got an illegal response from server: %s", err)
-		}
 	}
 
 	return nil
