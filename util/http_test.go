@@ -124,16 +124,6 @@ func TestGETDropResponse(t *testing.T) {
 	a.So(err, ShouldBeNil)
 }
 
-func TestGETIllegalResponse(t *testing.T) {
-	a := New(t)
-	server := httptest.NewServer(OKHandler(a, "GET"))
-	defer server.Close()
-
-	var resp FooResp
-	err := GET(ctx, server.URL, tokenStrategy, url, headers, &resp)
-	a.So(err, ShouldNotBeNil)
-}
-
 func TestGETIllegalResponseIgnore(t *testing.T) {
 	a := New(t)
 	server := httptest.NewServer(FooHandler(a, "GET"))
@@ -179,16 +169,6 @@ func TestPUTIllegalRequest(t *testing.T) {
 	a.So(err, ShouldNotBeNil)
 }
 
-func TestPUTIllegalResponse(t *testing.T) {
-	a := New(t)
-	server := httptest.NewServer(OKHandler(a, "PUT"))
-	defer server.Close()
-
-	var resp FooResp
-	err := PUT(ctx, server.URL, tokenStrategy, url, headers, nil, &resp)
-	a.So(err, ShouldNotBeNil)
-}
-
 func TestPUTRedirect(t *testing.T) {
 	a := New(t)
 	server := httptest.NewServer(RedirectHandler(a, "PUT"))
@@ -222,16 +202,6 @@ func TestPOSTIllegalRequest(t *testing.T) {
 	var resp FooResp
 	body := FooResp{}
 	err := POST(ctx, server.URL, tokenStrategy, url, headers, body, &resp)
-	a.So(err, ShouldNotBeNil)
-}
-
-func TestPOSTIllegalResponse(t *testing.T) {
-	a := New(t)
-	server := httptest.NewServer(OKHandler(a, "POST"))
-	defer server.Close()
-
-	var resp FooResp
-	err := POST(ctx, server.URL, tokenStrategy, url, headers, nil, &resp)
 	a.So(err, ShouldNotBeNil)
 }
 
