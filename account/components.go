@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/TheThingsNetwork/go-account-lib/scope"
+	"github.com/TheThingsNetwork/ttn/core/types"
 )
 
 // ComponentType represents the type of a component
@@ -132,4 +133,57 @@ func (a *Account) RouterToken(id string) (token string, err error) {
 // HandlerToken gets the specified handlers token
 func (a *Account) HandlerToken(id string) (token string, err error) {
 	return a.ComponentToken("handler", id)
+}
+
+// GrantComponentRights adds a collaborator to the component
+func (a *Account) GrantComponentRights(typ, componentID, username string, rights []types.Right) error {
+	p, err := plural(typ)
+	if err != nil {
+		return err
+	}
+
+	req := grantReq{
+		Rights: rights,
+	}
+	return a.put(a.auth.WithScope(scope.Component(componentID)), fmt.Sprintf("/api/v2/components/%s/%s/collaborators/%s", p, componentID, username), req, nil)
+}
+
+// RetractComponentRights removes rights from a collaborator of the component
+func (a *Account) RetractComponentRights(typ, componentID, username string) error {
+	p, err := plural(typ)
+	if err != nil {
+		return err
+	}
+
+	return a.del(a.auth.WithScope(scope.Component(componentID)), fmt.Sprintf("/api/v2/components/%s/%s/collaborators/%s", p, componentID, username))
+}
+
+// GrantRouterRights grants the rights on the specified router to the specified user
+func (a *Account) GrantRouterRights(routerID, username string, rights []types.Right) error {
+	return a.GrantComponentRights("router", routerID, username, rights)
+}
+
+// GrantBrokerRights grants the rights on the specified broker to the specified user
+func (a *Account) GrantBrokerRights(brokerID, username string, rights []types.Right) error {
+	return a.GrantComponentRights("broker", brokerID, username, rights)
+}
+
+// GrantHandlerRights grants the rights on the specified handler to the specified user
+func (a *Account) GrantHandlerRights(handlerID, username string, rights []types.Right) error {
+	return a.GrantComponentRights("handler", handlerID, username, rights)
+}
+
+// RetractRouterRights retracts all rights on the specified router for the specified user
+func (a *Account) RetractRouterRights(routerID, username string) error {
+	return a.RetractComponentRights("router", routerID, username)
+}
+
+// RetractBrokerRights retracts all rights on the specified broker for the specified user
+func (a *Account) RetractBrokerRights(brokerID, username string) error {
+	return a.RetractComponentRights("broker", brokerID, username)
+}
+
+// RetractHandlerRights retracts all rights on the specified handler for the specified user
+func (a *Account) RetractHandlerRights(handlerID, username string) error {
+	return a.RetractComponentRights("handler", handlerID, username)
 }
