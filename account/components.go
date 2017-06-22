@@ -135,6 +135,32 @@ func (a *Account) HandlerToken(id string) (token string, err error) {
 	return a.ComponentToken("handler", id)
 }
 
+// ComponentCollaborators fetches the given component collaborators
+func (a *Account) ComponentCollaborators(typ, componentID string) ([]Collaborator, error) {
+	p, err := plural(typ)
+	if err != nil {
+		return nil, err
+	}
+	collaborators := make([]Collaborator, 0)
+	err = a.get(a.auth.WithScope(scope.Component(componentID)), fmt.Sprintf("/api/v2/components/%s/%s/collaborators", p, componentID), &collaborators)
+	return collaborators, err
+}
+
+// RouterCollaborators fetches the given router collaborators
+func (a *Account) RouterCollaborators(componentID string) ([]Collaborator, error) {
+	return a.ComponentCollaborators("router", componentID)
+}
+
+// BrokerCollaborators fetches the given broker collaborators
+func (a *Account) BrokerCollaborators(componentID string) ([]Collaborator, error) {
+	return a.ComponentCollaborators("broker", componentID)
+}
+
+// HandlerCollaborators fetches the given handler collaborators
+func (a *Account) HandlerCollaborators(componentID string) ([]Collaborator, error) {
+	return a.ComponentCollaborators("handler", componentID)
+}
+
 // GrantComponentRights adds a collaborator to the component
 func (a *Account) GrantComponentRights(typ, componentID, username string, rights []types.Right) error {
 	p, err := plural(typ)
@@ -146,16 +172,6 @@ func (a *Account) GrantComponentRights(typ, componentID, username string, rights
 		Rights: rights,
 	}
 	return a.put(a.auth.WithScope(scope.Component(componentID)), fmt.Sprintf("/api/v2/components/%s/%s/collaborators/%s", p, componentID, username), req, nil)
-}
-
-// RetractComponentRights removes rights from a collaborator of the component
-func (a *Account) RetractComponentRights(typ, componentID, username string) error {
-	p, err := plural(typ)
-	if err != nil {
-		return err
-	}
-
-	return a.del(a.auth.WithScope(scope.Component(componentID)), fmt.Sprintf("/api/v2/components/%s/%s/collaborators/%s", p, componentID, username))
 }
 
 // GrantRouterRights grants the rights on the specified router to the specified user
@@ -171,6 +187,16 @@ func (a *Account) GrantBrokerRights(brokerID, username string, rights []types.Ri
 // GrantHandlerRights grants the rights on the specified handler to the specified user
 func (a *Account) GrantHandlerRights(handlerID, username string, rights []types.Right) error {
 	return a.GrantComponentRights("handler", handlerID, username, rights)
+}
+
+// RetractComponentRights removes rights from a collaborator of the component
+func (a *Account) RetractComponentRights(typ, componentID, username string) error {
+	p, err := plural(typ)
+	if err != nil {
+		return err
+	}
+
+	return a.del(a.auth.WithScope(scope.Component(componentID)), fmt.Sprintf("/api/v2/components/%s/%s/collaborators/%s", p, componentID, username))
 }
 
 // RetractRouterRights retracts all rights on the specified router for the specified user
