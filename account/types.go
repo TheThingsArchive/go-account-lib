@@ -51,9 +51,10 @@ type Name struct {
 
 // Component represents a component on the newtork
 type Component struct {
-	Type    string    `json:"type"`
-	ID      string    `json:"id"`
-	Created time.Time `json:"created,omitempty"`
+	Type          string         `json:"type"`
+	ID            string         `json:"id"`
+	Created       time.Time      `json:"created,omitempty"`
+	Collaborators []Collaborator `json:"collaborators,omitempty"`
 }
 
 // String implements the Stringer interface for Name
