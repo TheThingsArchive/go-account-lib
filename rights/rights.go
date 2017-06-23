@@ -53,4 +53,7 @@ const (
 
 	// ComponentDelete is the types.Right to delete the network component
 	ComponentDelete types.Right = "component:delete"
+
+	// ComponentCollaborators is the types.Right to view and edit component collaborators
+	ComponentCollaborators = "component:collaborators"
 )
