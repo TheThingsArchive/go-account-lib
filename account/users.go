@@ -95,3 +95,19 @@ func (a *Account) EditPassword(oldPassword, newPassword string) error {
 	}
 	return nil
 }
+
+// AuthorizedClients lists the authorized clients for the user
+func (a *Account) AuthorizedClients() ([]*OAuthClient, error) {
+	var clients []*OAuthClient
+	err := a.get(a.auth, "/api/v2/users/me/authorized-clients", &clients)
+	if err != nil {
+		return nil, err
+	}
+
+	return clients, nil
+}
+
+// RemoveAuthorizedClient removes a client from the users authorized clients
+func (a *Account) RemoveAuthorizedClient(name string) error {
+	return a.del(a.auth, fmt.Sprintf("/api/v2/users/me/authorized-clients/%s", name))
+}

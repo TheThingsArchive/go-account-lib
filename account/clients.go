@@ -10,12 +10,13 @@ import (
 type OAuthClient struct {
 	Name        string   `json:"name"`
 	Description string   `json:"description"`
-	Secret      string   `json:"secret"`
-	URI         string   `json:"uri"`
+	Secret      string   `json:"secret,omitempty"`
+	URI         string   `json:"uri,omitempty"`
 	Grants      []Grant  `json:"grants"`
 	Scope       []string `json:"scope"`
 	Accepted    bool     `json:"accepted"`
 	Rejected    bool     `json:"rejected"`
+	Official    bool     `json:"official"`
 }
 
 // Grant is an OAuth grant
