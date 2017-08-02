@@ -18,7 +18,7 @@ type OAuthClient struct {
 	Rejected    bool     `json:"rejected"`
 }
 
-// Grant is an OAuth grant
+// AddApplicationCollaboratorRights is an OAuth grant
 type Grant string
 
 const (
@@ -44,8 +44,8 @@ func (a *Account) FindOAuthClient(name string) (client *OAuthClient, err error) 
 	return client, err
 }
 
-// CreateOAuthClient creates a new OAuth client
-func (a *Account) CreateOAuthClient(client *OAuthClient) (c *OAuthClient, err error) {
+// RegisterOAuthClient creates a new OAuth client
+func (a *Account) RegisterOAuthClient(client *OAuthClient) (c *OAuthClient, err error) {
 	err = a.post(a.auth.WithScope(scope.Clients), "/api/v2/clients", client, &c)
 	return c, err
 }
@@ -55,7 +55,7 @@ func (a *Account) EditOAuthClient(name string, edits *OAuthClient) (err error) {
 	return a.patch(a.auth.WithScope(scope.Clients), fmt.Sprintf("/api/v2/clients/%s", name), edits, nil)
 }
 
-// RemoveOAuthClient removes the OAuth client
-func (a *Account) RemoveOAuthClient(name string) (err error) {
+// DeleteOAuthClient removes the OAuth client
+func (a *Account) DeleteOAuthClient(name string) (err error) {
 	return a.del(a.auth.WithScope(scope.Clients), fmt.Sprintf("/api/v2/clients/%s", name))
 }

@@ -14,8 +14,8 @@ func ComponentClaims(typ, id string) jwt.Claims {
 	}
 }
 
-// ComponentToken creates a token that is singed by PrivateKey, and has the
+// GetComponentToken creates a token that is singed by PrivateKey, and has the
 // ComponentClaims
-func ComponentToken(typ, id string) string {
+func GetComponentToken(typ, id string) string {
 	return TokenFromClaims(ComponentClaims(typ, id))
 }

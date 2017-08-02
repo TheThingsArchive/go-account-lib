@@ -74,8 +74,8 @@ type createComponentReq struct {
 	ID string `json:"id" valid:"required"`
 }
 
-// CreateComponent creates a component with the specified type and id
-func (a *Account) CreateComponent(typ, id string) error {
+// RegisterComponent creates a component with the specified type and id
+func (a *Account) RegisterComponent(typ, id string) error {
 	p, err := plural(typ)
 	if err != nil {
 		return err
@@ -89,17 +89,17 @@ func (a *Account) CreateComponent(typ, id string) error {
 
 // CreateBroker creates a broker with the specified id
 func (a *Account) CreateBroker(id string) error {
-	return a.CreateComponent("broker", id)
+	return a.RegisterComponent("broker", id)
 }
 
 // CreateRouter creates a Router with the specified id
 func (a *Account) CreateRouter(id string) error {
-	return a.CreateComponent("router", id)
+	return a.RegisterComponent("router", id)
 }
 
 // CreateHandler creates a handler with the specified id
 func (a *Account) CreateHandler(id string) error {
-	return a.CreateComponent("handler", id)
+	return a.RegisterComponent("handler", id)
 }
 
 type componentTokenRes struct {
@@ -135,8 +135,8 @@ func (a *Account) HandlerToken(id string) (token string, err error) {
 	return a.ComponentToken("handler", id)
 }
 
-// GrantComponentRights adds a collaborator to the component
-func (a *Account) GrantComponentRights(typ, componentID, username string, rights []types.Right) error {
+// AddComponentCollaboratorRights adds a collaborator to the component
+func (a *Account) AddComponentCollaboratorRights(typ, componentID, username string, rights []types.Right) error {
 	p, err := plural(typ)
 	if err != nil {
 		return err
@@ -148,8 +148,8 @@ func (a *Account) GrantComponentRights(typ, componentID, username string, rights
 	return a.put(a.auth.WithScope(scope.Component(componentID)), fmt.Sprintf("/api/v2/components/%s/%s/collaborators/%s", p, componentID, username), req, nil)
 }
 
-// RetractComponentRights removes rights from a collaborator of the component
-func (a *Account) RetractComponentRights(typ, componentID, username string) error {
+// RemoveComponentCollaboratorRights removes rights from a collaborator of the component
+func (a *Account) RemoveComponentCollaboratorRights(typ, componentID, username string) error {
 	p, err := plural(typ)
 	if err != nil {
 		return err
@@ -160,30 +160,30 @@ func (a *Account) RetractComponentRights(typ, componentID, username string) erro
 
 // GrantRouterRights grants the rights on the specified router to the specified user
 func (a *Account) GrantRouterRights(routerID, username string, rights []types.Right) error {
-	return a.GrantComponentRights("router", routerID, username, rights)
+	return a.AddComponentCollaboratorRights("router", routerID, username, rights)
 }
 
 // GrantBrokerRights grants the rights on the specified broker to the specified user
 func (a *Account) GrantBrokerRights(brokerID, username string, rights []types.Right) error {
-	return a.GrantComponentRights("broker", brokerID, username, rights)
+	return a.AddComponentCollaboratorRights("broker", brokerID, username, rights)
 }
 
 // GrantHandlerRights grants the rights on the specified handler to the specified user
 func (a *Account) GrantHandlerRights(handlerID, username string, rights []types.Right) error {
-	return a.GrantComponentRights("handler", handlerID, username, rights)
+	return a.AddComponentCollaboratorRights("handler", handlerID, username, rights)
 }
 
 // RetractRouterRights retracts all rights on the specified router for the specified user
 func (a *Account) RetractRouterRights(routerID, username string) error {
-	return a.RetractComponentRights("router", routerID, username)
+	return a.RemoveComponentCollaboratorRights("router", routerID, username)
 }
 
 // RetractBrokerRights retracts all rights on the specified broker for the specified user
 func (a *Account) RetractBrokerRights(brokerID, username string) error {
-	return a.RetractComponentRights("broker", brokerID, username)
+	return a.RemoveComponentCollaboratorRights("broker", brokerID, username)
 }
 
 // RetractHandlerRights retracts all rights on the specified handler for the specified user
 func (a *Account) RetractHandlerRights(handlerID, username string) error {
-	return a.RetractComponentRights("handler", handlerID, username)
+	return a.RemoveComponentCollaboratorRights("handler", handlerID, username)
 }

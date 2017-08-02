@@ -30,8 +30,8 @@ func (a *Account) RegisterUser(username, email, password string) error {
 	return nil
 }
 
-// Profile gets the user profile of the user that is logged in
-func (a *Account) Profile() (user Profile, err error) {
+// UserProfile gets the user profile of the user that is logged in
+func (a *Account) UserProfile() (user Profile, err error) {
 	err = a.get(a.auth, "/api/v2/users/me", &user)
 	if err != nil {
 		return user, fmt.Errorf("Could not get user profile: %s", err)
@@ -51,10 +51,10 @@ type editProfileReq struct {
 	Name     *Name  `json:"name,omitempty"`
 }
 
-// EditProfile edits the users profile. You can change only
+// EditUserProfile edits the users profile. You can change only
 // part of the profile (only the name, for instance) by
-// omitting the other fields from the passed in Profile struct.
-func (a *Account) EditProfile(profile Profile) error {
+// omitting the other fields from the passed in UserProfile struct.
+func (a *Account) EditUserProfile(profile Profile) error {
 	var edits editProfileReq
 
 	if profile.Username != "" {
@@ -81,9 +81,9 @@ type editPasswordReq struct {
 	Password    string `json:"password"`
 }
 
-// EditPassword edits the users password, it requires the old password
+// EditUserPassword edits the users password, it requires the old password
 // to be given.
-func (a *Account) EditPassword(oldPassword, newPassword string) error {
+func (a *Account) EditUserPassword(oldPassword, newPassword string) error {
 	edits := editPasswordReq{
 		OldPassword: oldPassword,
 		Password:    newPassword,

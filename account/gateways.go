@@ -165,16 +165,16 @@ func (a *Account) DeleteGateway(gatewayID string) error {
 	return a.del(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s", gatewayID))
 }
 
-// GrantGatewayRights grants rights to a collaborator of the gateway
-func (a *Account) GrantGatewayRights(gatewayID string, username string, rights []types.Right) error {
+// AddGatewayCollaboratorRights grants rights to a collaborator of the gateway
+func (a *Account) AddGatewayCollaboratorRights(gatewayID string, username string, rights []types.Right) error {
 	req := grantReq{
 		Rights: rights,
 	}
 	return a.put(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s/collaborators/%s", gatewayID, username), req, nil)
 }
 
-// RetractGatewayRights removes rights from a collaborator of the gateway
-func (a *Account) RetractGatewayRights(gatewayID string, username string) error {
+// RemoveGatewayCollaboratorRights removes rights from a collaborator of the gateway
+func (a *Account) RemoveGatewayCollaboratorRights(gatewayID string, username string) error {
 	return a.del(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s/collaborators/%s", gatewayID, username))
 }
 
@@ -197,23 +197,23 @@ func (a *Account) EditGateway(gatewayID string, edits GatewayEdits) error {
 	return a.patch(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s", gatewayID), edits, nil)
 }
 
-// TransferOwnership transfers the owenership of the gateway to another user
-func (a *Account) TransferOwnership(gatewayID, username string) error {
+// EditGatewayPrimaryOwner transfers the ownership of the gateway to another user
+func (a *Account) EditGatewayPrimaryOwner(gatewayID, username string) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
 		Owner: username,
 	})
 }
 
-// ChangeFrequencyPlan changes the requency plan of a gateway
-func (a *Account) ChangeFrequencyPlan(gatewayID, plan string) error {
+// EditGatewayFrequencyPlan changes the frequency plan of a gateway
+func (a *Account) EditGatewayFrequencyPlan(gatewayID, plan string) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
 		FrequencyPlan: plan,
 	})
 }
 
-// ChangeLocation changes the location of the gateway, set to nil, nil if you
+// EditGatewayLocation changes the location of the gateway, set to nil, nil if you
 // want to remove the location
-func (a *Account) ChangeLocation(gatewayID string, latitude, longitude float64) error {
+func (a *Account) EditGatewayLocation(gatewayID string, latitude, longitude float64) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
 		AntennaLocation: &Location{
 			Longitude: longitude,
@@ -222,8 +222,8 @@ func (a *Account) ChangeLocation(gatewayID string, latitude, longitude float64) 
 	})
 }
 
-// ChangeAltitude changes the altitude of the gateway with the specified ID
-func (a *Account) ChangeAltitude(gatewayID string, altitude int) error {
+// EditGatewayAltitude changes the altitude of the gateway with the specified ID
+func (a *Account) EditGatewayAltitude(gatewayID string, altitude int) error {
 	return a.EditGateway(gatewayID, GatewayEdits{
 		AntennaLocation: &Location{
 			Altitude: altitude,
@@ -238,9 +238,9 @@ func (a *Account) ChangeRouter(gatewayID string, router string) error {
 	})
 }
 
-// GatewayRights returns the rights the current account client has to a certain
+// ListGatewayRights returns the rights the current account client has to a certain
 // gateway
-func (a *Account) GatewayRights(gatewayID string) (rights []types.Right, err error) {
+func (a *Account) ListGatewayRights(gatewayID string) (rights []types.Right, err error) {
 	err = a.get(a.auth.WithScope(scope.Gateway(gatewayID)), fmt.Sprintf("/api/v2/gateways/%s/rights", gatewayID), &rights)
 	if err != nil {
 		return nil, err
@@ -249,8 +249,8 @@ func (a *Account) GatewayRights(gatewayID string) (rights []types.Right, err err
 	return rights, nil
 }
 
-// GatewayCollaborators fetches the gateway collaborators
-func (a *Account) GatewayCollaborators(gwID string) ([]Collaborator, error) {
+// ListGatewayCollaborators fetches the gateway collaborators
+func (a *Account) ListGatewayCollaborators(gwID string) ([]Collaborator, error) {
 	collaborators := make([]Collaborator, 0)
 	err := a.get(a.auth.WithScope(scope.Gateway(gwID)), fmt.Sprintf("/api/v2/gateways/%s/collaborators", gwID), &collaborators)
 	if err != nil {

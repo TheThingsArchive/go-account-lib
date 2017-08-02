@@ -5,8 +5,8 @@ package account
 
 import "github.com/TheThingsNetwork/go-account-lib/auth"
 
-// FrequencyPlans returns the frequency plans the account server supports
-func (a *Account) FrequencyPlans() (map[string]FrequencyPlan, error) {
+// ListFrequencyPlans returns the frequency plans the account server supports
+func (a *Account) ListFrequencyPlans() (map[string]FrequencyPlan, error) {
 	var plans map[string]FrequencyPlan
 	err := a.get(auth.Public, "/api/v2/frequency-plans", &plans)
 	if err != nil {
