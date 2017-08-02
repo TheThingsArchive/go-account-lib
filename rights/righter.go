@@ -5,11 +5,11 @@ package rights
 
 import "github.com/TheThingsNetwork/ttn/core/types"
 
-// AppRighter is the interface of everything that can hold rights to an app
-type AppRighter interface {
-	// AppRight checks wether or not the specified right is held on the app with the
+// ApplicationRighter is the interface of everything that can hold rights to an app
+type ApplicationRighter interface {
+	// ApplicationRight checks wether or not the specified right is held on the app with the
 	// specified appID
-	AppRight(appID string, right types.Right) bool
+	ApplicationRight(appID string, right types.Right) bool
 }
 
 // GatewayRighter is the interface of everything that can hold rights to a

@@ -18,7 +18,7 @@ type OAuthClient struct {
 	Rejected    bool     `json:"rejected"`
 }
 
-// AddApplicationCollaboratorRights is an OAuth grant
+// Grant is an OAuth grant
 type Grant string
 
 const (

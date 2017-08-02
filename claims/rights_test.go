@@ -13,30 +13,30 @@ func TestClaimsAppRight(t *testing.T) {
 	a := assertions.New(t)
 
 	// empty claims
-	a.So(none.AppRight(appID, right), assertions.ShouldBeFalse)
-	a.So(empty.AppRight(appID, right), assertions.ShouldBeFalse)
+	a.So(none.ApplicationRight(appID, right), assertions.ShouldBeFalse)
+	a.So(empty.ApplicationRight(appID, right), assertions.ShouldBeFalse)
 
 	// has only global scope
-	a.So(withApplicationScope.AppRight(appID, right), assertions.ShouldBeFalse)
-	a.So(withGatewaysScope.AppRight(appID, right), assertions.ShouldBeFalse)
-	a.So(withComponentsScope.AppRight(appID, right), assertions.ShouldBeFalse)
+	a.So(withApplicationScope.ApplicationRight(appID, right), assertions.ShouldBeFalse)
+	a.So(withGatewaysScope.ApplicationRight(appID, right), assertions.ShouldBeFalse)
+	a.So(withComponentsScope.ApplicationRight(appID, right), assertions.ShouldBeFalse)
 
 	// no app:id scope present
-	a.So(applicationRightsButNoScope.AppRight(appID, right), assertions.ShouldBeFalse)
-	a.So(gatewayRightsButNoScope.AppRight(appID, right), assertions.ShouldBeFalse)
-	a.So(componentRightsButNoScope.AppRight(appID, right), assertions.ShouldBeFalse)
+	a.So(applicationRightsButNoScope.ApplicationRight(appID, right), assertions.ShouldBeFalse)
+	a.So(gatewayRightsButNoScope.ApplicationRight(appID, right), assertions.ShouldBeFalse)
+	a.So(componentRightsButNoScope.ApplicationRight(appID, right), assertions.ShouldBeFalse)
 
 	// wrong right
-	a.So(withApplicationAccess.AppRight(appID, otherRight), assertions.ShouldBeFalse)
+	a.So(withApplicationAccess.ApplicationRight(appID, otherRight), assertions.ShouldBeFalse)
 
 	// wrong scope/rights
-	a.So(withGatewayAccess.AppRight(appID, right), assertions.ShouldBeFalse)
-	a.So(withGatewayAccess.AppRight(appID, otherRight), assertions.ShouldBeFalse)
-	a.So(withComponentAccess.AppRight(appID, right), assertions.ShouldBeFalse)
-	a.So(withComponentAccess.AppRight(appID, otherRight), assertions.ShouldBeFalse)
+	a.So(withGatewayAccess.ApplicationRight(appID, right), assertions.ShouldBeFalse)
+	a.So(withGatewayAccess.ApplicationRight(appID, otherRight), assertions.ShouldBeFalse)
+	a.So(withComponentAccess.ApplicationRight(appID, right), assertions.ShouldBeFalse)
+	a.So(withComponentAccess.ApplicationRight(appID, otherRight), assertions.ShouldBeFalse)
 
 	// correct scope and rights
-	a.So(withApplicationAccess.AppRight(appID, right), assertions.ShouldBeTrue)
+	a.So(withApplicationAccess.ApplicationRight(appID, right), assertions.ShouldBeTrue)
 }
 
 func TestClaimsGatewayRight(t *testing.T) {

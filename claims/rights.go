@@ -5,9 +5,9 @@ package claims
 
 import "github.com/TheThingsNetwork/ttn/core/types"
 
-// AppRight checks if the token grants the specified right for
+// ApplicationRight checks if the token grants the specified right for
 // the app with the specified ID
-func (claims *Claims) AppRight(appID string, right types.Right) bool {
+func (claims *Claims) ApplicationRight(appID string, right types.Right) bool {
 	return claims.AppAccess(appID) && containsRight(claims.Apps[appID], right)
 }
 

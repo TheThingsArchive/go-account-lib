@@ -36,7 +36,7 @@ func (c *Collaborator) HasRight(right types.Right) bool {
 	return false
 }
 
-// UserProfile represents the profile of a user
+// Profile represents the profile of a user
 type Profile struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`

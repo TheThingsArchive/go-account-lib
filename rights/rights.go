@@ -9,7 +9,7 @@ const (
 	// AppSettings is the types.Right to read and write access to the settings, devices and access keys of the application
 	AppSettings types.Right = "settings"
 
-	// ListApplicationCollaborators is the types.Right to edit and modify collaborators of the application
+	// AppCollaborators is the types.Right to edit and modify collaborators of the application
 	AppCollaborators types.Right = "collaborators"
 
 	// AppDelete is the types.Right to delete the application
@@ -30,7 +30,7 @@ const (
 	// GatewaySettings is the types.Right to read and write access to the gateway settings
 	GatewaySettings types.Right = "gateway:settings"
 
-	// ListGatewayCollaborators is the types.Right to edit the gateway collaborators
+	// GatewayCollaborators is the types.Right to edit the gateway collaborators
 	GatewayCollaborators types.Right = "gateway:collaborators"
 
 	// GatewayDelete is the types.Right to delete a gatweay
