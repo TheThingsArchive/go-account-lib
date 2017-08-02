@@ -16,12 +16,12 @@ func TestClaimsAppsScope(t *testing.T) {
 	a.So(none.HasScope(scope.Apps), assertions.ShouldBeFalse)
 	a.So(empty.HasScope(scope.Apps), assertions.ShouldBeFalse)
 
-	a.So(withAppAccess.HasScope(scope.Apps), assertions.ShouldBeFalse)
+	a.So(withApplicationAccess.HasScope(scope.Apps), assertions.ShouldBeFalse)
 	a.So(withGatewayAccess.HasScope(scope.Apps), assertions.ShouldBeFalse)
 	a.So(withComponentAccess.HasScope(scope.Apps), assertions.ShouldBeFalse)
 
 	a.So(withGatewaysScope.HasScope(scope.Apps), assertions.ShouldBeFalse)
 	a.So(withComponentsScope.HasScope(scope.Apps), assertions.ShouldBeFalse)
 
-	a.So(withAppsScope.HasScope(scope.Apps), assertions.ShouldBeTrue)
+	a.So(withApplicationScope.HasScope(scope.Apps), assertions.ShouldBeTrue)
 }

@@ -7,7 +7,7 @@ import "github.com/TheThingsNetwork/go-account-lib/scope"
 
 // AppAccess checks if the token grants access to the specified app
 func (claims *Claims) AppAccess(appID string) bool {
-	return claims.HasScope(scope.App(appID))
+	return claims.HasScope(scope.Application(appID))
 }
 
 // GatewayAccess checks if the token grants access to the specified Gateway

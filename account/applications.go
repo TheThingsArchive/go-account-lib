@@ -95,7 +95,7 @@ func (a *Account) streamApplications(deleted bool) (*ApplicationStream, error) {
 
 // FindApplication gets a specific application from the account server
 func (a *Account) FindApplication(appID string) (app Application, err error) {
-	err = a.get(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s", appID), &app)
+	err = a.get(a.auth.WithScope(scope.Application(appID)), fmt.Sprintf("/api/v2/applications/%s", appID), &app)
 	return app, err
 }
 
@@ -119,7 +119,7 @@ func (a *Account) RegisterApplication(appID string, name string, EUIs []types.Ap
 
 // DeleteApplication deletes an application
 func (a *Account) DeleteApplication(appID string) error {
-	return a.del(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s", appID))
+	return a.del(a.auth.WithScope(scope.Application(appID)), fmt.Sprintf("/api/v2/applications/%s", appID))
 }
 
 type grantReq struct {
@@ -131,12 +131,12 @@ func (a *Account) AddApplicationCollaboratorRights(appID string, username string
 	req := grantReq{
 		Rights: rights,
 	}
-	return a.put(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/collaborators/%s", appID, username), req, nil)
+	return a.put(a.auth.WithScope(scope.Application(appID)), fmt.Sprintf("/api/v2/applications/%s/collaborators/%s", appID, username), req, nil)
 }
 
 // RemoveApplicationCollaboratorRights removes rights from a collaborator of the application
 func (a *Account) RemoveApplicationCollaboratorRights(appID string, username string) error {
-	return a.del(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/collaborators/%s", appID, username))
+	return a.del(a.auth.WithScope(scope.Application(appID)), fmt.Sprintf("/api/v2/applications/%s/collaborators/%s", appID, username))
 }
 
 type addAccessKeyReq struct {
@@ -151,30 +151,30 @@ func (a *Account) AddApplicationAccessKey(appID string, name string, rights []ty
 		Name:   name,
 		Rights: rights,
 	}
-	err = a.post(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/access-keys", appID), body, &key)
+	err = a.post(a.auth.WithScope(scope.Application(appID)), fmt.Sprintf("/api/v2/applications/%s/access-keys", appID), body, &key)
 	return key, err
 }
 
 // RemoveApplicationAccessKey removes the specified access key from the application
 func (a *Account) RemoveApplicationAccessKey(appID string, name string) error {
-	return a.del(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/access-keys/%s", appID, name))
+	return a.del(a.auth.WithScope(scope.Application(appID)), fmt.Sprintf("/api/v2/applications/%s/access-keys/%s", appID, name))
 }
 
-type editAppReq struct {
+type editApplicationRequest struct {
 	Name string `json:"name,omitempty"`
 }
 
 // EditApplicationName changes the application name
 func (a *Account) EditApplicationName(appID string, name string) error {
-	body := editAppReq{
+	body := editApplicationRequest{
 		Name: name,
 	}
-	return a.patch(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s", appID), body, nil)
+	return a.patch(a.auth.WithScope(scope.Application(appID)), fmt.Sprintf("/api/v2/applications/%s", appID), body, nil)
 }
 
 // AddApplicationEUI adds an EUI to the applications list of EUIs
 func (a *Account) AddApplicationEUI(appID string, eui types.AppEUI) error {
-	return a.put(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/euis/%s", appID, eui.String()), nil, nil)
+	return a.put(a.auth.WithScope(scope.Application(appID)), fmt.Sprintf("/api/v2/applications/%s/euis/%s", appID, eui.String()), nil, nil)
 }
 
 type genEUIRes struct {
@@ -184,7 +184,7 @@ type genEUIRes struct {
 // AddGeneratedApplicationEUI creates a new EUI for the application
 func (a *Account) AddGeneratedApplicationEUI(appID string) (*types.AppEUI, error) {
 	var res genEUIRes
-	err := a.post(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/euis", appID), nil, &res)
+	err := a.post(a.auth.WithScope(scope.Application(appID)), fmt.Sprintf("/api/v2/applications/%s/euis", appID), nil, &res)
 	if err != nil {
 		return nil, err
 	}
@@ -193,13 +193,13 @@ func (a *Account) AddGeneratedApplicationEUI(appID string) (*types.AppEUI, error
 
 // RemoveApplicationEUI removes the specified EUI from the application
 func (a *Account) RemoveApplicationEUI(appID string, eui types.AppEUI) error {
-	return a.del(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/euis/%s", appID, eui.String()))
+	return a.del(a.auth.WithScope(scope.Application(appID)), fmt.Sprintf("/api/v2/applications/%s/euis/%s", appID, eui.String()))
 }
 
 // ListApplicationRights returns the rights the current account client has to a certain
 // application
 func (a *Account) ListApplicationRights(appID string) (rights []types.Right, err error) {
-	err = a.get(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/rights", appID), &rights)
+	err = a.get(a.auth.WithScope(scope.Application(appID)), fmt.Sprintf("/api/v2/applications/%s/rights", appID), &rights)
 	if err != nil {
 		return nil, err
 	}
@@ -210,7 +210,7 @@ func (a *Account) ListApplicationRights(appID string) (rights []types.Right, err
 // ListApplicationCollaborators fetches the application collaborators
 func (a *Account) ListApplicationCollaborators(appID string) ([]Collaborator, error) {
 	collaborators := make([]Collaborator, 0)
-	err := a.get(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/collaborators", appID), &collaborators)
+	err := a.get(a.auth.WithScope(scope.Application(appID)), fmt.Sprintf("/api/v2/applications/%s/collaborators", appID), &collaborators)
 	if err != nil {
 		return nil, err
 	}
@@ -228,8 +228,8 @@ type exchangeRes struct {
 	ExpiresIn   int    `json:"expires_in"`
 }
 
-// ExchangeAppKeyForToken exchanges an app ID and app Key for an app token
-func (a *Account) ExchangeAppKeyForToken(appID, accessKey string) (*oauth2.Token, error) {
+// ExchangeApplicationKeyForToken exchanges an app ID and app Key for an app token
+func (a *Account) ExchangeApplicationKeyForToken(appID, accessKey string) (*oauth2.Token, error) {
 	req := exchangeReq{
 		Username: appID,
 		Password: accessKey,
@@ -247,5 +247,5 @@ func (a *Account) ExchangeAppKeyForToken(appID, accessKey string) (*oauth2.Token
 
 // RestoreApplication restores a previously deleted app
 func (a *Account) RestoreApplication(appID string) error {
-	return a.post(a.auth.WithScope(scope.App(appID)), fmt.Sprintf("/api/v2/applications/%s/restore", appID), nil, nil)
+	return a.post(a.auth.WithScope(scope.Application(appID)), fmt.Sprintf("/api/v2/applications/%s/restore", appID), nil, nil)
 }

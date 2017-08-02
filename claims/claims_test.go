@@ -14,18 +14,18 @@ const otherRight = "delete"
 var none *Claims
 var empty = Claims{}
 
-var withAppAccess = Claims{
+var withApplicationAccess = Claims{
 	Scope: []string{"apps:" + appID},
 	Apps: map[string][]types.Right{
 		appID: []types.Right{right},
 	},
 }
 
-var withAppsScope = Claims{
+var withApplicationScope = Claims{
 	Scope: []string{"apps"},
 }
 
-var appRightsButNoScope = Claims{
+var applicationRightsButNoScope = Claims{
 	Apps: map[string][]types.Right{
 		appID: []types.Right{right},
 	},

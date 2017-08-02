@@ -30,7 +30,7 @@ func DerivedUserClaims(id string, apps map[string][]types.Right, gateways map[st
 	scopes := make([]string, 0, len(apps)+len(gateways)+len(components))
 
 	for id := range apps {
-		scopes = append(scopes, scope.App(id))
+		scopes = append(scopes, scope.Application(id))
 	}
 
 	for id := range gateways {

@@ -9,9 +9,9 @@ import (
 	. "github.com/smartystreets/assertions"
 )
 
-func TestApp(t *testing.T) {
+func TestApplication(t *testing.T) {
 	a := New(t)
-	a.So(App("foo"), ShouldEqual, "apps:foo")
+	a.So(Application("foo"), ShouldEqual, "apps:foo")
 }
 
 func TestGateway(t *testing.T) {

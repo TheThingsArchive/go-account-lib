@@ -103,8 +103,8 @@ func (c *Config) TokenSource(token *oauth2.Token) oauth2.TokenSource {
 	return config.TokenSource(c.getContext(), token)
 }
 
-// ExchangeAppKeyForToken exchanges an application Access Key for an equivalent
-func (c *Config) ExchangeAppKeyForToken(appID, accessKey string) (*oauth2.Token, error) {
+// ExchangeApplicationKeyForToken exchanges an application Access Key for an equivalent
+func (c *Config) ExchangeApplicationKeyForToken(appID, accessKey string) (*oauth2.Token, error) {
 	// application Access Token
 	config := c.getKeyConfig()
 

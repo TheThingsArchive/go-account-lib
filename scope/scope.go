@@ -20,8 +20,8 @@ const (
 	Clients = "clients"
 )
 
-// App returns the scope for the app with the specific ID
-func App(ID string) string {
+// Application returns the scope for the app with the specific ID
+func Application(ID string) string {
 	return Apps + ":" + ID
 }
 
