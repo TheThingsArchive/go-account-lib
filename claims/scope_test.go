@@ -23,5 +23,5 @@ func TestClaimsAppsScope(t *testing.T) {
 	a.So(withGatewaysScope.HasScope(scope.Apps), assertions.ShouldBeFalse)
 	a.So(withComponentsScope.HasScope(scope.Apps), assertions.ShouldBeFalse)
 
-	a.So(withApplicationScope.HasScope(scope.Apps), assertions.ShouldBeTrue)
+	a.So(withApplicationsScope.HasScope(scope.Apps), assertions.ShouldBeTrue)
 }

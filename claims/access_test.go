@@ -17,7 +17,7 @@ func TestClaimsAppAccess(t *testing.T) {
 	a.So(empty.AppAccess(appID), assertions.ShouldBeFalse)
 
 	// no app:id scope present
-	a.So(withApplicationScope.AppAccess(appID), assertions.ShouldBeFalse)
+	a.So(withApplicationsScope.AppAccess(appID), assertions.ShouldBeFalse)
 	a.So(withGatewaysScope.AppAccess(appID), assertions.ShouldBeFalse)
 	a.So(withComponentsScope.AppAccess(appID), assertions.ShouldBeFalse)
 	a.So(applicationRightsButNoScope.AppAccess(appID), assertions.ShouldBeFalse)
@@ -40,7 +40,7 @@ func TestClaimsGatewayAccess(t *testing.T) {
 	a.So(empty.GatewayAccess(gatewayID), assertions.ShouldBeFalse)
 
 	// no app:id scope present
-	a.So(withApplicationScope.GatewayAccess(gatewayID), assertions.ShouldBeFalse)
+	a.So(withApplicationsScope.GatewayAccess(gatewayID), assertions.ShouldBeFalse)
 	a.So(withGatewaysScope.GatewayAccess(gatewayID), assertions.ShouldBeFalse)
 	a.So(withComponentsScope.GatewayAccess(gatewayID), assertions.ShouldBeFalse)
 	a.So(applicationRightsButNoScope.GatewayAccess(gatewayID), assertions.ShouldBeFalse)
@@ -63,7 +63,7 @@ func TestClaimsComponentAccess(t *testing.T) {
 	a.So(empty.ComponentAccess(componentID), assertions.ShouldBeFalse)
 
 	// no app:id scope present
-	a.So(withApplicationScope.ComponentAccess(componentID), assertions.ShouldBeFalse)
+	a.So(withApplicationsScope.ComponentAccess(componentID), assertions.ShouldBeFalse)
 	a.So(withGatewaysScope.ComponentAccess(componentID), assertions.ShouldBeFalse)
 	a.So(withComponentsScope.ComponentAccess(componentID), assertions.ShouldBeFalse)
 	a.So(applicationRightsButNoScope.ComponentAccess(componentID), assertions.ShouldBeFalse)

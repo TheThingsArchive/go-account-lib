@@ -21,7 +21,7 @@ var withApplicationAccess = Claims{
 	},
 }
 
-var withApplicationScope = Claims{
+var withApplicationsScope = Claims{
 	Scope: []string{"apps"},
 }
 

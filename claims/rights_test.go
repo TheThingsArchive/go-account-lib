@@ -17,7 +17,7 @@ func TestClaimsAppRight(t *testing.T) {
 	a.So(empty.ApplicationRight(appID, right), assertions.ShouldBeFalse)
 
 	// has only global scope
-	a.So(withApplicationScope.ApplicationRight(appID, right), assertions.ShouldBeFalse)
+	a.So(withApplicationsScope.ApplicationRight(appID, right), assertions.ShouldBeFalse)
 	a.So(withGatewaysScope.ApplicationRight(appID, right), assertions.ShouldBeFalse)
 	a.So(withComponentsScope.ApplicationRight(appID, right), assertions.ShouldBeFalse)
 
@@ -47,7 +47,7 @@ func TestClaimsGatewayRight(t *testing.T) {
 	a.So(empty.GatewayRight(gatewayID, right), assertions.ShouldBeFalse)
 
 	// has only global scope
-	a.So(withApplicationScope.GatewayRight(gatewayID, right), assertions.ShouldBeFalse)
+	a.So(withApplicationsScope.GatewayRight(gatewayID, right), assertions.ShouldBeFalse)
 	a.So(withGatewaysScope.GatewayRight(gatewayID, right), assertions.ShouldBeFalse)
 	a.So(withComponentsScope.GatewayRight(gatewayID, right), assertions.ShouldBeFalse)
 
@@ -78,7 +78,7 @@ func TestClaimsComponentRight(t *testing.T) {
 	a.So(empty.ComponentRight(componentID, right), assertions.ShouldBeFalse)
 
 	// has only global scope
-	a.So(withApplicationScope.ComponentRight(componentID, right), assertions.ShouldBeFalse)
+	a.So(withApplicationsScope.ComponentRight(componentID, right), assertions.ShouldBeFalse)
 	a.So(withGatewaysScope.ComponentRight(componentID, right), assertions.ShouldBeFalse)
 	a.So(withComponentsScope.ComponentRight(componentID, right), assertions.ShouldBeFalse)
 
