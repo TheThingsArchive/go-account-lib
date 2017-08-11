@@ -21,3 +21,25 @@ It consists of these packages:
 - `util`: An internal package that provides helpers for the other packages.
 - `oauth`: A wrapper around `golang.org/x/oauth2` that provides extra
   functionality like caching, following redirects etc.
+
+A list of few rules and guidelines to follow when contributing to the `go-account-lib`.
+
+# Contribute
+
+**Of course follow the coding golang guidelines**
+
+## Be clear and consistent
+
+1. Do not use shortened form anywhere.
+2. Type-scoped functions. Functions do one thing on one type.
+3. Type functions names and requirement
+ - Types collection functions should have like: `ListTypes`, `StreamTypes`.
+ - Type must have the these function: `RegisterType`, `EditType`, `DeleteType`, `GetType`.
+ - Type attribute functions should be under this form: `AddTypeAttribute`, `RemoveTypeAttribute`, `ListTypeAttribute`, `GetTypeAttribute`.
+4. Other functions form are allowed as long as they are justified and start with verb and refer the type, ex: `VerbTypeDoSmth`.
+5. Documents your codes. This a librabrary that will be use in numerous package.
+6. Write tests.
+
+## Check
+
+Run `make test vet lint` (or separately) before pushing.
