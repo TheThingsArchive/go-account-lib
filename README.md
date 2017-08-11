@@ -24,7 +24,7 @@ It consists of these packages:
 
 # Contribute
 
-**Of course follow the coding golang guidelines**
+**Of course follow the golang guidelines**
 
 ## Be clear and consistent
 
