@@ -22,8 +22,6 @@ It consists of these packages:
 - `oauth`: A wrapper around `golang.org/x/oauth2` that provides extra
   functionality like caching, following redirects etc.
 
-A list of few rules and guidelines to follow when contributing to the `go-account-lib`.
-
 # Contribute
 
 **Of course follow the coding golang guidelines**
