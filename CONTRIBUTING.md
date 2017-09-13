@@ -7,7 +7,7 @@ Thank you for your interest in building this thing together with us. We're reall
 * **Implementing a new feature or fixing a bug**: If you see an [open issue](https://github.com/TheThingsNetwork/go-account-lib/issues) that you would like to work on, let us know by commenting in the issue. 
 * **Writing documentation**: If you see that our documentation is lacking or incorrect, it would be great if you could help us improve it. This will help users and fellow contributors understand better how to work with our stack, and will prevent making mistakes and introducing bugs. Our documentation is spread across a number of places. Code documentation obviously lives together with the code, and is therefore probably in this repository. More general documentation lives in [our `docs` repo](https://github.com/TheThingsNetwork/docs), that is published to our [official documentation pages](https://www.thethingsnetwork.org/docs).
 
-If you'd like to contribute by writing code, you'll find [here](https://github.com/TheThingsNetwork/ttn/DEVELOPMENT.md) how to set up your development environment. We also have some guidelines that describe how to make contributions that are consistent our way of working.
+If you'd like to contribute by writing code, you'll find [here](https://github.com/TheThingsNetwork/ttn/README.md) how to set up your development environment. We also have some guidelines that describe how to make contributions that are consistent our way of working.
 
 + [Git branching workflow](#branching)
 + [Commit conventions](#commit)
@@ -127,16 +127,14 @@ We follow the [official go guidelines](https://github.com/golang/go/wiki/CodeRev
 
 In case both of the words have an implementation-specific meaning, the variable name is the combination of first letter of each word.
 
-| entity                                                  | name    |
-| :-----------------------------------------------------: | :-----: |
-| wait group                                              | wg      |
-| gateway server                                          | gs      |
-| network server                                          | ns      |
-| join server                                             | js      |
-| application server                                      | as      |
-| identity server                                         | is      |
+In case one of the words specifies the meaning of the variable in a specific language construct context, the variable name is the combination of abbrevations of the words.
 
-In case one of the words specifies the meaning of the variable in a specific language construct context, the variable name is the combination of abbrevations of the words. 
+But don't over do, the name should still have meaning, for example:
+
+| entity        | name      | example type                                              |
+| :-----------: | :-------: | :-------------------------------------------------------: |
+| access key    | accessKey | github.com/TheThingsNetwork/go-account-lib/auth/accessKey |
+| wait group    | wg        |                                                           |
 
 #### Well-known variable names
 
@@ -155,7 +153,7 @@ meaning is obvious from the context.
 ### Functions
 
 Functions must have a clear role and name. As such they must be type scoped. They only do one thing
-on one entity. Non entity-scoped function are allowed as long as they answer to a real need.
+on one entity. Non entity-scoped function are allowed as long as they have a real purpose.
 
 #### Naming
 
@@ -185,16 +183,13 @@ If a collection of entity is made it also must implement functions, `List`, `Str
 
 #### Entity attributes
 
-When accessing an attributes in an entity a function should respect this format: `VerbEntityAttributeAction`.
+When accessing an attributes of an entity a function should respect this format: `VerbEntityAttributeAction`.
 Where the `Verb` is one of those `Edit`, `Delete`, `Get`
 
-Ex: `EditUserProfile`, `GetGatewayAltitude`
-
-- Documents your codes. You are bringing modification to a library that is used in numerous open project.
-- Write tests.
-- Run `make test vet lint` (or separately) before pushing.
-- Write good commit messages.
-- Sign our CLA.
+| entity    | attribute | Get                   | Edit                  |
+| :-------: | :-------: | :-------------------: | :-------------------: |
+| User      | Profile   | GetUserProfile        | EditUserProfile       |
+| Gateway   | Altitude  | GetGatewayAltitude    | EditGatewayAltitude   |
 
 ## <a name="security-issues"></a>Security Issues
 
