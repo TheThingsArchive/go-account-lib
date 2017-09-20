@@ -2,12 +2,12 @@
 
 Thank you for your interest in building this thing together with us. We're really happy with our active community and are glad that you're a part of it. There are many ways to contribute to our project, but given the fact that you're on Github looking at the code for The Things Network Stack, you're probably here for one of the following reasons:
 
-* **Requesting a new feature**: If you have a great idea or think some functionality is missing, we want to know! The only thing you have to do for that is to [create an issue](https://github.com/TheThingsNetwork/ttn/issues) if it doesn't exist yet. Please give a detailed description of the functionality you would want, and why it would be nice to have it. Also let us know if you can help us build it.
-* **Reporting an issue**: If you notice that a component of the Things Network Stack is not behaving as it should, there may be a bug in our systems. In this case you should [create an issue](https://github.com/TheThingsNetwork/ttn/issues) if it doesn't exist yet. For really sensitive issues, you can [contact us directly](#security-issues).
+* **Requesting a new feature**: If you have a great idea or think some functionality is missing, we want to know! The only thing you have to do for that is to [create an issue](https://github.com/TheThingsNetwork/go-account-lib/issues) if it doesn't exist yet. Please give a detailed description of the functionality you would want, and why it would be nice to have it. Also let us know if you can help us build it.
+* **Reporting an issue**: If you notice that a component of the Things Network Stack is not behaving as it should, there may be a bug in our systems. In this case you should [create an issue](https://github.com/TheThingsNetwork/go-account-lib/issues) if it doesn't exist yet. For really sensitive issues, you can [contact us directly](#security-issues).
 * **Implementing a new feature or fixing a bug**: If you see an [open issue](https://github.com/TheThingsNetwork/go-account-lib/issues) that you would like to work on, let us know by commenting in the issue. 
 * **Writing documentation**: If you see that our documentation is lacking or incorrect, it would be great if you could help us improve it. This will help users and fellow contributors understand better how to work with our stack, and will prevent making mistakes and introducing bugs. Our documentation is spread across a number of places. Code documentation obviously lives together with the code, and is therefore probably in this repository. More general documentation lives in [our `docs` repo](https://github.com/TheThingsNetwork/docs), that is published to our [official documentation pages](https://www.thethingsnetwork.org/docs).
 
-If you'd like to contribute by writing code, you'll find [here](https://github.com/TheThingsNetwork/ttn/README.md) how to set up your development environment. We also have some guidelines that describe how to make contributions that are consistent our way of working.
+If you'd like to contribute by writing code, you'll find [here](https://github.com/TheThingsNetwork/go-account-lib/README.md) how to set up your development environment. We also have some guidelines that describe how to make contributions that are consistent our way of working.
 
 + [Git branching workflow](#branching)
 + [Commit conventions](#commit)
@@ -45,8 +45,7 @@ The subject contains the concerning component or topic and a concise message in 
 
 The component or topic is typically a few characters long and should always be present. Component names are:
 
-- `auth`: general authentication
-- `oauth`: OAuth authentication
+- `auth`: Authentication (incl Oauth)
 - `app`: Applications management
 - `gtw`: Gateways management
 - `user`: User management
