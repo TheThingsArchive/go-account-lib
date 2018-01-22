@@ -190,6 +190,7 @@ type GatewayEdits struct {
 	Attributes      *GatewayAttributes `json:"attributes,omitempty"`
 	Router          *string            `json:"router,omitempty"`
 	FallbackRouters *[]string          `json:"fallback_routers,omitempty"`
+	BetaUpdates     *bool              `json:"beta_updates,omitempty"`
 }
 
 // EditGateway edits the fields of a gateway
