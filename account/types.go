@@ -124,6 +124,7 @@ type Gateway struct {
 	Attributes       GatewayAttributes `json:"attributes"`
 	Router           *GatewayRouter    `json:"router"`
 	FallbackRouters  []GatewayRouter   `json:"fallback_routers"`
+	BetaUpdates      bool              `json:"beta_updates"`
 	Owner            struct {
 		ID       string `json:"id"`
 		Username string `json:"username"`
