@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/TheThingsNetwork/go-account-lib/auth"
@@ -60,9 +61,8 @@ func newRequest(server, method string, URI string, body io.Reader) (*http.Reques
 	return req, nil
 }
 
-func performRequestBody(ctx log.Interface, server string, strategy auth.Strategy, method, URI string, headers map[string]string, body interface{}, redirects int) (io.ReadCloser, error) {
+func performRequestBody(ctx log.Interface, server string, strategy auth.Strategy, method, URI string, headers map[string]string, body interface{}, redirects int) (resBody io.ReadCloser, err error) {
 	var req *http.Request
-	var err error
 
 	if body != nil {
 		// body is not nil, so serialize it and pass it in the request
@@ -98,6 +98,15 @@ func performRequestBody(ctx log.Interface, server string, strategy auth.Strategy
 		return nil, err
 	}
 
+	defer func() {
+		// If we return an error, the caller won't use the response.
+		// If we return one, it needs to be read and closed.
+		if err != nil && resBody != nil {
+			io.Copy(ioutil.Discard, resp.Body)
+			resp.Body.Close()
+		}
+	}()
+
 	// catch deprecated api
 	if resp.StatusCode == 410 {
 		return nil, fmt.Errorf("API deprecated by The Things Network account server, please update your client")
@@ -105,7 +114,6 @@ func performRequestBody(ctx log.Interface, server string, strategy auth.Strategy
 
 	if resp.StatusCode >= 400 {
 		var herr HTTPError
-		defer resp.Body.Close()
 		decoder := json.NewDecoder(resp.Body)
 		if err := decoder.Decode(&herr); err != nil {
 			// could not decode body as error, just return http error
@@ -151,8 +159,12 @@ func performRequest(ctx log.Interface, server string, strategy auth.Strategy, me
 		return err
 	}
 
+	defer func() {
+		io.Copy(ioutil.Discard, body)
+		body.Close()
+	}()
+
 	if res != nil {
-		defer body.Close()
 		decoder := json.NewDecoder(body)
 		if err := decoder.Decode(res); err != nil {
 			return err
