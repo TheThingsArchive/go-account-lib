@@ -1,25 +1,15 @@
 language: go
 
 go:
-  - 1.7
+- 1.11.x
+- 1.12.x
+
+go_import_path: github.com/TheThingsNetwork/go-account-lib
+
+env:
+  global:
+  - GOPROXY=https://proxy.golang.org
+  - GO111MODULE=on
 
 services:
   - redis
-
-cache:
-  directories:
-    - vendor
-
-before_install:
-  - echo "machine github.com login ${GITHUB_ACCESS_TOKEN}" >> ~/.netrc
-
-install:
-  - make tools
-  - git checkout vendor/vendor.json
-  - make deps
-
-script:
-  - make fmt
-  - make vet
-  - make test
-  - make lint
